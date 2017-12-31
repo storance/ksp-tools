@@ -1,12 +1,14 @@
+import {PI} from './consts.js';
+
 export default class Orbit {
-    constructor(parentBody, semiMajorAxis, eccentricity, inclination, longitudeAN, argumentPE, meanAnomoloy) {
+    constructor(parentBody, semiMajorAxis, eccentricity, inclination, longitudeOfAscendingNode=null, argumentOfPeriapsis=null, meanAnomoloyAtEpoch=null) {
         this.parentBody = parentBody;
         this.semiMajorAxis = semiMajorAxis;
         this.eccentricity = eccentricity;
         this.inclination = inclination;
-        this.longitudeAN = longitudeAN;
-        this.argumentPE = argumentPE;
-        this.meanAnomoloy = meanAnomoloy;
+        this.longitudeOfAscendingNode = longitudeOfAscendingNode;
+        this.argumentOfPeriapsis = argumentOfPeriapsis;
+        this.meanAnomoloyAtEpoch = meanAnomoloyAtEpoch;
     }
 
     get radiusOfApoapsis() {
@@ -26,13 +28,11 @@ export default class Orbit {
     }
 
     get apoapsisVelocity() {
-        return Math.sqrt(((1 - this.eccentricity) * this,parentBody.mu) / 
-            ((1 + this.eccentricity) * this.semiMajorAxis));
+        return this.velocityAtRadius(this.radiusOfApoapsis);
     }
 
     get periapsisVelocity() {
-        return Math.sqrt(((1 + this.eccentricity) * this.parentBody.mu) / 
-            ((1 - this.eccentricity) * this.semiMajorAxis));
+        return this.velocityAtRadius(this.radiusOfPeriapsis);
     }
 
     get semiLatusRectum() {
@@ -53,7 +53,15 @@ export default class Orbit {
     }
 
     get period() {
-        return 2 * Math.PI * Math.sqrt( Math.pow(this.semiMajorAxis, 3) / this.parentBody.mu);
+        return 2 * PI * Math.sqrt( Math.pow(this.semiMajorAxis, 3) / this.parentBody.mu);
+    }
+
+    velocityAtAltitude(altitude) {
+        return this.velocityAtRadius(altitude + this.radius);
+    }
+
+    velocityAtRadius(radius) {
+        return Math.sqrt(this.parentBody.mu * ((2 / radius) - (1 / this.semiMajorAxis)));
     }
 
     clone() {
@@ -62,8 +70,8 @@ export default class Orbit {
             this.semiMajorAxis,
             this.eccentricity,
             this.inclination,
-            this.longitudeAN,
-            this.argumentPE,
-            this.meanAnomoloy);
+            this.longitudeOfAscendingNode,
+            this.argumentOfPeriapsis,
+            this.meanAnomoloyAtEpoch);
     }
 }

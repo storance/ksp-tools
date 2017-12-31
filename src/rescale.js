@@ -25,7 +25,7 @@ export class Rescale {
             // use the explicit calendar if it was defined
             calendar = this.overrides[homeworld.name].calendar;
         } else {
-            const dayLength = homeworld.rotationalPeriod;
+            const dayLength = Math.abs(homeworld.rotationalPeriod);
             const yearLength = homeworld.orbit.period;
             const daysInYear = Math.floor(yearLength / dayLength);
 
@@ -43,19 +43,18 @@ export class Rescale {
             dayLengthMultiplier : this.dayLengthMultiplier,
             semiMajorAxis} = this.overrides[body.name] || {};
 
-        const tidallyLocked = Math.abs(body.orbit.period - body.rotationalPeriod) < 0.1;
-
         body.radius *= resizeFactor;
         // update the body's mass to keep the same aslGravity with it's new radius
         body.mass = Math.pow(body.radius, 2) * body.aslGravity / GRAVITATIONAL_CONSTANT;
         body.atmosphereHeight *= atmosphereHeightMultiplier;
         body.orbit.semiMajorAxis = semiMajorAxis ? semiMajorAxis : body.orbit.semiMajorAxis * rescaleFactor;
 
-        if (!tidallyLocked) {
+        if (!body.tidallyLocked) {
             body.rotationalPeriod *= dayLengthMultiplier;
         } else {
-            // for tidally locked bodies, set it's rotational period to it's orbital period 
-            body.rotationalPeriod = body.orbit.period;
+            // for tidally locked bodies, set it's rotational period to it's orbital period
+            const rotationSign = body.rotationalPeriod < 0 ? -1 : 1; // negative rotationPeriod means it orbits westward instead of eastward
+            body.rotationalPeriod = body.orbit.period * rotationSign;
         }
 
         body.satellites.forEach(satellite => this.rescaleBody(satellite));
