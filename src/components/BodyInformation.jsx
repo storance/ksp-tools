@@ -9,8 +9,10 @@ export class BodyInformation extends React.PureComponent {
         return <div className="container">
             <form className="form-horizontal">
                 <OrbitingBodySelectContainer  />
-                <BodyDetails body={this.props.selectedBody} calendar={this.props.selectedPlanetPack.calendar} /> 
-                {this.props.selectedBody.orbit ? <OrbitDetails orbit={this.props.selectedBody.orbit} calendar={this.props.selectedPlanetPack.calendar} />  : null}
+                <BodyDetails body={this.props.body} calendar={this.props.planetpack.calendar} /> 
+                {this.props.body.orbit &&
+                    <OrbitDetails orbit={this.props.body.orbit} calendar={this.props.planetpack.calendar} />
+                }
             </form>
         </div>;
     }
@@ -18,8 +20,8 @@ export class BodyInformation extends React.PureComponent {
 
 function mapStateToProps(state) {
     return {
-        selectedPlanetPack: state.getIn(['celestialBody', 'selectedPlanetPack']),
-        selectedBody: state.getIn(['celestialBody', 'selectedBody']),
+        planetpack: state.getIn(['celestialBody', 'selectedPlanetPack']),
+        body: state.getIn(['celestialBody', 'selectedBody']),
     }
 }
 

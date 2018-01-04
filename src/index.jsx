@@ -14,6 +14,7 @@ import { loadState, saveStateMiddleware } from './localStorage.js';
 import * as reducers from './reducers';
 
 import Bootstrap from 'bootstrap/dist/css/bootstrap.css';
+import MainCSS from './css/main.css';
 
 const store = createStore(combineReducers(reducers), loadState(), applyMiddleware(saveStateMiddleware));
 

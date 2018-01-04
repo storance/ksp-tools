@@ -30,6 +30,7 @@ export const VELOCITY_UNITS = [
     },
     {
         scale: 1000,
+        threshold: 10000,
         suffix: 'km/s'
     }
 ];

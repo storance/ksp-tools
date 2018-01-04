@@ -1,35 +1,36 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import SelectField from './SelectField';
 import { planetpacks } from '../../planetpack.js';
-import * as actionCreators from '../../action_creators';
 
-export default class CelestialBody extends React.PureComponent {
+export default class BodySelect extends React.PureComponent {
     render() {
-        const bodies = this.flattenPlanetPack(this.props.selectedPlanetPack.sun)
-
-        return <div className="form-group">
-                <label htmlFor="rescale" className="control-label col-sm-3">Celestial Body</label>
-                <div className="col-sm-3">
-                    <select id="rescale" className="form-control" value={this.props.body}
-                        onChange={event => this.props.updateBody(event.target.value)}>
-                        {bodies.map(body => this.renderOption(body[0], body[1]))}
-                    </select>
-                </div>
-            </div>;
+        return <SelectField name={"body"}
+                            label={"Celestial Body"}
+                            value={this.props.body}
+                            update={this.props.updateBody}
+                            options={this.getOptions()} />;
     }
 
-    flattenPlanetPack(body, indent=0, bodies=[]) {
-        bodies.push([indent, body.name]);
-        body.satellites.forEach(satellite => this.flattenPlanetPack(satellite, indent + 2, bodies));
-
-        return bodies;
+    getOptions() {
+        return this.appendOptions([], this.props.selectedPlanetPack.sun);
     }
 
-    renderOption(indent, body) {
+    appendOptions(options, body, indent=0) {
+        options.push({
+            value: body.name,
+            label: this.buildIndent(indent) + body.name
+        });
+
+        body.satellites.forEach(satellite => this.appendOptions(options, satellite, indent + 2));
+        return options;
+    }
+
+    buildIndent(indent) {
         let indentSpaces = '';
         for (let i = 0; i < indent; i++) {
             indentSpaces = indentSpaces.concat('\u00A0');
         }
-        return <option key={body} value={body}>{indentSpaces}{body}</option>
+
+        return indentSpaces;
     }
 };

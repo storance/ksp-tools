@@ -24,8 +24,6 @@ function calculate(state, body) {
     const desiredPeriapsis = convertAltitude(state.get('desiredPeriapsis'), state.get('desiredPeriapsisUnits'), 'm');
     const maneuverPlan = new ManeuverPlan(body, currentApoapsis, currentPeriapsis, desiredApoapsis, desiredPeriapsis);
 
-    console.log(maneuverPlan);
-
     return state.set('maneuverPlan', maneuverPlan);
 }
 

@@ -1,20 +1,22 @@
 import React from 'react';
+import SelectField from './SelectField';
 import { rescales } from '../../rescale.js';
 
-export default class Rescale extends React.PureComponent {
+export default class RescaleSelect extends React.PureComponent {
     render() {
-        return <div className="form-group">
-                <label htmlFor="rescale" className="control-label col-sm-3">Rescale</label>
-                <div className="col-sm-3">
-                    <select id="rescale" className="form-control" value={this.props.rescale} 
-                            onChange={event => this.props.updateRescale(event.target.value)}>
-                        {rescales.map(this.renderOption)}
-                    </select>
-                </div>
-            </div>;
+        return <SelectField name={"rescale"}
+                            label={"Rescale"}
+                            value={this.props.rescale}
+                            update={this.props.updateRescale}
+                            options={this.getOptions()} />;
     }
 
-    renderOption(rescale) {
-        return <option key={rescale.name} value={rescale.name}>{rescale.name}</option>;
+    getOptions() {
+        return rescales.map(rescale => {
+            return {
+                value: rescale.name,
+                label: rescale.name
+            };
+        });
     }
 };

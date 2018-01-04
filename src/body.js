@@ -57,7 +57,7 @@ export default class Body {
         return Math.pow(this.orbit.semiMajorAxis * (this.mass / this.parentBody.mass), 0.4);
     }
 
-    get rotationalSpeed() {
+    get rotationalVelocity() {
         return this.equitorialCircumference / this.rotationalPeriod;
     }
 

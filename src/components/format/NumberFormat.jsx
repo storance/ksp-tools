@@ -20,7 +20,9 @@ export default class NumberFormat extends React.PureComponent {
             suffix = ' ' + this.props.units[0].suffix;
 
             for (const unit of Array.from(this.props.units).reverse()) {
-                if (Math.abs(value) >= unit.scale) {
+                const threshold = unit.threshold || unit.scale;
+                
+                if (Math.abs(value) >= threshold) {
                     value = value / unit.scale;
                     suffix = ' ' + unit.suffix;
                     break;

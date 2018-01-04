@@ -6,7 +6,9 @@ const initialState = Map({
     'apoapsis' : '',
     'apoapsisUnits' : 'km',
     'periapsis' : '',
-    'periapsisUnits' : 'km'
+    'periapsisUnits' : 'km',
+    'period' : '',
+    'mode' : 'ap+pe'
 });
 
 function formUpdate(state, field, value) {
@@ -14,10 +16,21 @@ function formUpdate(state, field, value) {
 }
 
 function calculate(state, body) {
+    const mode = state.get('mode');
     const apoapsis = convertAltitude(state.get('apoapsis'), state.get('apoapsisUnits'), 'm');
     const periapsis = convertAltitude(state.get('periapsis'), state.get('periapsisUnits'), 'm');
+    const period = parseFloat(state.get('period'));
 
-    const orbit = Orbit.fromApAndPe(body, apoapsis, periapsis);
+
+
+    let orbit = null;
+    if (mode === 'ap+pe') {
+        orbit = Orbit.fromApAndPe(body, apoapsis, periapsis);
+    } else if (mode === 'ap+period') {
+        orbit = Orbit.fromApAndPeriod(body, apoapsis, period);
+    } else if (mode === 'pe+period') {
+        orbit = Orbit.fromPeAndPeriod(body, apoapsis, period);
+    }
     return state.set('orbit', orbit);
 }
 

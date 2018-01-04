@@ -23,7 +23,7 @@ export default class Orbit {
 
     static fromApAndPeriod(parentBody, ap, period) {
         const semiMajorAxis = Math.pow(Math.pow(period / (2 * PI), 2) * parentBody.mu, 1/3);
-        const ra = ap + orbitingBody.radius;
+        const ra = ap + parentBody.radius;
         const rp = (2 * semiMajorAxis) - ra;
         const eccentricity = (ra - rp) / (ra + rp);
 
