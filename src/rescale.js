@@ -1,6 +1,6 @@
 import Calendar from './calendar.js';
-import PlanetPack from './planetpack.js';
-import {GRAVITATIONAL_CONSTANT} from './consts.js';
+import { PlanetPack } from './planetpack.js';
+import { GRAVITATIONAL_CONSTANT } from './consts.js';
 
 export class Rescale {
     constructor(name, resize, rescale, atmosphereHeightMultiplier, dayLengthMultiplier, overrides) {
@@ -12,7 +12,7 @@ export class Rescale {
     	this.overrides = overrides;
     }
 
-    rescale(planetpack) {
+    rescalePlanetPack(planetpack) {
         if (this.rescale == 1 && this.resize == 1) {
             return planetpack;
         }
@@ -32,29 +32,34 @@ export class Rescale {
             calendar = new Calendar(dayLength, daysInYear * dayLength);
         }
 
-        let rescaledPlanetPack = new PlanetPack(planetpack.name + ' ' + this.name, rescaledSun, homeworld, calendar);
+        return new PlanetPack(planetpack.name + ' ' + this.name, rescaledSun, homeworld, calendar);
     }
 
     rescaleBody(body) {
-        let {
-            resizeFactor : this.resizeFactor,
-            rescaleFactor : this.rescaleFactor,
-            atmosphereHeightMultiplier : this.atmosphereHeightMultiplier,
-            dayLengthMultiplier : this.dayLengthMultiplier,
-            semiMajorAxis} = this.overrides[body.name] || {};
+        const bodyOverrides = this.overrides[body.name] || {};
+        const rescaleFactor = bodyOverrides.rescale || this.rescale;
+        const resizeFactor = bodyOverrides.resize || this.resize;
+        const atmosphereHeightMultiplier = bodyOverrides.atmosphereHeightMultiplier || this.atmosphereHeightMultiplier;
+        const dayLengthMultiplier = bodyOverrides.dayLengthMultiplier || this.dayLengthMultiplier;
+        const semiMajorAxis = bodyOverrides.semiMajorAxis;
+        const aslGravity = body.aslGravity;
 
         body.radius *= resizeFactor;
         // update the body's mass to keep the same aslGravity with it's new radius
-        body.mass = Math.pow(body.radius, 2) * body.aslGravity / GRAVITATIONAL_CONSTANT;
+        body.mass = Math.pow(body.radius, 2) * aslGravity / GRAVITATIONAL_CONSTANT;
         body.atmosphereHeight *= atmosphereHeightMultiplier;
-        body.orbit.semiMajorAxis = semiMajorAxis ? semiMajorAxis : body.orbit.semiMajorAxis * rescaleFactor;
 
         if (!body.tidallyLocked) {
             body.rotationalPeriod *= dayLengthMultiplier;
-        } else {
-            // for tidally locked bodies, set it's rotational period to it's orbital period
-            const rotationSign = body.rotationalPeriod < 0 ? -1 : 1; // negative rotationPeriod means it orbits westward instead of eastward
-            body.rotationalPeriod = body.orbit.period * rotationSign;
+        }
+
+        if (body.orbit) {
+            body.orbit.semiMajorAxis = semiMajorAxis || body.orbit.semiMajorAxis * rescaleFactor;
+            if (body.tidallyLocked) {
+                // for tidally locked bodies, set it's rotational period to it's orbital period
+                const rotationSign = body.rotationalPeriod < 0 ? -1 : 1; // negative rotationPeriod means it rotates westward instead of eastward
+                body.rotationalPeriod = body.orbit.period * rotationSign;
+            }
         }
 
         body.satellites.forEach(satellite => this.rescaleBody(satellite));
@@ -64,7 +69,7 @@ export class Rescale {
 }
 
 export const rescales = [
-    new Rescale('Stock', 1, 1, 1, 1, 1, {}),
+    new Rescale('Default', 1, 1, 1, 1, 1, {}),
     new Rescale('2.5x', 2.5, 2.5, 1.3000000002, 1.25, {
         'Gael' : {
             'semiMajorAxis' :  34948895994.9601,
@@ -123,7 +128,7 @@ export const rescales = [
     }),
     new Rescale('6.4x', 6.4, 6.4, 1.5999999996, 1.75, {
         'Gael' : {
-            'semiMajorAxis' :  89450717932.7214,
+            'semiMajorAxis' : 89450717932.7214,
             'dayLengthMultiplier' : 3,
             'calendar' : new Calendar(64800, 23263200), 
         },
@@ -206,3 +211,7 @@ export const rescales = [
         }
     })
 ];
+
+export function findRescale(name) {
+    return rescales.find(r => r.name === name);
+}

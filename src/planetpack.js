@@ -1,5 +1,6 @@
 import Body from './body.js';
 import Orbit from './orbit.js';
+import Calendar from './calendar.js';
 
 export class PlanetPack {
     constructor(name, sun, homeworld, calendar) {
@@ -8,7 +9,11 @@ export class PlanetPack {
         this.homeworld = homeworld;
         this.calendar = calendar;
     }
-}
+
+    findByName(name) {
+        return this.sun.findByName(name);
+    }
+};
 
 const stock = (function () {
     const Kerbol = new Body('Sun', 261600000, 1.7565459e28, 0, 0, false);
@@ -20,18 +25,21 @@ const stock = (function () {
         new Orbit(Kerbol, 9832684544, 0.01, 2.1, 15, 0, 180));
     const Gilly = new Body('Gilly', 13000, 1.2420363e17, 0, 28255,
         new Orbit(Eve, 9832684544, 0.01, 2.1, 15, 0, 180));
+    Eve.satellites = [Gilly];
 
-    const Kerbin = new Body('Kerbin', 600000, 5.2915158e22, 250000, 21549.425, false,
+    const Kerbin = new Body('Kerbin', 600000, 5.2915158e22, 70000, 21549.425, false,
         new Orbit(Kerbol, 13599840256, 0, 0, 0, 0, 180));
     const Mun = new Body('Mun', 200000, 9.7599066e20, 0, 138984.38, true,
         new Orbit(Kerbin, 12000000, 0, 0, 0, 0, 97.4));
     const Minmus = new Body('Minmus', 60000, 2.6457580e19, 0, 40400, false, 
         new Orbit(Kerbin, 47000000, 0, 6, 78, 38, 51.6));
+    Kerbin.satellites = [Mun, Minmus];
 
     const Duna = new Body('Duna', 320000, 4.5154270e21, 50000, 65517.859, false,
         new Orbit(Kerbol, 20726155264, 0.051, 0.06, 135.5, 0, 180));
     const Ike = new Body('Ike', 130000, 2.7821615e20, 0, 65517.862, true,
         new Orbit(Duna, 3200000, 0.03, 0.2, 0, 0, 97.4));
+    Duna.satellites = [Ike];
 
     const Dres = new Body('Dres', 138000, 3.2190937e20, 0, 34800, false,
         new Orbit(Kerbol, 40839348203, 0.145, 5, 280, 90, 180));
@@ -48,9 +56,12 @@ const stock = (function () {
         new Orbit(Jool, 128500000, 0.235, 15, 10, 25, 51.6));
     const Pol = new Body('Pol', 44000, 1.0813507e19, 0, 901902.62, true,
         new Orbit(Jool, 179890000, 0.171, 4.25, 2, 15, 51.6));
+    Jool.satellites = [Laythe, Vall, Tylo, Bop,  Pol];
 
     const Eeloo = new Body('Eeloo', 210000, 1.1149224e21, 0, 19460, false,
         new Orbit(Kerbol, 90118820000, 0.26, 6.15, 50, 260, 180));
+
+    Kerbol.satellites = [Moho, Eve, Kerbin, Duna, Dres, Jool, Eeloo];
 
     return new PlanetPack('Stock', Kerbol, Kerbin, new Calendar(21600, 9201600));
 })();
@@ -65,6 +76,7 @@ const gpp = (function () {
         new Orbit(Ciro, 6992180000, 0.01, 3, 80, 10, 68.7549));
     const Eta = new Body('Eta', 60000, 2.6449495343e19, 0, null, true,
         new Orbit(Thalia, 11300000, 0.06, 2, 180, 350, 270));
+    Thalia.satellites = [Eta];
 
     const Niven = new Body('Niven', 400000, 1.17553312636e22, 65000, 43200, false,
         new Orbit(Ciro, 10488300000, 0.03, 1, 60, 0, 186.2113));
@@ -75,6 +87,7 @@ const gpp = (function () {
         new Orbit(Gael, 28000000, 0, 0, 90, 300, 97.4028279043159));
     const Ceti = new Body('Ceti', 150000, 4.46335233913e20, 0, null, true,
         new Orbit(Gael, 55000000, 0.05, 9, 90, 300, 180));
+    Gael.satellites = [Iota, Ceti];
 
     const Tellumo = new Body('Tellumo', 1000000, 2.7918911751e23, 45000, 57600, false,
         new Orbit(Ciro, 22375000000, 0.02, 1.5, 70, 20, 131.78));
@@ -83,6 +96,7 @@ const gpp = (function () {
         new Orbit(Ciro, 39156200000, 0.06, 2, 100, 50, 223.454));
     const Geminus = new Body('Geminus', 230000, 1.71010681557e21, 0, null, true,
         new Orbit(Gratian, 10300000, 0.025, 3, 60, 30, 90));
+    Gratian.satellites = [Geminus];
 
     const Otho = new Body('Otho', 3500000, 1.65603229175e24, 600000, 50400, false,
         new Orbit(Ciro, 71718700000, 0.04, 1.5, 80, 40, 0));
@@ -92,6 +106,7 @@ const gpp = (function () {
         new Orbit(Otho, 32000000, 0.01, 0.5, 100, 350, 90));
     const Jannah = new Body('Jannah', 105000, 1.05302053334e20, 0, null, true,
         new Orbit(Otho, 65000000, 0.075, 6, 80, 70, 180));
+    Otho.satellites = [Augustus, Hephaestus, Jannah];
 
     const Gauss = new Body('Gauss', 2500000, 9.45936812615e23, 400000, 61200, false,
         new Orbit(Ciro, 139844000000, 0.03, 2, 110, 340, 143.239));
@@ -101,6 +116,8 @@ const gpp = (function () {
         new Orbit(Gauss, 57000000, 0, 1, 90, 20, 180));
     const Tarsiss = new Body('Tarsiss', 320000, 2.55796008295e21, 130000, null, true,
         new Orbit(Catullus, 6000000, 0, 0, 90, 20, 90));
+    Catullus.satellites = [Tarsiss];
+    Gauss.satellites = [Loki, Catullus];
 
     const Nero = new Body('Nero', 5000000, 3.56333478927e24, 560000, 39600, false,
         new Orbit(Ciro, 274093000000, 0.035, 1, 90, 60, 143.239));
@@ -109,24 +126,28 @@ const gpp = (function () {
     const Narisse = new Body('Narisse', 90000, 4.76090916174e19, 0, null, true,
         new Orbit(Nero, 48000000, 0.015, 10.85, 3, 115, 180));
     const Muse = new Body('Muse', 130000, 1.98665098354e20, 0, null, true,
-        new Orbit(Nero, 80000000, 0.005, 10.25, 0, 180, 90);
+        new Orbit(Nero, 80000000, 0.005, 10.25, 0, 180, 90));
     const Minona = new Body('Minona', 120000, 1.26957577646e20, 0, null, true,
-        new Orbit(Nero, 135000000, 0.02, 11, 6, 155, 270);
+        new Orbit(Nero, 135000000, 0.02, 11, 6, 155, 270));
     const Agrippina = new Body('Agrippina', 50000, 1.10206230596e19, 0, 28800, false,
-        new Orbit(Nero, 800000000, 0.16, 18, 150, 60, 0);
+        new Orbit(Nero, 800000000, 0.16, 18, 150, 60, 0));
     const Julia = new Body('Julia', 30000, 1.98371215073e18, 0, 36000, false,
-        new Orbit(Nero, 1625000000, 0.28, 170, 0, 60, 180);
+        new Orbit(Nero, 1625000000, 0.28, 170, 0, 60, 180));
+    Nero.satellites = [Hadrian, Narisse, Muse, Minona, Agrippina, Julia];
 
     const Hox = new Body('Hox', 250000, 1.28573935695e21, 40000, 64800, false,
         new Orbit(Ciro, 139844000000, 0.03, 2, 110, 340, 270));
     const Argo = new Body('Argo', 80000, 3.2914927538e19, 0, null, true,
         new Orbit(Hox, 12500000, 0, 40, 90, 90, 0));
+    Hox.satellites = [Argo];
 
     const Leto = new Body('Leto', 210000, 7.77615163085e20, 35000, 21600, false,
         new Orbit(Ciro, 419531000000, 0.15, 5, 120, 90, 0));
 
     const Grannus = new Body('Grannus', 30170000, 9.54978770381e27, 400000, 1296000, false,
         new Orbit(Ciro, 2000000000000, 0.4, 7, 130, 20, 344.3009564));
+
+    Ciro.satellites = [Icarus, Thalia, Niven, Gael, Tellumo, Gratian, Otho, Gauss, Nero, Hox, Leto, Grannus];
 
     return new PlanetPack('Galileo\'s Planet Pack', Ciro, Gael, new Calendar(21600, 9201600));
 })();
@@ -144,13 +165,15 @@ const rss = (function () {
         new Orbit(Sun, 149598261150.4425, 0.01609636160505683, 23.44603795469773, 359.9965004168758, 102.9720683296131, 357.0607464120944));
     const Moon = new Body('Moon', 1737100, 7.34767309e22, 0, 2360584.68479999, true,
         new Orbit(Earth, 384308437.7707066, 0.05328149353682574, 28.36267790798491, 2.296616161126016, 199.7640930160823, 222.7012350930954));
+    Earth.satellites = [Moon];
 
     const Mars = new Body('Mars', 3375800 , 6.4171876e23, 125000, 88642.6848, false,
         new Orbit(Sun, 227949699961.9763, 0.09326110278323557, 24.69272426910055, 3.351911063089117, 332.1022655295414, 169.3913127942378));
     const Phobos = new Body('Phobos', 7250, 1.072e16, 0, null, true,
-        new Orbit(Mars, 9378492.209088314, 0.01539938155583979, 36.32433410471867, 46.48212553464923, 357.7759243021914, 7.185120835598890);
+        new Orbit(Mars, 9378492.209088314, 0.01539938155583979, 36.32433410471867, 46.48212553464923, 357.7759243021914, 7.185120835598890));
     const Deimos = new Body('Deimos', 5456, 1.48e15, 0, null, true,
         new Orbit(Mars, 23458112.01759387, 0.0003294680798661700, 38.2773701383231, 47.51893570799763, 263.8963868784089, 47.51893570799763));
+    Mars.satellites = [Phobos, Deimos];
 
     // Asteroid belt objects
     const Vesta = new Body('Vesta', 262700 , 2.59e20, 0, 19231.2, false,
@@ -168,6 +191,7 @@ const rss = (function () {
         new Orbit(Jupiter, 1070823468.894524, 0.001190086418361844, 25.27071366962049, 358.0125219248113, 139.2992571342065, 232.6753228788302));
     const Calisto = new Body('Calisto', 69373000, 1.89821e27, 0, null, true,
         new Orbit(Jupiter, 1883812366.573522, 0.007973319796896609, 25.44080019822134, 358.5022563372704, 320.7359683492656, 15.81614025483249));
+    Jupiter.satellites = [Io, Europa, Ganymede, Calisto];
 
     const Saturn = new Body('Saturn', 57216000, 5.6833582e26, 2000000, 38052, false,
         new Orbit(Sun, 1424838758613.269, 0.05347166506749872, 22.56992281132335, 5.970845343832233, 85.04661202834268, 67.46885226487360));
@@ -178,13 +202,14 @@ const rss = (function () {
     const Tethys = new Body('Tethys', 531100 , 6.17449e20, 0, null, true,
         new Orbit(Saturn, 294973462.3804425, 0.001064868868083566, 1.091, 119.2518388332899, 215.9196892523803, 349.8231217220438));
     const Dione = new Body('Dione', 561400 , 1.095452e21, 0, null, true,
-        new Orbit(Saturn, 377650651.5017090, 0.001679230905502774, 0.028, 128.5606071129818, 123.6717156049260, 167.9272784830226);
+        new Orbit(Saturn, 377650651.5017090, 0.001679230905502774, 0.028, 128.5606071129818, 123.6717156049260, 167.9272784830226));
     const Rhea = new Body('Rhea', 763800 , 2.306518e21, 0, null, true,
         new Orbit(Saturn, 527212645.7071990, 0.001168269515756326, 0.331, 130.3670574820431, 172.7367089889645, 13.48887718956405));
     const Titan = new Body('Titan', 2573300, 1.3452241e23, 600000, null, true,
         new Orbit(Saturn, 1221966238.511425, 0.02891936561555365, 6.460492679775526, 126.4945233702913, 182.0886765021483, 75.16117358815676));
     const Iapetus = new Body('Iapetus', 734500 , 1.805e21, 0, null, true,
         new Orbit(Saturn, 3560162593.022970, 0.02880286281969610, 7.489, 50.29392880240187, 314.3819081366686, 139.5683324894335));
+    Saturn.satellites = [Mimas, Enceladus, Tethys, Dione, Rhea, Titan, Iapetus];
 
     const Uranus = new Body('Uranus', 24702000, 8.6812549e25, 1400000, 62063.712, false,
         new Orbit(Sun, 2866832853163.975, 0.04620653158718433, 23.67256993343676, 1.846089669223938, 169.6876790522249, 286.8267359944493));
@@ -198,18 +223,27 @@ const rss = (function () {
         new Orbit(Uranus, 436292682.967703, 0.002486916, 75.045766393, 166.6555214910122, 165.7455424030838, 212.6552821835342));
     const Oberon = new Body('Oberon', 761400, 2.88e21, 0, null, true,
         new Orbit(Uranus, 583435328.340603, 0.00110558297330948, 74.9349049752716, 166.6887328903476, 274.4599570542317, 266.5149396374048));
+    Uranus.satellites = [Miranda, Ariel, Umbriel, Titania, Oberon];
 
     const Neptune = new Body('Neptune', 24085000, 1.0243403e26, 1250000, 58000.32, false,
         new Orbit(Sun, 4497455832811.736, 0.008090397688364061, 22.30735942964904, 3.512610711801178, 29.81485402991322, 162.0995481888285));
     const Triton = new Body('Triton', 1353400, 2.1394709e22, 110000, null, true,
         new Orbit(Neptune, 354767243.5406647, 0.0001688014359763687, 156.834, 197.1953239788069, 220.4523286895169, 358.6561877626771));
+    Neptune.satellites = [Triton];
 
     const Pluto = new Body('Pluto', 1187000, 1.305e22, 110000, 551856.672, false,
         new Orbit(Sun, 5845670624078.223, 0.2462772488425983, 23.61236405752844, 44.36099836994975, 184.4945352163909, 300.1297304812811));
     const Charon = new Body('Charon', 603500, 1.52e21, 0, null, true,
         new Orbit(Pluto, 19596193.83540397, 0.00005082225659448947, 0.001, 222.4053735570010, 188.4738646852448, 30.89989240060877));
+    Pluto.satellites = [Charon];
+
+    Sun.satellites = [Mercury, Venus, Earth, Mars, Vesta, Ceres, Jupiter, Saturn, Uranus, Neptune, Pluto];
 
     return new PlanetPack('Real Solar System', Sun, Earth, new Calendar(86400, 31536000));
 })();
 
-export planetpacks = [stock, gpp, rss];
+export const planetpacks = [stock, gpp, rss];
+
+export function findPlanetPack(name) {
+    return planetpacks.find(p => p.name === name);
+}

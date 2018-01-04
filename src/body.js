@@ -1,12 +1,11 @@
-import {GRAVITATIONAL_CONSTANT} from './consts.js';
+import {GRAVITATIONAL_CONSTANT, PI} from './consts.js';
 
 export default class Body {
     constructor(name, radius, mass, atmosphereHeight, rotationalPeriod, tidallyLocked = false, orbit=null, satellites=[]) {
         this.name = name;
         this.radius = radius;
         this.mass = mass;
-        this.atmosphereHeightMeters = atmosphereHeightMeters;
-        this.lowSpaceBorder = lowSpaceBorder;
+        this.atmosphereHeight = atmosphereHeight;
         this.tidallyLocked = tidallyLocked;
         if (tidallyLocked && orbit) {
             const sign = rotationalPeriod < 0 ? -1 : 1;
@@ -16,14 +15,26 @@ export default class Body {
         }
         this.orbit = orbit;
         this.satellites = satellites;
-
-        if (orbit) {
-            orbit.parentBody.addSatellite(this);
-        }
     }
 
     get mu() {
         return this.mass * GRAVITATIONAL_CONSTANT;
+    }
+
+    get equitorialCircumference() {
+        return 2 * PI * this.radius;
+    }
+
+    get surfaceArea() {
+        return 4 * PI * Math.pow(this.radius, 2);
+    }
+
+    get volume() {
+        return 4 / 3 * PI * Math.pow(this.radius, 3);
+    }
+
+    get density() {
+        return this.mass / this.volume;
     }
 
     get aslGravity() {
@@ -34,12 +45,20 @@ export default class Body {
         return this.mu / Math.pow(this.radius + altitude, 2);   
     }
 
+    get escapeVelocity() {
+        return Math.sqrt(2 * this.aslGravity * this.radius);
+    }
+
     get sphereOfInfluence() {
         if (this.orbit === null) {
             return Infinity;
         }
 
         return Math.pow(this.orbit.semiMajorAxis * (this.mass / this.parentBody.mass), 0.4);
+    }
+
+    get rotationalSpeed() {
+        return this.equitorialCircumference / this.rotationalPeriod;
     }
 
     get parentBody() {
@@ -70,29 +89,20 @@ export default class Body {
     }
 
     addSatellite(satellite) {
-        if (satellite.orbit) {
-            satellite.orbit.parentBody = this;
-        }
-
         this.satellites.push(satellite);
     }
 
-    clone() {
+    clone(parentBody=null) {
         let clonedBody = new Body(
             this.name,
             this.radius,
             this.mass,
             this.atmosphereHeight,
             this.rotationalPeriod,
-            this.tidallyLocked);
-        if (this.orbit) {
-            clonedBody.orbit = this.orbit.clone();
-        }
+            this.tidallyLocked,
+            this.orbit ? this.orbit.clone(parentBody) : null);
 
-        this.satellites.forEach(satellite => {
-           let clonedSatellite = satellite.clone();
-           clonedBody.addSatellite(satellite);
-        });
+        clonedBody.satellites = this.satellites.map(satellite => satellite.clone(clonedBody));
 
         return clonedBody;
     }
