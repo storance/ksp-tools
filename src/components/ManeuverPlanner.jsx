@@ -17,12 +17,14 @@ export class ManeuverPlanner extends React.PureComponent {
                         name="currentApoapsis"
                         value={this.props.currentApoapsis}
                         unitsValue={this.props.currentApoapsisUnits}
+                        error={this.props.errors.currentApoapsis}
                         update={newValue => this.props.updateManeuverPlanner('currentApoapsis', newValue)}
                         updateUnits={newValue => this.props.updateManeuverPlanner('currentApoapsisUnits', newValue)} />
                     <ApsisField label="Periapsis"
                         name="currentPeriapsis"
                         value={this.props.currentPeriapsis}
                         unitsValue={this.props.currentPeriapsisUnits}
+                        error={this.props.errors.currentPeriapsis}
                         update={newValue => this.props.updateManeuverPlanner('currentPeriapsis', newValue)}
                         updateUnits={newValue => this.props.updateManeuverPlanner('currentPeriapsisUnits', newValue)} />
                 </fieldset>
@@ -32,12 +34,14 @@ export class ManeuverPlanner extends React.PureComponent {
                         name="desiredApoapsis"
                         value={this.props.desiredApoapsis}
                         unitsValue={this.props.desiredApoapsisUnits}
+                        error={this.props.errors.desiredApoapsis}
                         update={newValue => this.props.updateManeuverPlanner('desiredApoapsis', newValue)}
                         updateUnits={newValue => this.props.updateManeuverPlanner('desiredApoapsisUnits', newValue)} />
                     <ApsisField label="Periapsis"
                         name="desiredPeriapsis"
                         value={this.props.desiredPeriapsis}
                         unitsValue={this.props.desiredPeriapsisUnits}
+                        error={this.props.errors.desiredPeriapsis}
                         update={newValue => this.props.updateManeuverPlanner('desiredPeriapsis', newValue)}
                         updateUnits={newValue => this.props.updateManeuverPlanner('desiredPeriapsisUnits', newValue)} />
 
@@ -61,6 +65,7 @@ function mapStateToProps(state) {
         desiredPeriapsis: state.getIn(['maneuverPlanner', 'desiredPeriapsis']),
         desiredPeriapsisUnits: state.getIn(['maneuverPlanner', 'desiredPeriapsisUnits']),
         maneuverPlan : state.getIn(['maneuverPlanner', 'maneuverPlan']),
+        errors : state.getIn(['maneuverPlanner', 'errors']),
         body: state.getIn(['celestialBody', 'selectedBody'])
     }
 }

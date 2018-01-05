@@ -1,11 +1,18 @@
 import React from 'react';
+import classNames from 'classnames';
 
 export default class ApsisField extends React.PureComponent {
     render() {
-        return <div className="form-group">
+        const classes = classNames({
+            'form-group' : true,
+            'has-error' : !!this.props.error
+        });
+
+        return <div className={classes}>
             <label htmlFor={this.props.name} className="control-label col-sm-3">{this.props.label}</label>
             <div className="col-sm-6">
                 <div className="row">
+                    {this.props.error && <span className="col-sm-12 help-block">{this.props.error}</span>}
                     <div className="col-sm-10">
                         <input type="number"
                                className="form-control"

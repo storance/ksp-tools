@@ -42,6 +42,7 @@ export class OrbitInformation extends React.PureComponent {
                             name="apoapsis"
                             value={this.props.apoapsis}
                             unitsValue={this.props.apoapsisUnits}
+                            error={this.props.errors.apoapsis}
                             update={newValue => this.props.updateOrbitInformation('apoapsis', newValue)}
                             updateUnits={newValue => this.props.updateOrbitInformation('apoapsisUnits', newValue)} />
                     }
@@ -51,6 +52,7 @@ export class OrbitInformation extends React.PureComponent {
                             name="periapsis"
                             value={this.props.periapsis}
                             unitsValue={this.props.periapsisUnits}
+                            error={this.props.errors.periapsis}
                             update={newValue => this.props.updateOrbitInformation('periapsis', newValue)}
                             updateUnits={newValue => this.props.updateOrbitInformation('periapsisUnits', newValue)} />
                     }
@@ -60,6 +62,7 @@ export class OrbitInformation extends React.PureComponent {
                                    type="number"
                                    name="period"
                                    value={this.props.period}
+                                   error={this.props.errors.period}
                                    update={newValue => this.props.updateOrbitInformation('period', newValue)}
                                    suffix={"s"} />
                     }
@@ -96,6 +99,7 @@ function mapStateToProps(state) {
         period: state.getIn(['orbitInformation', 'period']),
         mode: state.getIn(['orbitInformation', 'mode']),
         orbit: state.getIn(['orbitInformation', 'orbit']),
+        errors: state.getIn(['orbitInformation', 'errors']),
         planetpack: state.getIn(['celestialBody', 'selectedPlanetPack']),
         body: state.getIn(['celestialBody', 'selectedBody'])
     }

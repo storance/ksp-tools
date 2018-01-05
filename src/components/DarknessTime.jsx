@@ -20,12 +20,14 @@ export class DarknessTime extends React.PureComponent {
                         name="apoapsis"
                         value={this.props.apoapsis}
                         unitsValue={this.props.apoapsisUnits}
+                        error={this.props.errors.apoapsis}
                         update={newValue => this.props.updateDarknessTime('apoapsis', newValue)}
                         updateUnits={newValue => this.props.updateDarknessTime('apoapsisUnits', newValue)} />
                     <ApsisField label="Periapsis"
                         name="periapsis"
                         value={this.props.periapsis}
                         unitsValue={this.props.periapsisUnits}
+                        error={this.props.errors.periapsis}
                         update={newValue => this.props.updateDarknessTime('periapsis', newValue)}
                         updateUnits={newValue => this.props.updateDarknessTime('periapsisUnits', newValue)} />
 
@@ -46,12 +48,14 @@ export class DarknessTime extends React.PureComponent {
                                type="number"
                                name={"darknessTimeManual"}
                                value={this.props.darknessTimeManual}
+                               error={this.props.errors.darknessTime}
                                update={newValue => this.props.updateDarknessTime('darknessTimeManual', newValue)}
                                suffix={"s"} />
                     <TextField label={"Energy Use"}
                                type="number"
                                name={"energyUse"}
                                value={this.props.energyUse}
+                               error={this.props.errors.energyUse}
                                update={newValue => this.props.updateDarknessTime('energyUse', newValue)}
                                suffix={"ec/s"} />
 
@@ -78,6 +82,7 @@ function mapStateToProps(state) {
         darknessTimeManual: state.getIn(['darknessTime', 'darknessTimeManual']),
         energyUse: state.getIn(['darknessTime', 'energyUse']),
         energyCapacity: state.getIn(['darknessTime', 'energyCapacity']),
+        errors: state.getIn(['darknessTime', 'errors']),
         planetpack: state.getIn(['celestialBody', 'selectedPlanetPack']),
         body: state.getIn(['celestialBody', 'selectedBody'])
     }

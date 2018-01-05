@@ -22,3 +22,12 @@ export function toRadians(deg) {
 export function toDegrees(rad) {
     return rad * 180 / PI;
 }
+
+export function isPositiveNumber(n) {
+    const floatVal = parseFloat(n);
+    return Number.isFinite(floatVal) && floatVal >= 0;
+}
+
+export function isEmpty(obj) {
+    return Object.keys(obj).length === 0;
+}
