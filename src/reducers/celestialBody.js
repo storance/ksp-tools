@@ -1,6 +1,6 @@
 import { Map } from 'immutable';
-import { planetpacks, findPlanetPack } from '../planetpack.js';
-import { rescales, findRescale } from '../rescale.js';
+import { planetpacks, findPlanetPack } from '../planetpacks';
+import { rescales, findRescale } from '../rescale';
 
 const initialPlanetPack = planetpacks[0];
 const initialRescale = rescales[0];

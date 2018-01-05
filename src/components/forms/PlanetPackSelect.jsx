@@ -1,6 +1,6 @@
 import React from 'react';
 import SelectField from './SelectField';
-import { planetpacks } from '../../planetpack.js';
+import { planetpacks } from '../../planetpacks';
 
 export default class PlanetPackSelect extends React.PureComponent {
     render() {

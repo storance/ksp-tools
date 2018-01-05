@@ -1,5 +1,5 @@
 import Calendar from './calendar.js';
-import { PlanetPack } from './planetpack.js';
+import PlanetPack from './planetpack.js';
 import { GRAVITATIONAL_CONSTANT } from './consts.js';
 
 export class Rescale {
