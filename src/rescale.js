@@ -32,6 +32,7 @@ export class Rescale {
             calendar = new Calendar(dayLength, daysInYear * dayLength);
         }
 
+        console.log(rescaledSun);
         return new PlanetPack(planetpack.name + ' ' + this.name, rescaledSun, homeworld, calendar);
     }
 
@@ -62,7 +63,8 @@ export class Rescale {
             body.orbit.semiMajorAxis = semiMajorAxis || body.orbit.semiMajorAxis * rescaleFactor;
             if (body.tidallyLocked) {
                 // for tidally locked bodies, set it's rotational period to it's orbital period
-                const rotationSign = body.rotationalPeriod < 0 ? -1 : 1; // negative rotationPeriod means it rotates westward instead of eastward
+                // negative rotationPeriod means it rotates westward instead of eastward
+                const rotationSign = body.rotationalPeriod < 0 ? -1 : 1;
                 body.rotationalPeriod = body.orbit.period * rotationSign;
             }
         }

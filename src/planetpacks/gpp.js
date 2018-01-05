@@ -19,7 +19,15 @@ const Icarus = new Body({
     mass: 6.01872960694e20,
     highSpaceBorder: 80000,
     rotationalPeriod: 766931.065512794,
-    orbit: new Orbit(Ciro, 3496090000, 0.1, 6, 50, 340, 270)
+    orbit: new Orbit({
+        parentBody: Ciro,
+        semiMajorAxis: 3496090000,
+        eccentricity: 0.1,
+        inclination: 6,
+        longitudeOfAscendingNode: 50,
+        argumentOfPeriapsis: 240,
+        meanAnomoloyAtEpoch: 270
+    })
 });
 
 // Thalia System
@@ -29,7 +37,15 @@ const Thalia = new Body({
     mass: 3.21361368418e21,
     highSpaceBorder: 135000,
     rotationalPeriod: 72000,
-    orbit: new Orbit(Ciro, 6992180000, 0.01, 3, 80, 10, 68.7549)
+    orbit: new Orbit({
+        parentBody: Ciro,
+        semiMajorAxis: 6992180000,
+        eccentricity: 0.10,
+        inclination: 3,
+        longitudeOfAscendingNode: 80,
+        argumentOfPeriapsis: 10,
+        meanAnomoloyAtEpoch: 68.8
+    })
 });
 const Eta = new Body({
     name: 'Eta',
@@ -37,7 +53,15 @@ const Eta = new Body({
     mass: 2.6449495343e19,
     highSpaceBorder: 30000,
     tidallyLocked: true,
-    orbit: new Orbit(Thalia, 11300000, 0.06, 2, 180, 350, 270)
+    orbit: new Orbit({
+        parentBody: Thalia,
+        semiMajorAxis: 11300000,
+        eccentricity: 0.06,
+        inclination: 2,
+        longitudeOfAscendingNode: 180,
+        argumentOfPeriapsis: 250,
+        meanAnomoloyAtEpoch: 270
+    })
 });
 Thalia.satellites = [Eta];
 
@@ -49,7 +73,15 @@ const Niven = new Body({
     atmosphereHeight: 65000,
     highSpaceBorder: 200000,
     rotationalPeriod: 43200,
-    orbit: new Orbit(Ciro, 10488300000, 0.03, 1, 60, 0, 186.2113)
+    orbit: new Orbit({
+        parentBody: Ciro,
+        semiMajorAxis: 10488300000,
+        eccentricity: 0.03,
+        inclination: 1,
+        longitudeOfAscendingNode: 60,
+        argumentOfPeriapsis: 0,
+        meanAnomoloyAtEpoch: 186.2
+    })
 });
 
 // Gael System
@@ -60,7 +92,15 @@ const Gael = new Body({
     atmosphereHeight: 70000,
     highSpaceBorder: 300000,
     rotationalPeriod: 21600,
-    orbit: new Orbit(Ciro, 13982766706.4122, 0, 0, 90, 300, 0)
+    orbit: new Orbit({
+        parentBody: Ciro,
+        semiMajorAxis: 13982766706.4122,
+        eccentricity: 0,
+        inclination: 0,
+        longitudeOfAscendingNode: 90,
+        argumentOfPeriapsis: 300,
+        meanAnomoloyAtEpoch: 0
+    })
 });
 const Iota = new Body({
     name: 'Iota',
@@ -68,7 +108,15 @@ const Iota = new Body({
     mass: 1.24900394675e20,
     highSpaceBorder: 50000,
     tidallyLocked: true,
-    orbit: new Orbit(Gael, 28000000, 0, 0, 90, 300, 97.4028279043159)
+    orbit: new Orbit({
+        parentBody: Gael,
+        semiMajorAxis: 28000000,
+        eccentricity: 0,
+        inclination: 0,
+        longitudeOfAscendingNode: 90,
+        argumentOfPeriapsis: 300,
+        meanAnomoloyAtEpoch: 97.4
+    })
 });
 const Ceti = new Body({
     name: 'Ceti',
@@ -76,7 +124,15 @@ const Ceti = new Body({
     mass: 4.46335233913e20,
     highSpaceBorder: 75000,
     tidallyLocked: true,
-    orbit: new Orbit(Gael, 55000000, 0.05, 9, 90, 300, 180)
+    orbit: new Orbit({
+        parentBody: Gael,
+        semiMajorAxis: 55000000,
+        eccentricity: 0.05,
+        inclination: 9,
+        longitudeOfAscendingNode: 90,
+        argumentOfPeriapsis: 300,
+        meanAnomoloyAtEpoch: 180
+    })
 });
 Gael.satellites = [Iota, Ceti];
 
@@ -88,7 +144,15 @@ const Tellumo = new Body({
     atmosphereHeight: 45000,
     highSpaceBorder: 500000,
     rotationalPeriod: 57600,
-    orbit: new Orbit(Ciro, 22375000000, 0.02, 1.5, 70, 20, 131.78)
+    orbit: new Orbit({
+        parentBody: Ciro,
+        semiMajorAxis: 22375000000,
+        eccentricity: 0.02,
+        inclination: 1.5,
+        longitudeOfAscendingNode: 70,
+        argumentOfPeriapsis: 20,
+        meanAnomoloyAtEpoch: 131.8
+    })
 });
 
 // Gratian System
@@ -99,7 +163,15 @@ const Gratian = new Body({
     atmosphereHeight: 50000,
     highSpaceBorder: 275000,
     rotationalPeriod: 139245.781338531,
-    orbit: new Orbit(Ciro, 39156200000, 0.06, 2, 100, 50, 223.454)
+    orbit: new Orbit({
+        parentBody: Ciro,
+        semiMajorAxis: 39156200000,
+        eccentricity: 0.06,
+        inclination: 2,
+        longitudeOfAscendingNode: 100,
+        argumentOfPeriapsis: 50,
+        meanAnomoloyAtEpoch: 223.5
+    })
 });
 const Geminus = new Body({
     name: 'Geminus',
@@ -107,7 +179,15 @@ const Geminus = new Body({
     mass: 1.71010681557e21,
     highSpaceBorder: 115000,
     tidallyLocked: true,
-    orbit: new Orbit(Gratian, 10300000, 0.025, 3, 60, 30, 90)
+    orbit: new Orbit({
+        parentBody: Gratian,
+        semiMajorAxis: 10300000,
+        eccentricity: 0.025,
+        inclination: 3,
+        longitudeOfAscendingNode: 60,
+        argumentOfPeriapsis: 30,
+        meanAnomoloyAtEpoch: 90
+    })
 });
 Gratian.satellites = [Geminus];
 
@@ -119,7 +199,15 @@ const Otho = new Body({
     atmosphereHeight: 600000,
     highSpaceBorder: 1750000,
     rotationalPeriod: 50400, 
-    orbit: new Orbit(Ciro, 71718700000, 0.04, 1.5, 80, 40, 0)
+    orbit: new Orbit({
+        parentBody: Ciro,
+        semiMajorAxis: 71718700000,
+        eccentricity: 0.04,
+        inclination: 1.5,
+        longitudeOfAscendingNode: 80,
+        argumentOfPeriapsis: 40,
+        meanAnomoloyAtEpoch: 0
+    })
 });
 const Augustus = new Body({
     name: 'Augustus',
@@ -128,7 +216,15 @@ const Augustus = new Body({
     atmosphereHeight: 60000,
     highSpaceBorder: 175000,
     tidallyLocked: true,
-    orbit: new Orbit(Otho, 20000000, 0.005, 1, 60, 60, 0)
+    orbit: new Orbit({
+        parentBody: Otho,
+        semiMajorAxis: 20000000,
+        eccentricity: 0.005,
+        inclination: 1,
+        longitudeOfAscendingNode: 60,
+        argumentOfPeriapsis: 60,
+        meanAnomoloyAtEpoch: 0
+    })
 });
 const Hephaestus = new Body({
     name: 'Hephaestus',
@@ -136,7 +232,15 @@ const Hephaestus = new Body({
     mass: 1.83677050993e20,
     highSpaceBorder: 62500,
     tidallyLocked: true,
-    orbit: new Orbit(Otho, 32000000, 0.01, 0.5, 100, 350, 90)
+    orbit: new Orbit({
+        parentBody: Otho,
+        semiMajorAxis: 32000000,
+        eccentricity: 0.01,
+        inclination: 0.5,
+        longitudeOfAscendingNode: 100,
+        argumentOfPeriapsis: 350,
+        meanAnomoloyAtEpoch: 90
+    })
 });
 const Jannah = new Body({
     name: 'Jannah',
@@ -144,7 +248,15 @@ const Jannah = new Body({
     mass: 1.05302053334e20,
     highSpaceBorder: 52500,
     tidallyLocked: true,
-    orbit: new Orbit(Otho, 65000000, 0.075, 6, 80, 70, 180)
+    orbit: new Orbit({
+        parentBody: Otho,
+        semiMajorAxis: 65000000,
+        eccentricity: 0.0075,
+        inclination: 6,
+        longitudeOfAscendingNode: 80,
+        argumentOfPeriapsis: 70,
+        meanAnomoloyAtEpoch: 180
+    })
 });
 Otho.satellites = [Augustus, Hephaestus, Jannah];
 
@@ -156,7 +268,15 @@ const Gauss = new Body({
     atmosphereHeight: 400000,
     highSpaceBorder: 1250000,
     rotationalPeriod: 61200,
-    orbit: new Orbit(Ciro, 139844000000, 0.03, 2, 110, 340, 143.239)
+    orbit: new Orbit({
+        parentBody: Ciro,
+        semiMajorAxis: 139844000000,
+        eccentricity: 0.03,
+        inclination: 2,
+        longitudeOfAscendingNode: 100,
+        argumentOfPeriapsis: 340,
+        meanAnomoloyAtEpoch: 143.2
+    })
 });
 const Loki = new Body({
     name: 'Loki',
@@ -164,7 +284,15 @@ const Loki = new Body({
     mass: 4.76090916174e20,
     highSpaceBorder: 90000,
     tidallyLocked: true,
-    orbit: new Orbit(Gauss, 18500000, 0.02, 4, 130, 300, 0)
+    orbit: new Orbit({
+        parentBody: Gauss,
+        semiMajorAxis: 18500000,
+        eccentricity: 0.02,
+        inclination: 4,
+        longitudeOfAscendingNode: 130,
+        argumentOfPeriapsis: 300,
+        meanAnomoloyAtEpoch: 0
+    })
 });
 const Catullus = new Body({
     name: 'Catullus',
@@ -173,7 +301,15 @@ const Catullus = new Body({
     atmosphereHeight: 280000,
     highSpaceBorder: 600000,
     tidallyLocked: true,
-    orbit: new Orbit(Gauss, 57000000, 0, 1, 90, 20, 180)
+    orbit: new Orbit({
+        parentBody: Gauss,
+        semiMajorAxis: 57000000,
+        eccentricity: 0,
+        inclination: 1,
+        longitudeOfAscendingNode: 90,
+        argumentOfPeriapsis: 20,
+        meanAnomoloyAtEpoch: 180
+    })
 });
 const Tarsiss = new Body({
     name: 'Tarsiss',
@@ -182,7 +318,15 @@ const Tarsiss = new Body({
     atmosphereHeight: 130000,
     highSpaceBorder: 160000,
     tidallyLocked: true,
-    orbit: new Orbit(Catullus, 6000000, 0, 0, 90, 20, 90)
+    orbit: new Orbit({
+        parentBody: Gauss,
+        semiMajorAxis: 6000000,
+        eccentricity: 0,
+        inclination: 0,
+        longitudeOfAscendingNode: 90,
+        argumentOfPeriapsis: 20,
+        meanAnomoloyAtEpoch: 90
+    })
 });
 Catullus.satellites = [Tarsiss];
 Gauss.satellites = [Loki, Catullus];
@@ -195,7 +339,15 @@ const Nero = new Body({
     atmosphereHeight: 560000,
     highSpaceBorder: 2500000,
     rotationalPeriod: 39600,
-    orbit: new Orbit(Ciro, 274093000000, 0.035, 1, 90, 60, 143.239)
+    orbit: new Orbit({
+        parentBody: Ciro,
+        semiMajorAxis: 274093000000,
+        eccentricity: 0.035,
+        inclination: 1,
+        longitudeOfAscendingNode: 90,
+        argumentOfPeriapsis: 60,
+        meanAnomoloyAtEpoch: 143.2
+    })
 });
 const Hadrian = new Body({
     name: 'Hadrian',
@@ -204,7 +356,15 @@ const Hadrian = new Body({
     atmosphereHeight: 80000,
     highSpaceBorder: 150000,
     tidallyLocked: true,
-    orbit: new Orbit(Nero, 30000000, 0.01, 10, 357, 145, 0)
+    orbit: new Orbit({
+        parentBody: Nero,
+        semiMajorAxis: 30000000,
+        eccentricity: 0.01,
+        inclination: 10,
+        longitudeOfAscendingNode: 90,
+        argumentOfPeriapsis: 357,
+        meanAnomoloyAtEpoch: 145
+    })
 });
 const Narisse = new Body({
     name: 'Narisse',
@@ -212,7 +372,15 @@ const Narisse = new Body({
     mass: 4.76090916174e19,
     highSpaceBorder: 45000,
     tidallyLocked: true,
-    orbit: new Orbit(Nero, 48000000, 0.015, 10.85, 3, 115, 180)
+    orbit: new Orbit({
+        parentBody: Nero,
+        semiMajorAxis: 48000000,
+        eccentricity: 0.015,
+        inclination: 10.85,
+        longitudeOfAscendingNode: 3,
+        argumentOfPeriapsis: 115,
+        meanAnomoloyAtEpoch: 180
+    })
 });
 const Muse = new Body({
     name: 'Muse',
@@ -220,7 +388,15 @@ const Muse = new Body({
     mass: 1.98665098354e20,
     highSpaceBorder: 65000,
     tidallyLocked: true,
-    orbit: new Orbit(Nero, 80000000, 0.005, 10.25, 0, 180, 90)
+    orbit: new Orbit({
+        parentBody: Nero,
+        semiMajorAxis: 80000000,
+        eccentricity: 0.005,
+        inclination: 10.25,
+        longitudeOfAscendingNode: 0,
+        argumentOfPeriapsis: 180,
+        meanAnomoloyAtEpoch: 90
+    })
 });
 const Minona = new Body({
     name: 'Minona',
@@ -228,7 +404,15 @@ const Minona = new Body({
     mass: 1.26957577646e20,
     highSpaceBorder: 60000,
     tidallyLocked: true,
-    orbit: new Orbit(Nero, 135000000, 0.02, 11, 6, 155, 270)
+    orbit: new Orbit({
+        parentBody: Nero,
+        semiMajorAxis: 135000000,
+        eccentricity: 0.02,
+        inclination: 11,
+        longitudeOfAscendingNode: 6,
+        argumentOfPeriapsis: 155,
+        meanAnomoloyAtEpoch: 270
+    })
 });
 const Agrippina = new Body({
     name: 'Agrippina',
@@ -236,7 +420,15 @@ const Agrippina = new Body({
     mass: 1.10206230596e19,
     highSpaceBorder: 25000,
     rotationalPeriod: 28800,
-    orbit: new Orbit(Nero, 800000000, 0.16, 18, 150, 60, 0)
+    orbit: new Orbit({
+        parentBody: Nero,
+        semiMajorAxis: 800000000,
+        eccentricity: 0.16,
+        inclination: 18,
+        longitudeOfAscendingNode: 150,
+        argumentOfPeriapsis: 60,
+        meanAnomoloyAtEpoch: 0
+    })
 });
 const Julia = new Body({
     name: 'Julia',
@@ -244,7 +436,15 @@ const Julia = new Body({
     mass: 1.98371215073e18,
     highSpaceBorder: 15000,
     rotationalPeriod: 36000,
-    orbit: new Orbit(Nero, 1625000000, 0.28, 170, 0, 60, 180)
+    orbit: new Orbit({
+        parentBody: Nero,
+        semiMajorAxis: 1625000000,
+        eccentricity: 0.28,
+        inclination: 170,
+        longitudeOfAscendingNode: 0,
+        argumentOfPeriapsis: 60,
+        meanAnomoloyAtEpoch: 180
+    })
 });
 Nero.satellites = [Hadrian, Narisse, Muse, Minona, Agrippina, Julia];
 
@@ -256,7 +456,15 @@ const Hox = new Body({
     atmosphereHeight: 40000,
     highSpaceBorder: 125000,
     rotationalPeriod: 64800,
-    orbit: new Orbit(Ciro, 139844000000, 0.03, 2, 110, 340, 270)
+    orbit: new Orbit({
+        parentBody: Ciro,
+        semiMajorAxis: 139844000000,
+        eccentricity: 0.03,
+        inclination: 2,
+        longitudeOfAscendingNode: 110,
+        argumentOfPeriapsis: 340,
+        meanAnomoloyAtEpoch: 270
+    })
 });
 const Argo = new Body({
     name: 'Argo',
@@ -264,7 +472,15 @@ const Argo = new Body({
     mass: 3.2914927538e19,
     highSpaceBorder: 40000,
     tidallyLocked: true,
-    orbit: new Orbit(Hox, 12500000, 0, 40, 90, 90, 0)
+    orbit: new Orbit({
+        parentBody: Hox,
+        semiMajorAxis: 12500000,
+        eccentricity: 0,
+        inclination: 40,
+        longitudeOfAscendingNode: 90,
+        argumentOfPeriapsis: 90,
+        meanAnomoloyAtEpoch: 0
+    })
 });
 Hox.satellites = [Argo];
 
@@ -276,7 +492,15 @@ const Leto = new Body({
     atmosphereHeight: 35000,
     highSpaceBorder: 105000,
     rotationalPeriod: 21600,
-    orbit: new Orbit(Ciro, 419531000000, 0.15, 5, 120, 90, 0)
+    orbit: new Orbit({
+        parentBody: Ciro,
+        semiMajorAxis: 419531000000,
+        eccentricity: 0.15,
+        inclination: 5,
+        longitudeOfAscendingNode: 120,
+        argumentOfPeriapsis: 90,
+        meanAnomoloyAtEpoch: 0
+    })
 });
 
 // Grannus System
@@ -288,7 +512,15 @@ const Grannus = new Body({
     highSpaceBorder: 50000000000,
     rotationalPeriod: 1296000,
     sphereOfInfluence: 500000000000,
-    orbit: new Orbit(Ciro, 2000000000000, 0.4, 7, 130, 20, 344.3009564)
+    orbit: new Orbit({
+        parentBody: Ciro,
+        semiMajorAxis: 2000000000000,
+        eccentricity: 0.4,
+        inclination: 7,
+        longitudeOfAscendingNode: 130,
+        argumentOfPeriapsis: 20,
+        meanAnomoloyAtEpoch: 344.3
+    })
 });
 
 Ciro.satellites = [Icarus, Thalia, Niven, Gael, Tellumo, Gratian, Otho, Gauss, Nero, Hox, Leto, Grannus];

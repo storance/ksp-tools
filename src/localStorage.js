@@ -18,7 +18,11 @@ export const saveStateMiddleware = store => next => action => {
     const state = store.getState();
 
     let persistState = {
-        celestialBody : state.get('celestialBody').delete('body').delete('selectedBody').delete('selectedPlanetPack').toJS()
+        celestialBody : state.get('celestialBody')
+                             .delete('body')
+                             .delete('selectedBody')
+                             .delete('selectedPlanetPack')
+                             .toJS()
     };
 
     try {

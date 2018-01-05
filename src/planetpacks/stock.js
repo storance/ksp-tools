@@ -18,7 +18,15 @@ const Moho = new Body({
     mass: 2.5263314e21, 
     highSpaceBorder: 80000,
     rotationalPeriod:  1210000,
-    orbit: new Orbit(Kerbol, 5263138304, 0.2, 7, 70, 15, 180)
+    orbit: new Orbit({
+        parentBody: Kerbol,
+        semiMajorAxis: 5263138304,
+        eccentricity: 0.2,
+        inclination: 7,
+        longitudeOfAscendingNode: 70,
+        argumentOfPeriapsis: 15,
+        meanAnomoloyAtEpoch: 180
+    })
 });
 
 // Eve System
@@ -29,7 +37,15 @@ const Eve = new Body({
     atmosphereHeight: 90000,
     highSpaceBorder: 400000,
     rotationalPeriod: 80500,
-    orbit: new Orbit(Kerbol, 9832684544, 0.01, 2.1, 15, 0, 180)
+    orbit: new Orbit({
+        parentBody: Kerbol,
+        semiMajorAxis: 9832684544,
+        eccentricity: 0.01,
+        inclination: 2.1,
+        longitudeOfAscendingNode: 15,
+        argumentOfPeriapsis: 0,
+        meanAnomoloyAtEpoch: 180
+    })
 });
 const Gilly = new Body({
     name: 'Gilly',
@@ -37,7 +53,15 @@ const Gilly = new Body({
     mass: 1.2420363e17,
     highSpaceBorder: 6000,
     rotationalPeriod: 28255,
-    orbit: new Orbit(Eve, 9832684544, 0.01, 2.1, 15, 0, 180)
+    orbit: new Orbit({
+        parentBody: Eve,
+        semiMajorAxis: 31500000 ,
+        eccentricity: 0.55,
+        inclination: 12,
+        longitudeOfAscendingNode: 80,
+        argumentOfPeriapsis: 10,
+        meanAnomoloyAtEpoch: 51.6
+    })
 });
 Eve.satellites = [Gilly];
 
@@ -49,7 +73,15 @@ const Kerbin = new Body({
     atmosphereHeight: 70000,
     highSpaceBorder: 250000,
     rotationalPeriod: 21549.425, 
-    orbit: new Orbit(Kerbol, 13599840256, 0, 0, 0, 0, 180)
+    orbit: new Orbit({
+        parentBody: Kerbol,
+        semiMajorAxis: 13599840256,
+        eccentricity: 0,
+        inclination: 0,
+        longitudeOfAscendingNode: 0,
+        argumentOfPeriapsis: 0,
+        meanAnomoloyAtEpoch: 180
+    })
 });
 const Mun = new Body({
     name: 'Mun',
@@ -57,7 +89,15 @@ const Mun = new Body({
     mass: 9.7599066e20, 
     highSpaceBorder: 60000,
     tidallyLocked: true,
-    orbit: new Orbit(Kerbin, 12000000, 0, 0, 0, 0, 97.4)
+    orbit: new Orbit({
+        parentBody: Kerbin,
+        semiMajorAxis: 12000000,
+        eccentricity: 0,
+        inclination: 0,
+        longitudeOfAscendingNode: 0,
+        argumentOfPeriapsis: 0,
+        meanAnomoloyAtEpoch: 97.4
+    })
 });
 const Minmus = new Body({
     name: 'Minmus',
@@ -65,7 +105,15 @@ const Minmus = new Body({
     mass: 2.6457580e19,
     highSpaceBorder: 30000,
     rotationalPeriod: 40400,
-    orbit: new Orbit(Kerbin, 47000000, 0, 6, 78, 38, 51.6)
+    orbit: new Orbit({
+        parentBody: Kerbin,
+        semiMajorAxis: 47000000,
+        eccentricity: 0,
+        inclination: 6,
+        longitudeOfAscendingNode: 78,
+        argumentOfPeriapsis: 38,
+        meanAnomoloyAtEpoch: 51.6
+    })
 });
 Kerbin.satellites = [Mun, Minmus];
 
@@ -77,7 +125,15 @@ const Duna = new Body({
     atmosphereHeight: 50000,
     highSpaceBorder: 140000,
     rotationalPeriod: 65517.859,
-    orbit: new Orbit(Kerbol, 20726155264, 0.051, 0.06, 135.5, 0, 180)
+    orbit: new Orbit({
+        parentBody: Kerbol,
+        semiMajorAxis: 20726155264,
+        eccentricity: 0.051,
+        inclination: 0.06,
+        longitudeOfAscendingNode: 135.5,
+        argumentOfPeriapsis: 0,
+        meanAnomoloyAtEpoch: 180
+    })
 });
 const Ike = new Body({
     name: 'Ike',
@@ -85,7 +141,15 @@ const Ike = new Body({
     mass: 2.7821615e20, 
     highSpaceBorder: 50000,
     tidallyLocked: true,
-    orbit: new Orbit(Duna, 3200000, 0.03, 0.2, 0, 0, 97.4)
+    orbit: new Orbit({
+        parentBody: Duna,
+        semiMajorAxis: 3200000,
+        eccentricity: 0.03,
+        inclination: 0.2,
+        longitudeOfAscendingNode: 0,
+        argumentOfPeriapsis: 0,
+        meanAnomoloyAtEpoch: 97.4
+    })
 });
 Duna.satellites = [Ike];
 
@@ -96,7 +160,15 @@ const Dres = new Body({
     mass: 3.2190937e20,
     highSpaceBorder: 25000,
     rotationalPeriod: 34800,
-    orbit: new Orbit(Kerbol, 40839348203, 0.145, 5, 280, 90, 180)
+    orbit: new Orbit({
+        parentBody: Kerbol,
+        semiMajorAxis: 40839348203,
+        eccentricity: 0.145,
+        inclination: 5,
+        longitudeOfAscendingNode: 280,
+        argumentOfPeriapsis: 90,
+        meanAnomoloyAtEpoch: 180
+    })
 });
 
 // Jool System
@@ -107,7 +179,15 @@ const Jool = new Body({
     atmosphereHeight: 200000,
     highSpaceBorder: 4000000,
     rotationalPeriod: 36000,
-    orbit: new Orbit(Kerbol, 68773560320, 0.05, 1.304, 52, 0, 5.7)
+    orbit: new Orbit({
+        parentBody: Kerbol,
+        semiMajorAxis: 68773560320,
+        eccentricity: 0.05,
+        inclination: 1.304,
+        longitudeOfAscendingNode: 52,
+        argumentOfPeriapsis: 0,
+        meanAnomoloyAtEpoch: 5.7
+    })
 });
 const Laythe = new Body({
     name: 'Laythe',
@@ -116,7 +196,15 @@ const Laythe = new Body({
     atmosphereHeight: 50000,
     highSpaceBorder: 200000,
     tidallyLocked: true,
-    orbit: new Orbit(Jool, 27184000, 0, 0, 0, 0, 180)
+    orbit: new Orbit({
+        parentBody: Jool,
+        semiMajorAxis: 27184000,
+        eccentricity: 0,
+        inclination: 0,
+        longitudeOfAscendingNode: 0,
+        argumentOfPeriapsis: 0,
+        meanAnomoloyAtEpoch: 180
+    })
 });
 const Vall = new Body({
     name: 'Vall',
@@ -124,7 +212,15 @@ const Vall = new Body({
     mass: 3.1087655e21, 
     highSpaceBorder: 90000,
     tidallyLocked: true,
-    orbit: new Orbit(Jool, 43152000, 0, 0, 0, 0, 51.6)
+    orbit: new Orbit({
+        parentBody: Jool,
+        semiMajorAxis: 43152000,
+        eccentricity: 0,
+        inclination: 0,
+        longitudeOfAscendingNode: 0,
+        argumentOfPeriapsis: 0,
+        meanAnomoloyAtEpoch: 51.6
+    })
 });
 const Tylo = new Body({
     name: 'Tylo',
@@ -132,7 +228,15 @@ const Tylo = new Body({
     mass: 4.2332127e22, 
     highSpaceBorder: 250000,
     tidallyLocked: true,
-    orbit: new Orbit(Jool, 68500000, 0, 0.025, 0, 0, 180)
+    orbit: new Orbit({
+        parentBody: Jool,
+        semiMajorAxis: 68500000,
+        eccentricity: 0,
+        inclination: 0.025,
+        longitudeOfAscendingNode: 0,
+        argumentOfPeriapsis: 0,
+        meanAnomoloyAtEpoch: 180
+    })
 });
 const Bop = new Body({
     name: 'Bop',
@@ -140,7 +244,15 @@ const Bop = new Body({
     mass: 3.7261090e19,
     highSpaceBorder: 25000,
     tidallyLocked: true,
-    orbit: new Orbit(Jool, 128500000, 0.235, 15, 10, 25, 51.6)
+    orbit: new Orbit({
+        parentBody: Jool,
+        semiMajorAxis: 128500000,
+        eccentricity: 0.235,
+        inclination: 15,
+        longitudeOfAscendingNode: 10,
+        argumentOfPeriapsis: 25,
+        meanAnomoloyAtEpoch: 51.6
+    })
 });
 const Pol = new Body({
     name: 'Pol',
@@ -148,7 +260,15 @@ const Pol = new Body({
     mass: 1.0813507e19,
     highSpaceBorder: 22000,
     tidallyLocked: true,
-    orbit: new Orbit(Jool, 179890000, 0.171, 4.25, 2, 15, 51.6)
+    orbit: new Orbit({
+        parentBody: Jool,
+        semiMajorAxis: 179890000,
+        eccentricity: 0.171,
+        inclination: 4.25,
+        longitudeOfAscendingNode: 2,
+        argumentOfPeriapsis: 15,
+        meanAnomoloyAtEpoch: 51.6
+    })
 });
 Jool.satellites = [Laythe, Vall, Tylo, Bop,  Pol];
 
@@ -159,7 +279,15 @@ const Eeloo = new Body({
     mass: 1.1149224e21,
     highSpaceBorder: 60000,
     rotationalPeriod: 19460,
-    orbit: new Orbit(Kerbol, 90118820000, 0.26, 6.15, 50, 260, 180)
+    orbit: new Orbit({
+        parentBody: Kerbol,
+        semiMajorAxis: 90118820000,
+        eccentricity: 0.26,
+        inclination: 6.15,
+        longitudeOfAscendingNode: 50,
+        argumentOfPeriapsis: 260,
+        meanAnomoloyAtEpoch: 180
+    })
 });
 
 Kerbol.satellites = [Moho, Eve, Kerbin, Duna, Dres, Jool, Eeloo];

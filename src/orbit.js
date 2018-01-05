@@ -1,9 +1,16 @@
-import {PI} from './consts.js';
+import { PI } from './consts.js';
 import { toRadians } from './utils.js';
 
 export default class Orbit {
-    constructor(parentBody, semiMajorAxis, eccentricity, inclination=null, longitudeOfAscendingNode=null,
-        argumentOfPeriapsis=null, meanAnomoloyAtEpoch=null) {
+    constructor({
+            parentBody,
+            semiMajorAxis,
+            eccentricity,
+            inclination=null,
+            longitudeOfAscendingNode=null,
+            argumentOfPeriapsis=null,
+            meanAnomoloyAtEpoch=null
+        }) {
         this.parentBody = parentBody;
         this.semiMajorAxis = semiMajorAxis;
         this.eccentricity = eccentricity;
@@ -19,7 +26,11 @@ export default class Orbit {
         const semiMajorAxis = (ra + rp) / 2;
         const eccentricity = (ra - rp) / (ra + rp);
 
-        return new Orbit(parentBody, semiMajorAxis, eccentricity);
+        return new Orbit({
+            parentBody: parentBody,
+            semiMajorAxis: semiMajorAxis,
+            eccentricity: eccentricity
+        });
     }
 
     static fromApAndPeriod(parentBody, ap, period) {
@@ -28,7 +39,11 @@ export default class Orbit {
         const rp = (2 * semiMajorAxis) - ra;
         const eccentricity = (ra - rp) / (ra + rp);
 
-        return new Orbit(parentBody, semiMajorAxis, eccentricity);
+        return new Orbit({
+            parentBody: parentBody,
+            semiMajorAxis: semiMajorAxis,
+            eccentricity: eccentricity
+        });
     }
 
     static fromPeAndPeriod(parentBody, pe, period) {
@@ -37,7 +52,11 @@ export default class Orbit {
         const ra = (2 * semiMajorAxis) - rp;
         const eccentricity = (ra - rp) / (ra + rp);
 
-        return new Orbit(parentBody, semiMajorAxis, eccentricity);
+        return new Orbit({
+            parentBody: parentBody,
+            semiMajorAxis: semiMajorAxis,
+            eccentricity: eccentricity
+        });
     }
 
     get hasInclination() {
@@ -118,13 +137,14 @@ export default class Orbit {
     }
 
     clone(parentBody = null) {
-        return new Orbit(
-            parentBody || this.parentBody,
-            this.semiMajorAxis,
-            this.eccentricity,
-            this.inclination,
-            this.longitudeOfAscendingNode,
-            this.argumentOfPeriapsis,
-            this.meanAnomoloyAtEpoch);
+        return new Orbit({
+            parentBody: parentBody || this.parentBody,
+            semiMajorAxis: this.semiMajorAxis,
+            eccentricity: this.eccentricity,
+            inclination: this.inclination,
+            longitudeOfAscendingNode: this.longitudeOfAscendingNode,
+            argumentOfPeriapsis: this.argumentOfPeriapsis,
+            meanAnomoloyAtEpoch: this.meanAnomoloyAtEpoch
+        });
     }
 }

@@ -13,6 +13,10 @@ export default class Body {
             sphereOfInfluence=null,
             satellites=[]}) {
 
+        if (orbit && !orbit.parentBody) {
+            console.log(name + " has no parent body");
+        }
+
         this.name = name;
         this.radius = radius;
         this.mass = mass;

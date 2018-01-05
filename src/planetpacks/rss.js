@@ -17,7 +17,15 @@ const Mercury = new Body({
     mass: 3.3022e23,
     highSpaceBorder: 5000000,
     rotationalPeriod: 5067031.68,
-    orbit: new Orbit(Sun, 57908973645.8802, 0.2056187266319207, 28.60252108855048, 10.86541167564728, 66.90371044151551, 318.2162077814089)
+    orbit: new Orbit({
+        parentBody: Sun,
+        semiMajorAxis: 57908973645.8802,
+        eccentricity: 0.2056187266319207,
+        inclination: 28.60252108855048,
+        longitudeOfAscendingNode: 10.86541167564728,
+        argumentOfPeriapsis: 66.90371044151551,
+        meanAnomoloyAtEpoch: 318.2162077814089
+    })
 });
 
 // Venus System
@@ -28,7 +36,15 @@ const Venus = new Body({
     atmosphereHeight: 145000,
     highSpaceBorder: 5000000,
     rotationalPeriod: -20996797.016381,
-    orbit: new Orbit(Sun, 108209548790.4671, 0.006810339650842032, 24.46397633556437, 7.981603378781639, 123.7121294282329, 311.2459947553124)
+    orbit: new Orbit({
+        parentBody: Sun,
+        semiMajorAxis: 108209548790.4671,
+        eccentricity: 0.006810339650842032,
+        inclination: 24.46397633556437,
+        longitudeOfAscendingNode: 7.981603378781639,
+        argumentOfPeriapsis: 123.7121294282329,
+        meanAnomoloyAtEpoch: 311.2459947553124
+    })
 });
 
 // Earth System
@@ -39,7 +55,15 @@ const Earth = new Body({
     atmosphereHeight: 140000,
     highSpaceBorder: 35786000,
     rotationalPeriod: 86164.098903691,
-    orbit: new Orbit(Sun, 149598261150.4425, 0.01609636160505683, 23.44603795469773, 359.9965004168758, 102.9720683296131, 357.0607464120944)
+    orbit: new Orbit({
+        parentBody: Sun,
+        semiMajorAxis: 149598261150.4425,
+        eccentricity: 0.01609636160505683,
+        inclination: 23.44603795469773,
+        longitudeOfAscendingNode: 359.9965004168758,
+        argumentOfPeriapsis: 102.9720683296131,
+        meanAnomoloyAtEpoch: 357.0607464120944
+    })
 });
 const Moon = new Body({
     name: 'The Moon',
@@ -47,7 +71,15 @@ const Moon = new Body({
     mass: 7.34767309e22,
     highSpaceBorder: 150000,
     tidallyLocked: true,
-    orbit: new Orbit(Earth, 384308437.7707066, 0.05328149353682574, 28.36267790798491, 2.296616161126016, 199.7640930160823, 222.7012350930954)
+    orbit: new Orbit({
+        parentBody: Earth,
+        semiMajorAxis: 384308437.7707066,
+        eccentricity: 0.05328149353682574,
+        inclination: 28.36267790798491,
+        longitudeOfAscendingNode: 2.296616161126016,
+        argumentOfPeriapsis: 199.7640930160823,
+        meanAnomoloyAtEpoch: 222.7012350930954
+    })
 });
 Earth.satellites = [Moon];
 
@@ -59,7 +91,15 @@ const Mars = new Body({
     atmosphereHeight: 125000,
     highSpaceBorder: 5000000,
     rotationalPeriod: 88642.6848,
-    orbit: new Orbit(Sun, 227949699961.9763, 0.09326110278323557, 24.69272426910055, 3.351911063089117, 332.1022655295414, 169.3913127942378)
+    orbit: new Orbit({
+        parentBody: Sun,
+        semiMajorAxis: 227949699961.9763,
+        eccentricity: 0.09326110278323557,
+        inclination: 24.69272426910055,
+        longitudeOfAscendingNode: 3.351911063089117,
+        argumentOfPeriapsis: 332.1022655295414,
+        meanAnomoloyAtEpoch: 169.3913127942378
+    })
 });
 const Phobos = new Body({
     name: 'Phobos',
@@ -67,7 +107,15 @@ const Phobos = new Body({
     mass: 1.072e16,
     highSpaceBorder: 5000,
     tidallyLocked: true,
-    orbit: new Orbit(Mars, 9378492.209088314, 0.01539938155583979, 36.32433410471867, 46.48212553464923, 357.7759243021914, 7.185120835598890)
+    orbit: new Orbit({
+        parentBody: Mars,
+        semiMajorAxis: 9378492.209088314,
+        eccentricity: 0.01539938155583979,
+        inclination: 36.32433410471867,
+        longitudeOfAscendingNode: 46.48212553464923,
+        argumentOfPeriapsis: 357.7759243021914,
+        meanAnomoloyAtEpoch: 7.185120835598890
+    })
 });
 const Deimos = new Body({
     name: 'Deimos',
@@ -75,7 +123,15 @@ const Deimos = new Body({
     mass: 1.48e15,
     highSpaceBorder: 5000,
     tidallyLocked: true,
-    orbit: new Orbit(Mars, 23458112.01759387, 0.0003294680798661700, 38.2773701383231, 47.51893570799763, 263.8963868784089, 47.51893570799763)
+    orbit: new Orbit({
+        parentBody: Mars,
+        semiMajorAxis: 23458112.01759387,
+        eccentricity: 0.0003294680798661700,
+        inclination: 38.2773701383231,
+        longitudeOfAscendingNode: 47.51893570799763,
+        argumentOfPeriapsis: 263.8963868784089,
+        meanAnomoloyAtEpoch: 47.51893570799763
+    })
 });
 Mars.satellites = [Phobos, Deimos];
 
@@ -86,7 +142,15 @@ const Vesta = new Body({
     mass: 2.59e20,
     highSpaceBorder: 300000,
     rotationalPeriod: 19231.2,
-    orbit: new Orbit(Sun, 353346223803.158, 0.0902068412255369, 22.7696439720361, 18.1671232653234, 236.445369158826, 61.0607001442198)
+    orbit: new Orbit({
+        parentBody: Sun,
+        semiMajorAxis: 353346223803.158,
+        eccentricity: 0.0902068412255369,
+        inclination: 22.7696439720361,
+        longitudeOfAscendingNode: 18.1671232653234,
+        argumentOfPeriapsis: 236.445369158826,
+        meanAnomoloyAtEpoch: 61.0607001442198
+    })
 });
 const Ceres = new Body({
     name: 'Ceres',
@@ -94,7 +158,15 @@ const Ceres = new Body({
     mass: 9.39e20, 
     highSpaceBorder: 300000,
     rotationalPeriod: 32666.4,
-    orbit: new Orbit(Sun, 413738762313.173, 0.079363494880566, 27.1273394923134, 23.4501727740666, 129.19102663711, 60.1624710451615)
+    orbit: new Orbit({
+        parentBody: Sun,
+        semiMajorAxis: 413738762313.173,
+        eccentricity: 0.079363494880566,
+        inclination: 27.1273394923134,
+        longitudeOfAscendingNode: 23.4501727740666,
+        argumentOfPeriapsis: 129.19102663711,
+        meanAnomoloyAtEpoch: 60.1624710451615
+    })
 });
 
 // Jupiter System
@@ -105,7 +177,15 @@ const Jupiter = new Body({
     atmosphereHeight: 1550000,
     highSpaceBorder: 100000000,
     rotationalPeriod: 35730,
-    orbit: new Orbit(Sun, 778188938659.7554, 0.04872660654702194, 23.25313306947884, 3.262077289923354, 10.75642751202877, 302.5812396096649)
+    orbit: new Orbit({
+        parentBody: Sun,
+        semiMajorAxis: 778188938659.7554,
+        eccentricity: 0.04872660654702194,
+        inclination: 23.25313306947884,
+        longitudeOfAscendingNode: 3.262077289923354,
+        argumentOfPeriapsis: 10.75642751202877,
+        meanAnomoloyAtEpoch: 302.5812396096649
+    })
 });
 const Io = new Body({
     name: 'Io',
@@ -113,7 +193,15 @@ const Io = new Body({
     mass: 8.9319e22,
     highSpaceBorder: 2000000,
     tidallyLocked: true,
-    orbit: new Orbit(Jupiter, 422018294.5236953, 0.003545858426216978, 25.46409538664874, 358.0466431678460, 231.2703460977786, 195.3274089855250)
+    orbit: new Orbit({
+        parentBody: Jupiter,
+        semiMajorAxis: 422018294.5236953,
+        eccentricity: 0.003545858426216978,
+        inclination: 25.46409538664874,
+        longitudeOfAscendingNode: 358.0466431678460,
+        argumentOfPeriapsis: 231.2703460977786,
+        meanAnomoloyAtEpoch: 195.3274089855250
+    })
 });
 const Europa = new Body({
     name: 'Europa',
@@ -121,7 +209,15 @@ const Europa = new Body({
     mass: 4.7998E22,
     highSpaceBorder: 2000000,
     tidallyLocked: true,
-    orbit: new Orbit(Jupiter, 671253637.5417169, 0.009511727119926178, 25.70364276471991, 358.9360081847504, 53.13210737539627, 276.2652038284650)
+    orbit: new Orbit({
+        parentBody: Jupiter,
+        semiMajorAxis: 671253637.5417169,
+        eccentricity: 0.009511727119926178,
+        inclination: 25.70364276471991,
+        longitudeOfAscendingNode: 358.9360081847504,
+        argumentOfPeriapsis: 53.13210737539627,
+        meanAnomoloyAtEpoch: 276.2652038284650
+    })
 });
 const Ganymede = new Body({
     name: 'Ganymede',
@@ -129,7 +225,15 @@ const Ganymede = new Body({
     mass: 1.4819E23,
     highSpaceBorder: 2000000,
     tidallyLocked: true,
-    orbit: new Orbit(Jupiter, 1070823468.894524, 0.001190086418361844, 25.27071366962049, 358.0125219248113, 139.2992571342065, 232.6753228788302)
+    orbit: new Orbit({
+        parentBody: Jupiter,
+        semiMajorAxis: 1070823468.894524,
+        eccentricity: 0.001190086418361844,
+        inclination: 25.27071366962049,
+        longitudeOfAscendingNode: 358.0125219248113,
+        argumentOfPeriapsis: 139.2992571342065,
+        meanAnomoloyAtEpoch: 232.6753228788302
+    })
 });
 const Calisto = new Body({
     name: 'Calisto',
@@ -137,7 +241,15 @@ const Calisto = new Body({
     mass: 1.89821e27,
     highSpaceBorder: 2000000,
     tidallyLocked: true,
-    orbit: new Orbit(Jupiter, 1883812366.573522, 0.007973319796896609, 25.44080019822134, 358.5022563372704, 320.7359683492656, 15.81614025483249)
+    orbit: new Orbit({
+        parentBody: Jupiter,
+        semiMajorAxis: 1883812366.573522,
+        eccentricity: 0.007973319796896609,
+        inclination: 25.44080019822134,
+        longitudeOfAscendingNode: 358.5022563372704,
+        argumentOfPeriapsis: 320.7359683492656,
+        meanAnomoloyAtEpoch: 15.81614025483249
+    })
 });
 Jupiter.satellites = [Io, Europa, Ganymede, Calisto];
 
@@ -149,7 +261,15 @@ const Saturn = new Body({
     atmosphereHeight: 2000000,
     highSpaceBorder: 100000000,
     rotationalPeriod: 38052,
-    orbit: new Orbit(Sun, 1424838758613.269, 0.05347166506749872, 22.56992281132335, 5.970845343832233, 85.04661202834268, 67.46885226487360)
+    orbit: new Orbit({
+        parentBody: Sun,
+        semiMajorAxis: 1424838758613.269,
+        eccentricity: 0.05347166506749872,
+        inclination: 22.56992281132335,
+        longitudeOfAscendingNode: 5.970845343832233,
+        argumentOfPeriapsis: 85.04661202834268,
+        meanAnomoloyAtEpoch: 67.46885226487360
+    })
 });
 const Mimas = new Body({
     name: 'Mimas',
@@ -158,7 +278,15 @@ const Mimas = new Body({
     atmosphereHeight: 125000,
     highSpaceBorder: 2000000,
     tidallyLocked: true,
-    orbit: new Orbit(Saturn, 186009285.9220490, 0.01776275223147744, 1.572, 139.7604722490289, 222.2172789396715, 125.5909781664896)
+    orbit: new Orbit({
+        parentBody: Saturn,
+        semiMajorAxis: 186009285.9220490,
+        eccentricity: 0.01776275223147744,
+        inclination: 1.572,
+        longitudeOfAscendingNode: 139.7604722490289,
+        argumentOfPeriapsis: 222.2172789396715,
+        meanAnomoloyAtEpoch: 125.5909781664896
+    })
 });
 const Enceladus = new Body({
     name: 'Enceladus',
@@ -166,7 +294,15 @@ const Enceladus = new Body({
     mass: 1.08022e20, 
     highSpaceBorder: 2000000,
     tidallyLocked: true,
-    orbit: new Orbit(Saturn, 238413699.4838728, 0.006227897999957464, 0.009, 128.4244161601446, 115.5615886062458, 346.6301476573209)
+    orbit: new Orbit({
+        parentBody: Saturn,
+        semiMajorAxis: 238413699.4838728,
+        eccentricity: 0.006227897999957464,
+        inclination: 0.009,
+        longitudeOfAscendingNode: 128.4244161601446,
+        argumentOfPeriapsis: 115.5615886062458,
+        meanAnomoloyAtEpoch: 346.6301476573209
+    })
 });
 const Tethys = new Body({
     name: 'Tethys',
@@ -174,7 +310,15 @@ const Tethys = new Body({
     mass: 6.17449e20,
     highSpaceBorder: 2000000,
     tidallyLocked: true,
-    orbit: new Orbit(Saturn, 294973462.3804425, 0.001064868868083566, 1.091, 119.2518388332899, 215.9196892523803, 349.8231217220438)
+    orbit: new Orbit({
+        parentBody: Saturn,
+        semiMajorAxis: 294973462.3804425,
+        eccentricity: 0.001064868868083566,
+        inclination: 1.091,
+        longitudeOfAscendingNode: 119.2518388332899,
+        argumentOfPeriapsis: 215.9196892523803,
+        meanAnomoloyAtEpoch: 349.8231217220438
+    })
 });
 const Dione = new Body({
     name: 'Dione',
@@ -182,7 +326,15 @@ const Dione = new Body({
     mass: 1.095452e21,
     highSpaceBorder: 2000000,
     tidallyLocked: true,
-    orbit: new Orbit(Saturn, 377650651.5017090, 0.001679230905502774, 0.028, 128.5606071129818, 123.6717156049260, 167.9272784830226)
+    orbit: new Orbit({
+        parentBody: Saturn,
+        semiMajorAxis: 377650651.5017090,
+        eccentricity: 0.001679230905502774,
+        inclination: 0.028,
+        longitudeOfAscendingNode: 128.5606071129818,
+        argumentOfPeriapsis: 123.6717156049260,
+        meanAnomoloyAtEpoch: 167.9272784830226
+    })
 });
 const Rhea = new Body({
     name: 'Rhea',
@@ -190,7 +342,15 @@ const Rhea = new Body({
     mass: 2.306518e21,
     highSpaceBorder: 2000000,
     tidallyLocked: true,
-    orbit: new Orbit(Saturn, 527212645.7071990, 0.001168269515756326, 0.331, 130.3670574820431, 172.7367089889645, 13.48887718956405)
+    orbit: new Orbit({
+        parentBody: Saturn,
+        semiMajorAxis: 527212645.7071990,
+        eccentricity: 0.001168269515756326,
+        inclination: 0.331,
+        longitudeOfAscendingNode: 130.3670574820431,
+        argumentOfPeriapsis: 172.7367089889645,
+        meanAnomoloyAtEpoch: 13.48887718956405
+    })
 });
 const Titan = new Body({
     name: 'Titan',
@@ -199,7 +359,15 @@ const Titan = new Body({
     atmosphereHeight: 600000,
     highSpaceBorder: 2000000,
     tidallyLocked: true,
-    orbit: new Orbit(Saturn, 1221966238.511425, 0.02891936561555365, 6.460492679775526, 126.4945233702913, 182.0886765021483, 75.16117358815676)
+    orbit: new Orbit({
+        parentBody: Saturn,
+        semiMajorAxis: 1221966238.511425,
+        eccentricity: 0.02891936561555365,
+        inclination: 6.460492679775526,
+        longitudeOfAscendingNode: 126.4945233702913,
+        argumentOfPeriapsis: 182.0886765021483,
+        meanAnomoloyAtEpoch: 75.16117358815676
+    })
 });
 const Iapetus = new Body({
     name: 'Iapetus',
@@ -207,7 +375,15 @@ const Iapetus = new Body({
     mass: 1.805e21,
     highSpaceBorder: 2000000,
     tidallyLocked: true,
-    orbit: new Orbit(Saturn, 3560162593.022970, 0.02880286281969610, 7.489, 50.29392880240187, 314.3819081366686, 139.5683324894335)
+    orbit: new Orbit({
+        parentBody: Saturn,
+        semiMajorAxis: 3560162593.022970,
+        eccentricity: 0.02880286281969610,
+        inclination: 7.489,
+        longitudeOfAscendingNode: 50.29392880240187,
+        argumentOfPeriapsis: 314.3819081366686,
+        meanAnomoloyAtEpoch: 139.5683324894335
+    })
 });
 Saturn.satellites = [Mimas, Enceladus, Tethys, Dione, Rhea, Titan, Iapetus];
 
@@ -219,7 +395,15 @@ const Uranus = new Body({
     atmosphereHeight: 1400000,
     highSpaceBorder: 100000000,
     rotationalPeriod: 62063.712,
-    orbit: new Orbit(Sun, 2866832853163.975, 0.04620653158718433, 23.67256993343676, 1.846089669223938, 169.6876790522249, 286.8267359944493)
+    orbit: new Orbit({
+        parentBody: Sun,
+        semiMajorAxis: 2866832853163.975,
+        eccentricity: 0.04620653158718433,
+        inclination: 23.67256993343676,
+        longitudeOfAscendingNode: 1.846089669223938,
+        argumentOfPeriapsis: 169.6876790522249,
+        meanAnomoloyAtEpoch: 286.8267359944493
+    })
 });
 const Miranda = new Body({
     name: 'Miranda',
@@ -227,7 +411,15 @@ const Miranda = new Body({
     mass: 6.6e19,
     highSpaceBorder: 200000,
     tidallyLocked: true,
-    orbit: new Orbit(Uranus, 129880047.634175, 0.00118741261963413, 78.5887546839913, 169.0642120548280, 326.7575256535064, 253.0006290232421)
+    orbit: new Orbit({
+        parentBody: Uranus,
+        semiMajorAxis: 129880047.634175,
+        eccentricity: 0.00118741261963413,
+        inclination: 78.5887546839913,
+        longitudeOfAscendingNode: 169.0642120548280,
+        argumentOfPeriapsis: 326.7575256535064,
+        meanAnomoloyAtEpoch: 253.0006290232421
+    })
 });
 const Ariel = new Body({
     name: 'Ariel',
@@ -235,7 +427,15 @@ const Ariel = new Body({
     mass: 1.29e21,
     highSpaceBorder: 200000,
     tidallyLocked: true,
-    orbit: new Orbit(Uranus, 190944364.477622, 0.00190951361476287, 74.8989043025419, 166.5671084714081, 169.9966404991910, 46.46367954654207)
+    orbit: new Orbit({
+        parentBody: Uranus,
+        semiMajorAxis: 190944364.477622,
+        eccentricity: 0.00190951361476287,
+        inclination: 74.8989043025419,
+        longitudeOfAscendingNode: 166.5671084714081,
+        argumentOfPeriapsis: 169.9966404991910,
+        meanAnomoloyAtEpoch: 46.46367954654207
+    })
 });
 const Umbriel = new Body({
     name: 'Umbriel',
@@ -243,7 +443,15 @@ const Umbriel = new Body({
     mass: 1.22e21,
     highSpaceBorder: 200000,
     tidallyLocked: true,
-    orbit: new Orbit(Uranus, 265992360.127656, 0.0038334454580725, 74.9939984108702, 166.5601075193709, 207.7259222157362, 114.3251464012079)
+    orbit: new Orbit({
+        parentBody: Uranus,
+        semiMajorAxis: 265992360.127656,
+        eccentricity: 0.0038334454580725,
+        inclination: 74.9939984108702,
+        longitudeOfAscendingNode: 166.5601075193709,
+        argumentOfPeriapsis: 207.7259222157362,
+        meanAnomoloyAtEpoch: 114.3251464012079
+    })
 });
 const Titania = new Body({
     name: 'Titania',
@@ -251,7 +459,15 @@ const Titania = new Body({
     mass: 3.42e21,
     highSpaceBorder: 200000,
     tidallyLocked: true,
-    orbit: new Orbit(Uranus, 436292682.967703, 0.002486916, 75.045766393, 166.6555214910122, 165.7455424030838, 212.6552821835342)
+    orbit: new Orbit({
+        parentBody: Uranus,
+        semiMajorAxis: 436292682.967703,
+        eccentricity: 0.002486916,
+        inclination: 75.045766393,
+        longitudeOfAscendingNode: 166.6555214910122,
+        argumentOfPeriapsis: 165.7455424030838,
+        meanAnomoloyAtEpoch: 212.6552821835342
+    })
 });
 const Oberon = new Body({
     name: 'Oberon',
@@ -259,7 +475,15 @@ const Oberon = new Body({
     mass: 2.88e21,
     highSpaceBorder: 200000,
     tidallyLocked: true,
-    orbit:new Orbit(Uranus, 583435328.340603, 0.00110558297330948, 74.9349049752716, 166.6887328903476, 274.4599570542317, 266.5149396374048)
+    orbit:new Orbit({
+        parentBody: Uranus,
+        semiMajorAxis: 583435328.340603,
+        eccentricity: 0.00110558297330948,
+        inclination: 74.9349049752716,
+        longitudeOfAscendingNode: 166.6887328903476,
+        argumentOfPeriapsis: 274.4599570542317,
+        meanAnomoloyAtEpoch: 266.5149396374048
+    })
 });
 Uranus.satellites = [Miranda, Ariel, Umbriel, Titania, Oberon];
 
@@ -271,7 +495,15 @@ const Neptune = new Body({
     atmosphereHeight: 1250000,
     highSpaceBorder: 100000000,
     rotationalPeriod: 58000.32,
-    orbit: new Orbit(Sun, 4497455832811.736, 0.008090397688364061, 22.30735942964904, 3.512610711801178, 29.81485402991322, 162.0995481888285)
+    orbit: new Orbit({
+        parentBody: Sun,
+        semiMajorAxis: 4497455832811.736,
+        eccentricity: 0.008090397688364061,
+        inclination: 22.30735942964904,
+        longitudeOfAscendingNode: 3.512610711801178,
+        argumentOfPeriapsis: 29.81485402991322,
+        meanAnomoloyAtEpoch: 162.0995481888285
+    })
 });
 const Triton = new Body({
     name: 'Triton',
@@ -280,7 +512,15 @@ const Triton = new Body({
     atmosphereHeight: 110000,
     highSpaceBorder: 2000000,
     tidallyLocked: true,
-    orbit: new Orbit(Neptune, 354767243.5406647, 0.0001688014359763687, 156.834, 197.1953239788069, 220.4523286895169, 358.6561877626771)
+    orbit: new Orbit({
+        parentBody: Neptune,
+        semiMajorAxis: 354767243.5406647,
+        eccentricity: 0.0001688014359763687,
+        inclination: 156.834,
+        longitudeOfAscendingNode: 197.1953239788069,
+        argumentOfPeriapsis: 220.4523286895169,
+        meanAnomoloyAtEpoch: 358.6561877626771
+    })
 });
 Neptune.satellites = [Triton];
 
@@ -292,7 +532,15 @@ const Pluto = new Body({
     atmosphereHeight: 110000,
     highSpaceBorder: 2000000,
     rotationalPeriod: 551856.672,
-    radius: new Orbit(Sun, 5845670624078.223, 0.2462772488425983, 23.61236405752844, 44.36099836994975, 184.4945352163909, 300.1297304812811)
+    radius: new Orbit({
+        parentBody: Sun,
+        semiMajorAxis: 5845670624078.223,
+        eccentricity: 0.2462772488425983,
+        inclination: 23.61236405752844,
+        longitudeOfAscendingNode: 44.36099836994975,
+        argumentOfPeriapsis: 184.4945352163909,
+        meanAnomoloyAtEpoch: 300.1297304812811
+    })
 });
 const Charon = new Body({
     name: 'Charon',
@@ -300,7 +548,15 @@ const Charon = new Body({
     mass: 1.52e21,
     highSpaceBorder: 2000000,
     tidallyLocked: true,
-    orbit: new Orbit(Pluto, 19596193.83540397, 0.00005082225659448947, 0.001, 222.4053735570010, 188.4738646852448, 30.89989240060877)
+    orbit: new Orbit({
+        parentBody: Pluto,
+        semiMajorAxis: 19596193.83540397,
+        eccentricity: 0.00005082225659448947,
+        inclination: 0.001,
+        longitudeOfAscendingNode: 222.4053735570010,
+        argumentOfPeriapsis: 188.4738646852448,
+        meanAnomoloyAtEpoch: 30.89989240060877
+    })
 });
 Pluto.satellites = [Charon];
 
