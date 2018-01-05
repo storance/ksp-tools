@@ -41,6 +41,10 @@ export default class BodyDetails extends React.PureComponent {
                     <NumberFormat value={this.props.body.escapeVelocity} fractionDigits={3} units={VELOCITY_UNITS} />
                 </StaticTextField>
 
+                <StaticTextField label={"Sphere Of Influence"}>
+                    <NumberFormat value={this.props.body.sphereOfInfluence} fractionDigits={3} units={DISTANCE_UNITS} />
+                </StaticTextField>
+
                 <StaticTextField label={"Tidally Locked?"}>
                     {this.props.body.tidallyLocked ? 'Yes' : 'No'}
                 </StaticTextField>
@@ -55,6 +59,10 @@ export default class BodyDetails extends React.PureComponent {
 
                 <StaticTextField label={"Has Atmosphere?"}>
                     {this.props.body.hasAtmosphere ? 'Yes' : 'No'}
+                </StaticTextField>
+
+                <StaticTextField label={"High Space Border"}>
+                    <NumberFormat value={this.props.body.highSpaceBorder} fractionDigits={3} units={DISTANCE_UNITS} />
                 </StaticTextField>
 
                 {this.props.body.hasAtmosphere &&

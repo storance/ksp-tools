@@ -48,9 +48,14 @@ export class Rescale {
         // update the body's mass to keep the same aslGravity with it's new radius
         body.mass = Math.pow(body.radius, 2) * aslGravity / GRAVITATIONAL_CONSTANT;
         body.atmosphereHeight *= atmosphereHeightMultiplier;
+        body.highSpaceBorder *= resizeFactor;
 
         if (!body.tidallyLocked) {
             body.rotationalPeriod *= dayLengthMultiplier;
+        }
+
+        if (body.sphereOfInfluenceManual !== null) {
+            body.sphereOfInfluenceManual *= rescaleFactor;
         }
 
         if (body.orbit) {

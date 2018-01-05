@@ -2,7 +2,8 @@ import {PI} from './consts.js';
 import { toRadians } from './utils.js';
 
 export default class Orbit {
-    constructor(parentBody, semiMajorAxis, eccentricity, inclination=null, longitudeOfAscendingNode=null, argumentOfPeriapsis=null, meanAnomoloyAtEpoch=null) {
+    constructor(parentBody, semiMajorAxis, eccentricity, inclination=null, longitudeOfAscendingNode=null,
+        argumentOfPeriapsis=null, meanAnomoloyAtEpoch=null) {
         this.parentBody = parentBody;
         this.semiMajorAxis = semiMajorAxis;
         this.eccentricity = eccentricity;
