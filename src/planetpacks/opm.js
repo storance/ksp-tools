@@ -3,7 +3,7 @@ import Orbit from '../orbit.js';
 import { toDegrees } from '../utils';
 import stock from './stock';
 
-// not a selectable planetpack, just adds the ability to attach to another planet
+// not a selectable planetpack, just adds the ability to attach to another planet pack
 export function attachSarnus(parentBody, semiMajorAxisMultiplier=1) {
     const Sarnus = new Body({
         name: 'Sarnus',
