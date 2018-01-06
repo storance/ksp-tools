@@ -7,6 +7,8 @@ import BodyDetails from './BodyDetails';
 export class BodyInformation extends React.PureComponent {
     render() {
         return <div className="container">
+            <h1>Body Information</h1>
+            <p>Displays some useful information about a celestial body and it's orbit.</p>
             <form className="form-horizontal">
                 <OrbitingBodySelectContainer  />
                 <BodyDetails body={this.props.body} calendar={this.props.planetpack.calendar} /> 

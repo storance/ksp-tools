@@ -9,6 +9,9 @@ import * as actionCreators from '../action_creators';
 export class ManeuverPlanner extends React.PureComponent {
     render() {
         return <div className="container">
+            <h1>Maneuver Planner</h1>
+            <p>Calculates the delta-v required to perform a Hohmann transfer from the current orbit to the desired
+            orbit.  This will also break down the delta-v for the individual burns and where they should occur.</p>
             <form className="form-horizontal">
                 <OrbitingBodySelectContainer />
                 <fieldset>

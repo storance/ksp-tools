@@ -1,4 +1,5 @@
-import {GRAVITATIONAL_CONSTANT, PI} from './consts.js';
+import { List} from 'immutable';
+import {GRAVITATIONAL_CONSTANT, PI} from './consts';
 
 export default class Body {
     constructor({
@@ -12,11 +13,6 @@ export default class Body {
             orbit=null,
             sphereOfInfluence=null,
             satellites=[]}) {
-
-        if (orbit && !orbit.parentBody) {
-            console.log(name + " has no parent body");
-        }
-
         this.name = name;
         this.radius = radius;
         this.mass = mass;
@@ -30,7 +26,7 @@ export default class Body {
             this.rotationalPeriod = rotationalPeriod;
         }
         this.orbit = orbit;
-        this.satellites = satellites;
+        this._satellites = List(satellites);
         if (sphereOfInfluence !== null) {
             this.sphereOfInfluenceManual = sphereOfInfluence;
         } else {
@@ -98,12 +94,24 @@ export default class Body {
         return this.atmosphereHeight > 0;
     }
 
+    get stationaryOrbit() {
+        return Math.pow(Math.pow(this.rotationalPeriod / (2 * PI), 2) * this.mu, 1/3) - this.radius;
+    }
+
+    get satellites() {
+        return this._satellites;
+    }
+
+    set satellites(satellites) {
+        this._satellites = List(satellites).sortBy(satellite => satellite.orbit.semiMajorAxis);
+    }
+
     findByName(name) {
         if (this.name === name) {
             return this;
         }
 
-        for (const satellite of this.satellites) {
+        for (const satellite of this._satellites) {
             const body = satellite.findByName(name);
             if (body) {
                 return body;
@@ -114,7 +122,9 @@ export default class Body {
     }
 
     addSatellite(satellite) {
-        this.satellites.push(satellite);
+        this._satellites = this._satellites.withMutations(satellites => {
+            satellites.push(satellite).sortBy(satellite => satellite.orbit.semiMajorAxis);
+        });
     }
 
     clone(parentBody=null) {
@@ -130,7 +140,7 @@ export default class Body {
             sphereOfInfluence: this.sphereOfInfluenceManual
         });
 
-        clonedBody.satellites = this.satellites.map(satellite => satellite.clone(clonedBody));
+        clonedBody._satellites = this._satellites.map(satellite => satellite.clone(clonedBody));
 
         return clonedBody;
     }

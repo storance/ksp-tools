@@ -69,3 +69,33 @@ export function calculateBatteryStorage() {
         type: 'DARKNESS_TIME.CALCULATE_BATTERY_STORAGE'
     };
 }
+
+export function updateSatelliteSingleLaunch(field, value) {
+    return {
+        type: 'SATELLITE.SINGLE_LAUNCH.FORM_UPDATE',
+        field,
+        value
+    };
+}
+
+export function calculateSatelliteSingleLaunch(orbitingBody) {
+    return {
+        type: 'SATELLITE.SINGLE_LAUNCH.CALCULATE',
+        orbitingBody
+    };
+}
+
+export function updateSatelliteMultipleLaunch(field, value) {
+    return {
+        type: 'SATELLITE.MUTIPLE_LAUNCH.FORM_UPDATE',
+        field,
+        value
+    };
+}
+
+export function calculateSatelliteMultipleLaunch(orbitingBody) {
+    return {
+        type: 'SATELLITE.MUTIPLE_LAUNCH.CALCULATE',
+        orbitingBody
+    };
+}

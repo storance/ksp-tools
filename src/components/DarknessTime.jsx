@@ -12,6 +12,11 @@ import * as actionCreators from '../action_creators';
 export class DarknessTime extends React.PureComponent {
     render() {
         return <div className="container">
+            <h1>Darkness Time</h1>
+            <p>The darkness time calculator calculates the maximum amount of time a spacecraft will spend on the dark
+            side of the celestial body it's orbiting in a single revolution.</p>
+            <p>The battery storage calculator calculates the amount of battery capacity a spacecraft requires to last
+            passing through the dark side of the celestial body it's orbiting based on it's energy use.</p>
             <form className="form-horizontal">
                 <OrbitingBodySelectContainer />
                 <fieldset>

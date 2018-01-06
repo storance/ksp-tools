@@ -532,7 +532,7 @@ const Pluto = new Body({
     atmosphereHeight: 110000,
     highSpaceBorder: 2000000,
     rotationalPeriod: 551856.672,
-    radius: new Orbit({
+    orbit: new Orbit({
         parentBody: Sun,
         semiMajorAxis: 5845670624078.223,
         eccentricity: 0.2462772488425983,

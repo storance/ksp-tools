@@ -1,4 +1,4 @@
-import {PI} from './consts';
+import { PI, GRAVITY } from './consts';
 
 export function convertAltitude(value, fromUnits, toUnits) {
     var unitMult = {
@@ -30,4 +30,8 @@ export function isPositiveNumber(n) {
 
 export function isEmpty(obj) {
     return Object.keys(obj).length === 0;
+}
+
+export function toGees(gravity) {
+    return gravity / GRAVITY;
 }

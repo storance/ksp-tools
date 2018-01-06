@@ -9,6 +9,8 @@ import { OrbitInformationContainer } from './components/OrbitInformation';
 import { BodyInformationContainer } from './components/BodyInformation';
 import { ManeuverPlannerContainer } from './components/ManeuverPlanner';
 import { DarknessTimeContainer } from './components/DarknessTime';
+import { SatelliteSingleLaunchContainer } from './components/SatelliteSingleLaunch';
+import { SatelliteMultipleLaunchContainer } from './components/SatelliteMultipleLaunch';
 import { loadState, saveStateMiddleware } from './localStorage.js';
 
 import * as reducers from './reducers';
@@ -29,12 +31,12 @@ ReactDOM.render(
                         </div>
                         <div className="collapse navbar-collapse">
                             <ul className="nav navbar-nav">
-                                <li><NavLink activeClassName="active" to="/body/information">Body Information Time</NavLink></li>
+                                <li><NavLink activeClassName="active" to="/body/information">Body Information</NavLink></li>
                                 <li><NavLink activeClassName="active" to="/orbit/darknesstime">Darkness Time</NavLink></li>
                                 <li><NavLink activeClassName="active" to="/orbit/information">Orbit Information</NavLink></li>
                                 <li><NavLink activeClassName="active" to="/orbit/maneuver">Maneuver Planner</NavLink></li>
                                 <li><NavLink activeClassName="active" to="/satellite/singlelaunch">Satellite: Single Launch</NavLink></li>
-                                <li><NavLink activeClassName="active" to="/satellite/mutiplelaunch">Satellite: Multiple Launch</NavLink></li>
+                                <li><NavLink activeClassName="active" to="/satellite/multiplelaunch">Satellite: Multiple Launch</NavLink></li>
                             </ul>
                         </div>
                     </div>
@@ -45,6 +47,8 @@ ReactDOM.render(
                     <Route path="/orbit/information" component={OrbitInformationContainer} />
                     <Route path="/orbit/maneuver" component={ManeuverPlannerContainer} />
                     <Route path="/body/information" component={BodyInformationContainer} />
+                    <Route path="/satellite/singlelaunch" component={SatelliteSingleLaunchContainer} />
+                    <Route path="/satellite/multiplelaunch" component={SatelliteMultipleLaunchContainer} />
                 </Switch>
             </div>
         </Router>

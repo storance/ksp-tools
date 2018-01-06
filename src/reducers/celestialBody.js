@@ -15,46 +15,51 @@ const initialState = Map({
 });
 
 function lookupPlanetPackAndBody(state) {
-    let selectedPlanetPack = state.get('selectedPlanetPack');
-    let newState = state;
-    if (!selectedPlanetPack) {
-        const planetpack = findPlanetPack(newState.get('planetpack'));
-        const rescale = findRescale(newState.get('rescale'));
+    return state.withMutations(state => {
+        let selectedPlanetPack = state.get('selectedPlanetPack');
 
-        selectedPlanetPack = rescale.rescalePlanetPack(planetpack);
-        newState = newState.set('selectedPlanetPack', selectedPlanetPack);
-    }
+        if (!selectedPlanetPack) {
+            const planetpack = findPlanetPack(state.get('planetpack'));
+            const rescale = findRescale(state.get('rescale'));
 
-    if (!newState.has('selectedBody')) {
-        const body = selectedPlanetPack.findByName(newState.get('body'));
-        if (!body) {
-            newState = newState.set('selectedBody', selectedPlanetPack.homeworld)
-                    .set('body', selectedPlanetPack.homeworld.name)
-        } else {
-            newState = newState.set('selectedBody', body);
+            selectedPlanetPack = rescale.rescalePlanetPack(planetpack);
+            state.set('selectedPlanetPack', selectedPlanetPack);
         }
-    }
 
-    return newState;
+        if (!state.has('selectedBody')) {
+            const body = selectedPlanetPack.findByName(state.get('body'));
+            if (!body) {
+                state.set('selectedBody', selectedPlanetPack.homeworld);
+                state.set('body', selectedPlanetPack.homeworld.name);
+            } else {
+                state.set('selectedBody', body);
+            }
+        }
+    });
 }
 
 function updatePlanetPack(state, planetpackName) {
     const planetpack = findPlanetPack(planetpackName);
-    return state.set('planetpack', planetpackName)
-                .set('body', planetpack.homeworld.name)
-                .remove('selectedPlanetPack')
-                .remove('selectedBody');
+    return state.withMutations(state => {
+        state.set('planetpack', planetpackName)
+             .set('body', planetpack.homeworld.name)
+             .remove('selectedPlanetPack')
+             .remove('selectedBody')
+    });
 }
 
 function updateRescale(state, rescale) {
-    return state.set('rescale', rescale)
-                .remove('selectedPlanetPack')
-                .remove('selectedBody');
+    return state.withMutations(state => {
+        state.set('rescale', rescale)
+             .remove('selectedPlanetPack')
+             .remove('selectedBody')
+    });
 }
 
 function updateBody(state, body) {
-    return state.set('body', body)
-                .remove('selectedBody');
+    return state.withMutations(state => {
+            state.set('body', body).remove('selectedBody')
+    });
 }
 
 export default function(state = initialState, action) {

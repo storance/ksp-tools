@@ -1,4 +1,4 @@
-import { Map } from 'immutable';
+import { fromJS } from 'immutable';
 
 export function loadState() {
     try {
@@ -7,7 +7,7 @@ export function loadState() {
             return undefined;
         }
 
-        return Map().mergeDeep(JSON.parse(serializedState));
+        return fromJS(JSON.parse(serializedState));
     } catch (err) {
         return undefined;
     }
@@ -16,13 +16,12 @@ export function loadState() {
 export const saveStateMiddleware = store => next => action => {
     const result = next(action);
     const state = store.getState();
+    const celestialBodyState = state.get('celestialBody');
 
     let persistState = {
-        celestialBody : state.get('celestialBody')
-                             .delete('body')
-                             .delete('selectedBody')
-                             .delete('selectedPlanetPack')
-                             .toJS()
+        celestialBody : celestialBodyState.withMutations(state => {
+                state.delete('body').delete('selectedBody').delete('selectedPlanetPack')
+            }).toJS()
     };
 
     try {

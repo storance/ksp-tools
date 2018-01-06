@@ -1,15 +1,24 @@
-import Calendar from './calendar.js';
-import PlanetPack from './planetpack.js';
-import { GRAVITATIONAL_CONSTANT } from './consts.js';
+import Calendar from './calendar';
+import PlanetPack from './planetpack';
+import Body from './body';
+import Orbit from './orbit';
+import { GRAVITATIONAL_CONSTANT } from './consts';
+import { Map, fromJS, List} from 'immutable';
 
 export class Rescale {
-    constructor(name, resize, rescale, atmosphereHeightMultiplier, dayLengthMultiplier, overrides) {
+    constructor({
+            name,
+            resize=1,
+            rescale=1,
+            atmosphereHeightMultiplier=1,
+            dayLengthMultiplier=1,
+            overrides={}}) {
     	this.name = name;
     	this.resize = resize;
     	this.rescale = rescale;
     	this.atmosphereHeightMultiplier = atmosphereHeightMultiplier;
     	this.dayLengthMultiplier = dayLengthMultiplier;
-    	this.overrides = overrides;
+    	this.overrides = fromJS(overrides);
     }
 
     rescalePlanetPack(planetpack) {
@@ -17,14 +26,11 @@ export class Rescale {
             return planetpack;
         }
 
-        const rescaledSun = this.rescaleBody(planetpack.sun.clone());
+        const rescaledSun = this.rescaleBody(planetpack.sun);
         const homeworld = rescaledSun.findByName(planetpack.homeworld.name);
         
-        let calendar = null;
-        if (homeworld.name in this.overrides && 'calendar' in this.overrides[homeworld.name]) {
-            // use the explicit calendar if it was defined
-            calendar = this.overrides[homeworld.name].calendar;
-        } else {
+        let calendar = this.overrides.getIn([homeworld.name, 'calendar']);
+        if (!calendar) {
             const dayLength = Math.abs(homeworld.rotationalPeriod);
             const yearLength = homeworld.orbit.period;
             const daysInYear = Math.floor(yearLength / dayLength);
@@ -32,189 +38,224 @@ export class Rescale {
             calendar = new Calendar(dayLength, daysInYear * dayLength);
         }
 
-        console.log(rescaledSun);
         return new PlanetPack(planetpack.name + ' ' + this.name, rescaledSun, homeworld, calendar);
     }
 
-    rescaleBody(body) {
-        const bodyOverrides = this.overrides[body.name] || {};
-        const rescaleFactor = bodyOverrides.rescale || this.rescale;
-        const resizeFactor = bodyOverrides.resize || this.resize;
-        const atmosphereHeightMultiplier = bodyOverrides.atmosphereHeightMultiplier || this.atmosphereHeightMultiplier;
-        const dayLengthMultiplier = bodyOverrides.dayLengthMultiplier || this.dayLengthMultiplier;
-        const semiMajorAxis = bodyOverrides.semiMajorAxis;
-        const aslGravity = body.aslGravity;
+    rescaleBody(body, parentBody=null) {
+        const rescaleFactor = this.overrides.getIn([body.name, 'rescale'], this.rescale);
+        const resizeFactor = this.overrides.getIn([body.name, 'resize'], this.resize);
+        const atmosphereHeightMultiplier = this.overrides.getIn([body.name, 'atmosphereHeightMultiplier'],
+            this.atmosphereHeightMultiplier);
+        const dayLengthMultiplier = this.overrides.getIn([body.name, 'dayLengthMultiplier'],
+            this.dayLengthMultiplier);
 
-        body.radius *= resizeFactor;
-        // update the body's mass to keep the same aslGravity with it's new radius
-        body.mass = Math.pow(body.radius, 2) * aslGravity / GRAVITATIONAL_CONSTANT;
-        body.atmosphereHeight *= atmosphereHeightMultiplier;
-        body.highSpaceBorder *= resizeFactor;
-
-        if (!body.tidallyLocked) {
-            body.rotationalPeriod *= dayLengthMultiplier;
-        }
-
-        if (body.sphereOfInfluenceManual !== null) {
-            body.sphereOfInfluenceManual *= rescaleFactor;
-        }
-
+        let orbit = null;
         if (body.orbit) {
-            body.orbit.semiMajorAxis = semiMajorAxis || body.orbit.semiMajorAxis * rescaleFactor;
-            if (body.tidallyLocked) {
-                // for tidally locked bodies, set it's rotational period to it's orbital period
-                // negative rotationPeriod means it rotates westward instead of eastward
-                const rotationSign = body.rotationalPeriod < 0 ? -1 : 1;
-                body.rotationalPeriod = body.orbit.period * rotationSign;
-            }
+            const semiMajorAxis = this.overrides.getIn([body.name, 'semiMajorAxis'],
+                body.orbit.semiMajorAxis * rescaleFactor);
+            orbit = new Orbit({
+                parentBody: parentBody,
+                semiMajorAxis: semiMajorAxis,
+                eccentricity: body.orbit.eccentricity,
+                inclination: body.orbit.inclination,
+                longitudeOfAscendingNode: body.orbit.longitudeOfAscendingNode,
+                argumentOfPeriapsis: body.orbit.argumentOfPeriapsis,
+                meanAnomoloyAtEpoch: body.orbit.meanAnomoloyAtEpoch
+            });
         }
 
-        body.satellites.forEach(satellite => this.rescaleBody(satellite));
+        const rescaledBody = new Body({
+            name: body.name,
+            radius: body.radius * resizeFactor,
+            mass: Math.pow(body.radius * resizeFactor, 2) * body.aslGravity / GRAVITATIONAL_CONSTANT,
+            atmosphereHeight: body.atmosphereHeight * atmosphereHeightMultiplier,
+            highSpaceBorder: body.highSpaceBorder * resizeFactor,
+            rotationalPeriod: body.rotationalPeriod * dayLengthMultiplier,
+            tidallyLocked: body.tidallyLocked,
+            orbit: orbit,
+            sphereOfInfluence: body.sphereOfInfluenceManual !== null ? body.sphereOfInfluenceManual * rescaleFactor : null
+        });
+        rescaledBody.satellites = body.satellites.map(satellite => this.rescaleBody(satellite, rescaledBody));
 
-        return body;
+        return rescaledBody;
     }
 }
 
 export const rescales = [
-    new Rescale('Default', 1, 1, 1, 1, 1, {}),
-    new Rescale('2.5x', 2.5, 2.5, 1.3000000002, 1.25, {
-        'Gael' : {
-            'semiMajorAxis' :  34948895994.9601,
-            'dayLengthMultiplier' : 1.66666666666667,
-            'calendar' : new Calendar(36000, 14544000)
-        },
-        'Icarus' : {
-            'dayLengthMultiplier' : 1.58113883008419
-        },
-        'Gratian' : {
-            'dayLengthMultiplier' : 1.58113883008419
-        },
-        'Otho' : {
-            'dayLengthMultiplier' : 1
-        },
-        'Gauss' : {
-            'dayLengthMultiplier' : 1
-        },
-        'Nero' : {
-            'dayLengthMultiplier' : 1
-        },
-        'Ciro' : {
-            'dayLengthMultiplier' : 1.66666666666667
-        },
-        'Grannus' : {
-            'dayLengthMultiplier' : 1.66666666666667
+    new Rescale({name: 'Default'}),
+    new Rescale({
+        name: '2.5x',
+        resize: 2.5,
+        rescale: 2.5,
+        atmosphereHeightMultiplier: 1.3000000002,
+        dayLengthMultiplier: 1.25,
+        overrides: {
+            'Gael' : {
+                'semiMajorAxis' :  34948895994.9601,
+                'dayLengthMultiplier' : 1.66666666666667,
+                'calendar' : new Calendar(36000, 14544000)
+            },
+            'Icarus' : {
+                'dayLengthMultiplier' : 1.58113883008419
+            },
+            'Gratian' : {
+                'dayLengthMultiplier' : 1.58113883008419
+            },
+            'Otho' : {
+                'dayLengthMultiplier' : 1
+            },
+            'Gauss' : {
+                'dayLengthMultiplier' : 1
+            },
+            'Nero' : {
+                'dayLengthMultiplier' : 1
+            },
+            'Ciro' : {
+                'dayLengthMultiplier' : 1.66666666666667
+            },
+            'Grannus' : {
+                'dayLengthMultiplier' : 1.66666666666667
+            }
         }
     }),
-    new Rescale('3.2x', 3.2, 3.2, 1.5, 1.5, {
-        'Gael' : {
-            'semiMajorAxis' :  44742819242.0888,
-            'dayLengthMultiplier' : 2,
-            'calendar' : new Calendar(43200, 16459200)
-        },
-        'Icarus' : {
-            'dayLengthMultiplier' : 1.78885438199983
-        },
-        'Gratian' : {
-            'dayLengthMultiplier' : 1.78885438199983
-        },
-        'Otho' : {
-            'dayLengthMultiplier' : 1
-        },
-        'Gauss' : {
-            'dayLengthMultiplier' : 1
-        },
-        'Nero' : {
-            'dayLengthMultiplier' : 1
-        },
-        'Ciro' : {
-            'dayLengthMultiplier' : 2
-        },
-        'Grannus' : {
-            'dayLengthMultiplier' : 2
+    new Rescale({
+        name: '3.2x',
+        resize: 3.2,
+        rescale: 3.2,
+        atmosphereHeightMultiplier: 1.5,
+        dayLengthMultiplier: 1.5,
+        overrides: {
+            'Gael' : {
+                'semiMajorAxis' :  44742819242.0888,
+                'dayLengthMultiplier' : 2,
+                'calendar' : new Calendar(43200, 16459200)
+            },
+            'Icarus' : {
+                'dayLengthMultiplier' : 1.78885438199983
+            },
+            'Gratian' : {
+                'dayLengthMultiplier' : 1.78885438199983
+            },
+            'Otho' : {
+                'dayLengthMultiplier' : 1
+            },
+            'Gauss' : {
+                'dayLengthMultiplier' : 1
+            },
+            'Nero' : {
+                'dayLengthMultiplier' : 1
+            },
+            'Ciro' : {
+                'dayLengthMultiplier' : 2
+            },
+            'Grannus' : {
+                'dayLengthMultiplier' : 2
+            }
         }
     }),
-    new Rescale('6.4x', 6.4, 6.4, 1.5999999996, 1.75, {
-        'Gael' : {
-            'semiMajorAxis' : 89450717932.7214,
-            'dayLengthMultiplier' : 3,
-            'calendar' : new Calendar(64800, 23263200), 
-        },
-        'Icarus' : {
-            'dayLengthMultiplier' : 2.5298221281347
-        },
-        'Gratian' : {
-            'dayLengthMultiplier' : 2.5298221281347
-        },
-        'Otho' : {
-            'dayLengthMultiplier' : 1
-        },
-        'Gauss' : {
-            'dayLengthMultiplier' : 1
-        },
-        'Nero' : {
-            'dayLengthMultiplier' : 1
-        },
-        'Ciro' : {
-            'dayLengthMultiplier' : 3
-        },
-        'Grannus' : {
-            'dayLengthMultiplier' : 3
+    new Rescale({
+        name: '6.4x',
+        resize: 6.4,
+        rescale: 6.4,
+        atmosphereHeightMultiplier: 1.5999999996,
+        dayLengthMultiplier: 1.75,
+        overrides: {
+            'Gael' : {
+                'semiMajorAxis' : 89450717932.7214,
+                'dayLengthMultiplier' : 3,
+                'calendar' : new Calendar(64800, 23263200), 
+            },
+            'Icarus' : {
+                'dayLengthMultiplier' : 2.5298221281347
+            },
+            'Gratian' : {
+                'dayLengthMultiplier' : 2.5298221281347
+            },
+            'Otho' : {
+                'dayLengthMultiplier' : 1
+            },
+            'Gauss' : {
+                'dayLengthMultiplier' : 1
+            },
+            'Nero' : {
+                'dayLengthMultiplier' : 1
+            },
+            'Ciro' : {
+                'dayLengthMultiplier' : 3
+            },
+            'Grannus' : {
+                'dayLengthMultiplier' : 3
+            }
         }
     }),
-    new Rescale('10x', 10, 10, 1.728, 2, {
-        'Gael' : {
-            'semiMajorAxis' :  139887843072.6100,
-            'dayLengthMultiplier' : 4,
-            'calendar' : new Calendar(86400, 29116800), 
-        },
-        'Icarus' : {
-            'dayLengthMultiplier' : 3.16227766016838
-        },
-        'Gratian' : {
-            'dayLengthMultiplier' : 3.16227766016838
-        },
-        'Otho' : {
-            'dayLengthMultiplier' : 1
-        },
-        'Gauss' : {
-            'dayLengthMultiplier' : 1
-        },
-        'Nero' : {
-            'dayLengthMultiplier' : 1
-        },
-        'Ciro' : {
-            'dayLengthMultiplier' : 4
-        },
-        'Grannus' : {
-            'dayLengthMultiplier' : 4
+    new Rescale({
+        name: '10x',
+        resize: 10,
+        rescale: 10,
+        atmosphereHeightMultiplier: 1.728,
+        dayLengthMultiplier: 2,
+        overrides: {
+            'Gael' : {
+                'semiMajorAxis' :  139887843072.6100,
+                'dayLengthMultiplier' : 4,
+                'calendar' : new Calendar(86400, 29116800), 
+            },
+            'Icarus' : {
+                'dayLengthMultiplier' : 3.16227766016838
+            },
+            'Gratian' : {
+                'dayLengthMultiplier' : 3.16227766016838
+            },
+            'Otho' : {
+                'dayLengthMultiplier' : 1
+            },
+            'Gauss' : {
+                'dayLengthMultiplier' : 1
+            },
+            'Nero' : {
+                'dayLengthMultiplier' : 1
+            },
+            'Ciro' : {
+                'dayLengthMultiplier' : 4
+            },
+            'Grannus' : {
+                'dayLengthMultiplier' : 4
+            }
         }
     }),
-    new Rescale('10.625x', 10.625, 10.625, 1.728, 2, {
-        'Gael' : {
-            'semiMajorAxis' : 148524802065.2240,
-            'dayLengthMultiplier' : 4,
-            'calendar' : new Calendar(86400, 29116800), 
-        },
-        'Icarus' : {
-            'dayLengthMultiplier' : 3.25960120260132
-        },
-        'Gratian' : {
-            'dayLengthMultiplier' : 3.25960120260132
-        },
-        'Otho' : {
-            'dayLengthMultiplier' : 1
-        },
-        'Gauss' : {
-            'dayLengthMultiplier' : 1
-        },
-        'Nero' : {
-            'dayLengthMultiplier' : 1
-        },
-        'Ciro' : {
-            'dayLengthMultiplier' : 4
-        },
-        'Grannus' : {
-            'dayLengthMultiplier' : 4
+    new Rescale({
+        name: '10.625x',
+        resize: 10.625,
+        rescale: 10.625,
+        atmosphereHeightMultiplier: 1.728,
+        dayLengthMultiplier: 2,
+            overrides:  {
+            'Gael' : {
+                'semiMajorAxis' : 148524802065.2240,
+                'dayLengthMultiplier' : 4,
+                'calendar' : new Calendar(86400, 29116800), 
+            },
+            'Icarus' : {
+                'dayLengthMultiplier' : 3.25960120260132
+            },
+            'Gratian' : {
+                'dayLengthMultiplier' : 3.25960120260132
+            },
+            'Otho' : {
+                'dayLengthMultiplier' : 1
+            },
+            'Gauss' : {
+                'dayLengthMultiplier' : 1
+            },
+            'Nero' : {
+                'dayLengthMultiplier' : 1
+            },
+            'Ciro' : {
+                'dayLengthMultiplier' : 4
+            },
+            'Grannus' : {
+                'dayLengthMultiplier' : 4
+            }
         }
     })
 ];

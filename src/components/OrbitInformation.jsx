@@ -26,6 +26,10 @@ const MODE_OPTIONS = [
 export class OrbitInformation extends React.PureComponent {
     render() {
         return <div className="container">
+            <h1>Orbit Information</h1>
+            <p>Calculates details about the orbit given the apoapsis and periapsis, apoapsis and period, or the
+            periapsis and period.  This will show details such as the semi-major axis, orbital period, eccentricity,
+            and velocities at apoapsis and periapsis. </p>
             <form className="form-horizontal">
                 <OrbitingBodySelectContainer />
                 <fieldset>

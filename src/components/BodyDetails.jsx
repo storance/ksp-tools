@@ -3,6 +3,7 @@ import NumberFormat from './format/NumberFormat';
 import DurationFormat from './format/DurationFormat';
 import StaticTextField from './forms/StaticTextField';
 import { DISTANCE_UNITS, DISTANCE_SQUARED_UNITS, VELOCITY_UNITS } from '../consts.js';
+import { toGees } from '../utils.js';
 
 export default class BodyDetails extends React.PureComponent {
     render() {
@@ -35,6 +36,7 @@ export default class BodyDetails extends React.PureComponent {
 
                 <StaticTextField label={"Surface Gravity"}>
                     <NumberFormat value={this.props.body.aslGravity} fractionDigits={3} suffix={' m/s^2'} />
+                    (<NumberFormat value={toGees(this.props.body.aslGravity)} fractionDigits={3} suffix={'g'} />)
                 </StaticTextField>
 
                 <StaticTextField label={"Escape Velocity"}>
@@ -50,11 +52,15 @@ export default class BodyDetails extends React.PureComponent {
                 </StaticTextField>
 
                 <StaticTextField label={"Rotational Period"}>
-                    <DurationFormat value={this.props.body.rotationalPeriod} calendar={this.props.calendar} />
+                    <DurationFormat value={this.props.body.rotationalPeriod} calendar={this.props.calendar} includeRaw={true} />
                 </StaticTextField>
 
                 <StaticTextField label={"Rotational Velocity"}>
                     <NumberFormat value={this.props.body.rotationalVelocity} fractionDigits={3} units={VELOCITY_UNITS} />
+                </StaticTextField>
+
+                <StaticTextField label={"Stationary Orbit"}>
+                    <NumberFormat value={this.props.body.stationaryOrbit} fractionDigits={3} units={DISTANCE_UNITS} />
                 </StaticTextField>
 
                 <StaticTextField label={"Has Atmosphere?"}>
