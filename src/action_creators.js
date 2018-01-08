@@ -99,3 +99,18 @@ export function calculateSatelliteMultipleLaunch(orbitingBody) {
         orbitingBody
     };
 }
+
+export function updateDeltavMap(field, value) {
+    return {
+        type: 'DELTAVMAP.FORM_UPDATE',
+        field,
+        value
+    };
+}
+
+export function calculateAscentDeltav(orbitingBody) {
+    return {
+        type: 'DELTAVMAP.CALCULATE',
+        orbitingBody
+    };
+}

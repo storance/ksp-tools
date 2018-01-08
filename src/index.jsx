@@ -11,6 +11,7 @@ import { ManeuverPlannerContainer } from './components/ManeuverPlanner';
 import { DarknessTimeContainer } from './components/DarknessTime';
 import { SatelliteSingleLaunchContainer } from './components/SatelliteSingleLaunch';
 import { SatelliteMultipleLaunchContainer } from './components/SatelliteMultipleLaunch';
+import { DeltaVMapContainer } from './components/DeltaVMap';
 import { loadState, saveStateMiddleware } from './localStorage.js';
 
 import * as reducers from './reducers';
@@ -37,6 +38,7 @@ ReactDOM.render(
                                 <li><NavLink activeClassName="active" to="/orbit/maneuver">Maneuver Planner</NavLink></li>
                                 <li><NavLink activeClassName="active" to="/satellite/singlelaunch">Satellite: Single Launch</NavLink></li>
                                 <li><NavLink activeClassName="active" to="/satellite/multiplelaunch">Satellite: Multiple Launch</NavLink></li>
+                                <li><NavLink activeClassName="active" to="/deltavmap">Delta-V Map</NavLink></li>
                             </ul>
                         </div>
                     </div>
@@ -49,6 +51,7 @@ ReactDOM.render(
                     <Route path="/body/information" component={BodyInformationContainer} />
                     <Route path="/satellite/singlelaunch" component={SatelliteSingleLaunchContainer} />
                     <Route path="/satellite/multiplelaunch" component={SatelliteMultipleLaunchContainer} />
+                    <Route path="/deltavmap" component={DeltaVMapContainer} />
                 </Switch>
             </div>
         </Router>
