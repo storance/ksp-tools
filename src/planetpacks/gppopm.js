@@ -7,8 +7,8 @@ const Grannus = Ciro.findByName('Grannus');
 const Gael = Ciro.findByName('Gael');
 
 attachSarnus(Grannus);
-attachUrlum(Grannus, 0.77);
-attachNeidon(Grannus, 0.7);
-attachPlock(Grannus, 0.75);
+attachUrlum(Grannus, {semiMajorAxisMultiplier: 0.77});
+attachNeidon(Grannus, {semiMajorAxisMultiplier: 0.7});
+attachPlock(Grannus, {semiMajorAxisMultiplier: 0.75});
 
 export default new PlanetPack('Galileo\'s Planet Pack + OPM', Ciro, Gael, gpp.calendar);

@@ -4,7 +4,10 @@ import { toDegrees } from '../utils';
 import stock from './stock';
 
 // not a selectable planetpack, just adds the ability to attach to another planet pack
-export function attachSarnus(parentBody, semiMajorAxisMultiplier=1) {
+export function attachSarnus(parentBody, {
+        semiMajorAxisMultiplier=1,
+        semiMajorAxis = null
+    }={}) {
     const Sarnus = new Body({
         name: 'Sarnus',
         radius: 5300000,
@@ -14,7 +17,7 @@ export function attachSarnus(parentBody, semiMajorAxisMultiplier=1) {
         rotationalPeriod: 28500,
         orbit: new Orbit({
             parentBody: parentBody,
-            semiMajorAxis: 125798522368 * semiMajorAxisMultiplier,
+            semiMajorAxis: semiMajorAxis ? semiMajorAxis : 125798522368 * semiMajorAxisMultiplier,
             eccentricity: 0.0534,
             inclination: 2.02,
             longitudeOfAscendingNode: 184,
@@ -126,7 +129,10 @@ function moveEeloo(parentBody) {
     }
 }
 
-export function attachUrlum(parentBody, semiMajorAxisMultiplier=1) {
+export function attachUrlum(parentBody, {
+        semiMajorAxisMultiplier=1,
+        semiMajorAxis = null
+    }={}) {
     const Urlum = new Body({
         name: 'Urlum',
         radius: 2177000,
@@ -136,7 +142,7 @@ export function attachUrlum(parentBody, semiMajorAxisMultiplier=1) {
         rotationalPeriod: 41000,
         orbit: new Orbit({
             parentBody: parentBody,
-            semiMajorAxis: 254317012787 * semiMajorAxisMultiplier,
+            semiMajorAxis: semiMajorAxis ? semiMajorAxis : 254317012787 * semiMajorAxisMultiplier,
             eccentricity: 0.045214674,
             inclination: 0.64,
             longitudeOfAscendingNode: 61,
@@ -217,7 +223,10 @@ export function attachUrlum(parentBody, semiMajorAxisMultiplier=1) {
     parentBody.addSatellite(Urlum);
 }
 
-export function attachNeidon(parentBody, semiMajorAxisMultiplier=1) {
+export function attachNeidon(parentBody, {
+        semiMajorAxisMultiplier=1,
+        semiMajorAxis = null
+    }={}) {
     const Neidon = new Body({
         name: 'Neidon',
         radius: 2145000,
@@ -227,7 +236,7 @@ export function attachNeidon(parentBody, semiMajorAxisMultiplier=1) {
         rotationalPeriod: 40250,
         orbit: new Orbit({
             parentBody: parentBody,
-            semiMajorAxis: 409355191706 * semiMajorAxisMultiplier,
+            semiMajorAxis: semiMajorAxis ? semiMajorAxis : 409355191706 * semiMajorAxisMultiplier,
             eccentricity: 0.0127567,
             inclination: 1.27,
             longitudeOfAscendingNode: 259,
@@ -275,7 +284,10 @@ export function attachNeidon(parentBody, semiMajorAxisMultiplier=1) {
     parentBody.addSatellite(Neidon);
 }
 
-export function attachPlock(parentBody, semiMajorAxisMultiplier=1) {
+export function attachPlock(parentBody, {
+        semiMajorAxisMultiplier=1,
+        semiMajorAxis = null
+    }={}) {
     const Plock = new Body({
         name: 'Plock',
         radius: 189000,
@@ -284,7 +296,7 @@ export function attachPlock(parentBody, semiMajorAxisMultiplier=1) {
         rotationalPeriod: 106309.606989054,
         orbit: new Orbit({
             parentBody: parentBody,
-            semiMajorAxis: 535833706086 * semiMajorAxisMultiplier,
+            semiMajorAxis: semiMajorAxis ? semiMajorAxis : 535833706086 * semiMajorAxisMultiplier,
             eccentricity: 0.26,
             inclination: 6.15,
             longitudeOfAscendingNode: 260,

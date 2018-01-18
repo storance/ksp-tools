@@ -59,9 +59,11 @@ export default class BodyDetails extends React.PureComponent {
                     <NumberFormat value={this.props.body.rotationalVelocity} fractionDigits={3} units={VELOCITY_UNITS} />
                 </StaticTextField>
 
-                <StaticTextField label={"Stationary Orbit"}>
-                    <NumberFormat value={this.props.body.stationaryOrbit} fractionDigits={3} units={DISTANCE_UNITS} />
-                </StaticTextField>
+                {this.props.body.stationaryOrbit > this.props.body.sphereOfInfluence ? <StaticTextField label={"Stationary Orbit"}>Not Possible</StaticTextField>
+                    : <StaticTextField label={"Stationary Orbit"}>
+                        <NumberFormat value={this.props.body.stationaryOrbit} fractionDigits={3} units={DISTANCE_UNITS} />
+                    </StaticTextField>
+                }
 
                 <StaticTextField label={"Has Atmosphere?"}>
                     {this.props.body.hasAtmosphere ? 'Yes' : 'No'}

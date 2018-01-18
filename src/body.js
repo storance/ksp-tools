@@ -1,11 +1,13 @@
 import { List} from 'immutable';
-import {GRAVITATIONAL_CONSTANT, PI} from './consts';
+import {GRAVITATIONAL_CONSTANT, GRAVITY, PI} from './consts';
 
 export default class Body {
     constructor({
             name,
             radius,
-            mass,
+            mass=null,
+            geeAsl=null,
+            mu=null,
             atmosphereHeight = 0,
             highSpaceBorder = 0,
             rotationalPeriod = null,
@@ -15,7 +17,16 @@ export default class Body {
             satellites=[]}) {
         this.name = name;
         this.radius = radius;
-        this.mass = mass;
+        if (mass !== null) {
+            this.mass = mass;
+            this.mu = this.mass * GRAVITATIONAL_CONSTANT;
+        } else if (mu !== null) {
+            this.mass = mu / GRAVITATIONAL_CONSTANT;
+            this.mu = mu;
+        } else if (geeAsl !== null) {
+            this.mu = geeAsl * GRAVITY * Math.pow(radius, 2);
+            this.mass = this.mu / GRAVITATIONAL_CONSTANT;
+        }
         this.atmosphereHeight = atmosphereHeight;
         this.highSpaceBorder = highSpaceBorder;
         this.tidallyLocked = tidallyLocked;
@@ -27,15 +38,7 @@ export default class Body {
         }
         this.orbit = orbit;
         this._satellites = List(satellites);
-        if (sphereOfInfluence !== null) {
-            this.sphereOfInfluenceManual = sphereOfInfluence;
-        } else {
-            this.sphereOfInfluenceManual = null;
-        }
-    }
-
-    get mu() {
-        return this.mass * GRAVITATIONAL_CONSTANT;
+        this.sphereOfInfluenceManual = sphereOfInfluence;
     }
 
     get equitorialCircumference() {
@@ -59,7 +62,7 @@ export default class Body {
     }
 
     gravityAt(altitude) {
-        return this.mu / Math.pow(this.radius + altitude, 2);   
+        return this.mu / Math.pow(this.radius + altitude, 2);
     }
 
     get escapeVelocity() {

@@ -1,4 +1,4 @@
-import { PI, GRAVITY } from './consts';
+import { PI, GRAVITY, GRAVITATIONAL_CONSTANT } from './consts';
 
 export function convertAltitude(value, fromUnits, toUnits) {
     var unitMult = {
