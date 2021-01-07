@@ -8,9 +8,11 @@ export default class Body {
             mass=null,
             geeAsl=null,
             mu=null,
-            atmosphereHeight = 0,
-            highSpaceBorder = 0,
-            rotationalPeriod = null,
+            atmosphereHeight=0,
+            hasOxygen=false,
+            flyingHighAltitude=1,
+            highSpaceBorder=0,
+            rotationalPeriod=null,
             tidallyLocked=false,
             orbit=null,
             sphereOfInfluence=null,
@@ -28,6 +30,8 @@ export default class Body {
             this.mass = this.mu / GRAVITATIONAL_CONSTANT;
         }
         this.atmosphereHeight = atmosphereHeight;
+        this.hasOxygen = hasOxygen;
+        this.flyingHighAltitude = flyingHighAltitude;
         this.highSpaceBorder = highSpaceBorder;
         this.tidallyLocked = tidallyLocked;
         if (tidallyLocked && orbit) {

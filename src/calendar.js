@@ -13,7 +13,7 @@ export default class Calendar {
 
         if (seconds >= this.yearLengthSeconds) {
             years = Math.floor(seconds / this.yearLengthSeconds);
-            seconds = seconds % this.yearLengthSeconds;
+            seconds = (seconds % this.yearLengthSeconds).toFixed(3);
         }
 
         if (seconds >= this.dayLengthSeconds) {

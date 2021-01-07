@@ -9,7 +9,8 @@ export default class Orbit {
             inclination=null,
             longitudeOfAscendingNode=null,
             argumentOfPeriapsis=null,
-            meanAnomoloyAtEpoch=null
+            meanAnomoloyAtEpoch=null,
+            meanAnomoloyAtEpochRad=null
         }) {
         this.parentBody = parentBody;
         this.semiMajorAxis = semiMajorAxis;
@@ -17,7 +18,11 @@ export default class Orbit {
         this.inclination = inclination;
         this.longitudeOfAscendingNode = longitudeOfAscendingNode;
         this.argumentOfPeriapsis = argumentOfPeriapsis;
-        this.meanAnomoloyAtEpoch = meanAnomoloyAtEpoch;
+        if (meanAnomoloyAtEpochRad !== null) {
+            this.meanAnomoloyAtEpoch = meanAnomoloyAtEpochRad * 180.0 / PI;
+        } else {
+            this.meanAnomoloyAtEpoch = meanAnomoloyAtEpoch;
+        }
     }
 
     static fromApAndPe(parentBody, ap, pe) {

@@ -69,15 +69,29 @@ export default class BodyDetails extends React.PureComponent {
                     {this.props.body.hasAtmosphere ? 'Yes' : 'No'}
                 </StaticTextField>
 
-                <StaticTextField label={"High Space Border"}>
-                    <NumberFormat value={this.props.body.highSpaceBorder} fractionDigits={3} units={DISTANCE_UNITS} />
-                </StaticTextField>
-
                 {this.props.body.hasAtmosphere &&
                     <StaticTextField label={"Atmosphere Height"}>
                         <NumberFormat value={this.props.body.atmosphereHeight} fractionDigits={3} units={DISTANCE_UNITS} />
                     </StaticTextField>
                 }
+
+                {this.props.body.hasAtmosphere &&
+                    <StaticTextField label={"Has Oxygen?"}>
+                        {this.props.body.hasOxygen ? 'Yes' : 'No'}
+                    </StaticTextField>
+                }
+
+                {this.props.body.hasAtmosphere &&
+                    <StaticTextField label={"Flying High Threshold"}>
+                        <NumberFormat value={this.props.body.flyingHighAltitude} fractionDigits={3} units={DISTANCE_UNITS} />
+                    </StaticTextField>
+                }
+
+                <StaticTextField label={"High Space Threshold"}>
+                    <NumberFormat value={this.props.body.highSpaceBorder} fractionDigits={3} units={DISTANCE_UNITS} />
+                </StaticTextField>
+
+                
             </fieldset>;
     }
 };
