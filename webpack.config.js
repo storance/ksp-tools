@@ -6,7 +6,6 @@ const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
     filename: 'index.html',
     inject: 'body'
 });
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
     entry: [
@@ -14,7 +13,7 @@ module.exports = {
         './src/index.jsx'
     ],
     module: {
-        loaders: [{
+        rules: [{
             test: /\.jsx?$/,
             exclude: /node_modules/,
             loader: require.resolve('babel-loader'),
@@ -31,11 +30,17 @@ module.exports = {
         },
         { 
             test: /\.css$/, 
-            loader: "style-loader!css-loader" 
+            use: [
+                "style-loader",
+                "css-loader"
+            ]
         },
         { 
             test: /\.png$/, 
-            loader: "url-loader?limit=100000" 
+            loader: "url-loader",
+            options: {
+                limit: 100000
+            }
         },
         { 
             test: /\.jpg$/, 
@@ -43,11 +48,19 @@ module.exports = {
         },
         {
             test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/, 
-            loader: 'url-loader?limit=10000&mimetype=application/font-woff'
+            loader: 'url-loader',
+            options: {
+                limit: 10000,
+                mimetype: "application/font-woff"
+            }
         },
         {
             test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, 
-            loader: 'url-loader?limit=10000&mimetype=application/octet-stream'
+            loader: 'url-loader',
+            options: {
+                limit: 10000,
+                mimetype: "application/octet-stream"
+            }
         },
         {
             test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, 
@@ -55,7 +68,11 @@ module.exports = {
         },
         {
             test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, 
-            loader: 'url-loader?limit=10000&mimetype=image/svg+xml'
+            loader: 'url-loader',
+            options: {
+                limit: 10000,
+                mimetype: "image/svg+xml"
+            }
         }]
     },
     resolve: {
