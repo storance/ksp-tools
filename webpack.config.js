@@ -6,26 +6,26 @@ const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
     filename: 'index.html',
     inject: 'body'
 });
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+
+const isDevelopment = process.env.NODE_ENV !== 'production';
 
 module.exports = {
     entry: [
-        'react-hot-loader/patch',
         './src/index.jsx'
     ],
     module: {
         rules: [{
             test: /\.jsx?$/,
             exclude: /node_modules/,
-            loader: require.resolve('babel-loader'),
-            options: {
-
-                // This is a feature of `babel-loader` for webpack (not Babel itself).
-                // It enables caching results in ./node_modules/.cache/babel-loader/
-                // directory for faster rebuilds.
-                cacheDirectory: true,
-                plugins: [
-                    'react-hot-loader/babel'
-                ]
+            use: {
+                loader: require.resolve('babel-loader'),
+                options: {
+                    plugins: [
+                        require.resolve('@babel/plugin-proposal-export-default-from'),
+                        isDevelopment && require.resolve('react-refresh/babel')
+                    ].filter(Boolean),
+                }
             }
         },
         { 
@@ -75,7 +75,7 @@ module.exports = {
             }
         }]
     },
-    mode: "development",
+    mode: isDevelopment ? 'development' : 'production',
     devtool: 'inline-source-map',
     resolve: {
         extensions: ['.js', '.jsx']
@@ -92,6 +92,7 @@ module.exports = {
     },
     plugins: [
         HtmlWebpackPluginConfig,
-        new webpack.HotModuleReplacementPlugin(),
-    ]
+        isDevelopment && new webpack.HotModuleReplacementPlugin(),
+        isDevelopment && new ReactRefreshWebpackPlugin()
+    ].filter(Boolean)
 };
