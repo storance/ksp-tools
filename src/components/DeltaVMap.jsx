@@ -8,6 +8,7 @@ import ButtonField from './forms/ButtonField';
 import DurationFormat from './format/DurationFormat';
 import NumberFormat from './format/NumberFormat';
 import * as actionCreators from '../action_creators';
+import { formatNumber } from '../format.js';
 
 export class DeltaVMap extends React.PureComponent {
     render() {
@@ -30,9 +31,7 @@ export class DeltaVMap extends React.PureComponent {
                                  onClick={() => this.props.calculateAscentDeltav(this.props.body)} />
 
                     {this.props.ascentDeltav  &&
-                        <StaticTextField label={"Delta-V"}>
-                            <NumberFormat value={this.props.ascentDeltav} fractionDigits={1} suffix={'m/s'} />
-                        </StaticTextField>
+                        <StaticTextField label={"Delta-V"}  value={formatNumber(this.props.ascentDeltav, {fractionDigits: 3, suffix: ' m/s'})} />
                     }
                 </fieldset>
             </form>

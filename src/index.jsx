@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import 'bootstrap';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import { combineReducers } from 'redux-immutable';
-import { HashRouter as Router, Route, NavLink, Switch, Redirect } from 'react-router-dom';
+import { HashRouter as Router, Route, Link, Switch, Redirect, useRouteMatch } from 'react-router-dom';
 import App from './components/App';
 import { OrbitInformationContainer } from './components/OrbitInformation';
 import { BodyInformationContainer } from './components/BodyInformation';
@@ -25,36 +26,48 @@ ReactDOM.render(
     <Provider store={store}>
         <Router>
             <div>
-                <div className="navbar navbar-inverse navbar-static-top" role="navigation">
-                    <div className="container">
-                        <div className="navbar-header">
-                            <a className="navbar-brand" href="#">KSP Tools</a>
-                        </div>
-                        <div className="collapse navbar-collapse">
-                            <ul className="nav navbar-nav">
-                                <li><NavLink activeClassName="active" to="/body/information">Body Information</NavLink></li>
-                                <li><NavLink activeClassName="active" to="/orbit/darknesstime">Darkness Time</NavLink></li>
-                                <li><NavLink activeClassName="active" to="/orbit/information">Orbit Information</NavLink></li>
-                                <li><NavLink activeClassName="active" to="/orbit/maneuver">Maneuver Planner</NavLink></li>
-                                <li><NavLink activeClassName="active" to="/satellite/singlelaunch">Satellite: Single Launch</NavLink></li>
-                                <li><NavLink activeClassName="active" to="/satellite/multiplelaunch">Satellite: Multiple Launch</NavLink></li>
-                                <li><NavLink activeClassName="active" to="/deltavmap">Delta-V Map</NavLink></li>
-                            </ul>
-                        </div>
+                <nav className="navbar navbar-dark bg-dark navbar-expand-lg" role="navigation">
+                    <a className="navbar-brand" href="#">KSP Tools</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#kspToolsNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div className="collapse navbar-collapse" id="kspToolsNavbar">
+                        <ul className="navbar-nav mr-auto">
+                            
+                            <NavbarItem to="/body/information" label="Body Information" />
+                            <NavbarItem to="/orbit/darknesstime" label="Darkness Time" />
+                            <NavbarItem to="/orbit/information" label="Orbit Information" />
+                            <NavbarItem to="/orbit/maneuver" label="Maneuver Planner" />
+                            <NavbarItem to="/satellite/singlelaunch" label="Satellite: Single Launch" />
+                            <NavbarItem to="/satellite/multiplelaunch" label="Satellite: Multiple Launch" />
+                            <NavbarItem to="/deltavmap" label="Delta-V Map" />
+                        </ul>
                     </div>
+                </nav>
+                <div>
+                    <Switch>
+                        <Redirect exact from="/" to="/orbit/information" />
+                        <Route path="/orbit/darknesstime" component={DarknessTimeContainer} />
+                        <Route path="/orbit/information" component={OrbitInformationContainer} />
+                        <Route path="/orbit/maneuver" component={ManeuverPlannerContainer} />
+                        <Route path="/body/information" component={BodyInformationContainer} />
+                        <Route path="/satellite/singlelaunch" component={SatelliteSingleLaunchContainer} />
+                        <Route path="/satellite/multiplelaunch" component={SatelliteMultipleLaunchContainer} />
+                        <Route path="/deltavmap" component={DeltaVMapContainer} />
+                    </Switch>
                 </div>
-                <Switch>
-                    <Redirect exact from="/" to="/orbit/information" />
-                    <Route path="/orbit/darknesstime" component={DarknessTimeContainer} />
-                    <Route path="/orbit/information" component={OrbitInformationContainer} />
-                    <Route path="/orbit/maneuver" component={ManeuverPlannerContainer} />
-                    <Route path="/body/information" component={BodyInformationContainer} />
-                    <Route path="/satellite/singlelaunch" component={SatelliteSingleLaunchContainer} />
-                    <Route path="/satellite/multiplelaunch" component={SatelliteMultipleLaunchContainer} />
-                    <Route path="/deltavmap" component={DeltaVMapContainer} />
-                </Switch>
             </div>
         </Router>
     </Provider>,
     document.getElementById('root')
 );
+
+function NavbarItem({to, label}) {
+    let match = useRouteMatch({
+        path: to
+    });
+
+    return <li className={match ? "nav-item active" : "nav-item"}>
+            <Link to={to} className={"nav-link"}>{label}</Link>
+        </li>
+}

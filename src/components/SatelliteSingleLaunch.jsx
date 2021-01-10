@@ -10,6 +10,7 @@ import ButtonField from './forms/ButtonField';
 import DurationFormat from './format/DurationFormat';
 import NumberFormat from './format/NumberFormat';
 import * as actionCreators from '../action_creators';
+import { formatNumber, formatDuration } from '../format.js';
 
 export class SatelliteSingleLaunch extends React.PureComponent {
     render() {
@@ -54,23 +55,11 @@ export class SatelliteSingleLaunch extends React.PureComponent {
                 {this.props.transferOrbit  &&
                     <fieldset>
                         <legend>Transfer Orbit</legend>
-                            <StaticTextField label={"Apoapsis"}>
-                                <NumberFormat value={this.props.transferOrbit.apoapsis}
-                                              fractionDigits={3}
-                                              units={DISTANCE_UNITS} />
-                            </StaticTextField>
+                            <StaticTextField label={"Apoapsis"} value={formatNumber(this.props.transferOrbit.apoapsis, {fractionDigits: 3, units: DISTANCE_UNITS})} />
 
-                            <StaticTextField label={"Periapsis"}>
-                                <NumberFormat value={this.props.transferOrbit.periapsis}
-                                              fractionDigits={3}
-                                              units={DISTANCE_UNITS} />
-                            </StaticTextField>
+                            <StaticTextField label={"Periapsis"} value={formatNumber(this.props.transferOrbit.periapsis, {fractionDigits: 3, units: DISTANCE_UNITS})} />
 
-                            <StaticTextField label={"Orbital Period"}>
-                                <DurationFormat value={this.props.transferOrbit.period}
-                                                calendar={this.props.planetpack.calendar}
-                                                includeRaw={true} />
-                            </StaticTextField>
+                            <StaticTextField label={"Orbital Period"} value={formatDuration(this.props.transferOrbit.period, this.props.planetpack.calendar, true)} />
                     </fieldset>
                 }
             </form>

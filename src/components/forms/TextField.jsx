@@ -5,24 +5,24 @@ export default class TextField extends React.PureComponent {
     render() {
         const type = this.props.type || "text";
         const classes = classNames({
-            'form-group' : true,
-            'has-error' : !!this.props.error
+            'form-control' : true,
+            'is-invalid' : !!this.props.error
         });
 
-        return <div className={classes}>
-            <label htmlFor={this.props.name} className="control-label col-sm-3">{this.props.label}</label>
+        return <div className="form-group row">
+            <label htmlFor={this.props.name} className="col-form-label col-sm-4 text-right font-weight-bold">{this.props.label}</label>
             <div className="col-sm-6">
-                {this.props.error && <span className="help-block">{this.props.error}</span>}
-                <div className="input-group">
-                    <input type={type}
-                           className="form-control"
-                           id={this.props.name}
-                           name={this.props.name}
-                           value={this.props.value}
-                           onChange={event => this.props.update(event.target.value)} />
-                    {this.props.suffix ? <div className="input-group-addon">{this.props.suffix}</div> : null}
-                </div>
+              <div className="input-group">
+                  <input type={type}
+                         className={classes}
+                         id={this.props.name}
+                         name={this.props.name}
+                         value={this.props.value}
+                         onChange={event => this.props.update(event.target.value)} />
+                  {this.props.suffix && <div className="input-group-append"><span class="input-group-text">{this.props.suffix}</span></div>}
+                  {this.props.error && <div className="invalidFeedback">{this.props.error}</div>}
+              </div>
             </div>
-        </div>;
+          </div>;
     }
 };

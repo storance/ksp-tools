@@ -8,6 +8,7 @@ import ButtonField from './forms/ButtonField';
 import DurationFormat from './format/DurationFormat';
 import NumberFormat from './format/NumberFormat';
 import * as actionCreators from '../action_creators';
+import { formatNumber, formatDuration } from '../format.js';
 
 export class DarknessTime extends React.PureComponent {
     render() {
@@ -40,11 +41,7 @@ export class DarknessTime extends React.PureComponent {
                                  onClick={() => this.props.calculateDarknessTime(this.props.body)} />
 
                     {this.props.darknessTime  &&
-                        <StaticTextField label={"Darkness Time"}>
-                            <DurationFormat value={this.props.darknessTime}
-                                            calendar={this.props.planetpack.calendar}
-                                            includeRaw={true} />
-                        </StaticTextField>
+                        <StaticTextField label={"Darkness Time"} value={formatDuration(this.props.darknessTime, this.props.planetpack.calendar, true)} />
                     }
                 </fieldset>
                 <fieldset>
@@ -67,9 +64,7 @@ export class DarknessTime extends React.PureComponent {
                     <ButtonField label={"Calculate"} onClick={this.props.calculateBatteryStorage} />
 
                     {this.props.energyCapacity && 
-                        <StaticTextField label={"Battery Capacity"}>
-                            <NumberFormat value={this.props.energyCapacity} fractionDigits={0} suffix={' ec'} />
-                        </StaticTextField>
+                        <StaticTextField label={"Battery Capacity"} value={formatNumber(this.props.energyCapacity, {fractionDigits: 0, suffix: ' ec'})} />
                     }
                 </fieldset>
             </form>

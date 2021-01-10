@@ -34,7 +34,7 @@ export function noAtmosphere() {
 
 export function atmosphere(height, flyingHighAltitude) {
     return new Atmosphere({
-        enabled: false,
+        enabled: true,
         hasOxygen: false,
         height: height,
         flyingHighAltitude: flyingHighAltitude
@@ -43,7 +43,7 @@ export function atmosphere(height, flyingHighAltitude) {
 
 export function atmosphereWithOxygen(height, flyingHighAltitude) {
     return new Atmosphere({
-        enabled: false,
+        enabled: true,
         hasOxygen: true,
         height: height,
         flyingHighAltitude: flyingHighAltitude

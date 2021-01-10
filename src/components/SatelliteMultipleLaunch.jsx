@@ -10,6 +10,7 @@ import ButtonField from './forms/ButtonField';
 import DurationFormat from './format/DurationFormat';
 import NumberFormat from './format/NumberFormat';
 import * as actionCreators from '../action_creators';
+import { formatNumber } from '../format.js';
 
 export class SatelliteMultipleLaunch extends React.PureComponent {
     render() {
@@ -58,11 +59,7 @@ export class SatelliteMultipleLaunch extends React.PureComponent {
                 {this.props.separation &&
                     <fieldset>
                         <legend>Satellite Separation</legend>
-                            <StaticTextField label={"Separation"}>
-                                <NumberFormat value={this.props.separation}
-                                              fractionDigits={3}
-                                              units={DISTANCE_UNITS} />
-                            </StaticTextField>
+                            <StaticTextField label={"Separation"} value={formatNumber(this.props.separation, {fractionDigits: 3, units: DISTANCE_UNITS})} />
                     </fieldset>
                 }
             </form>
