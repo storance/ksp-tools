@@ -2,7 +2,7 @@ import gpp from './gpp';
 import PlanetPack from '../planetpack.js';
 import Body from '../body.js';
 import Orbit from '../orbit.js';
-import { toDegrees } from '../utils';
+import {atmosphere, atmosphereWithOxygen} from '../atmosphere.js';
 
 const Ciro = gpp.sun.clone();
 const Grannus = Ciro.findByName('Grannus');
@@ -13,7 +13,7 @@ const Taranis = new Body({
     name: 'Taranis',
     radius: 200000,
     geeAsl: 0.2,
-    highSpaceBorder: 100000,
+    highSpaceAltitude: 100000,
     tidallyLocked: true,
     orbit: new Orbit({
         parentBody: Grannus,
@@ -22,7 +22,7 @@ const Taranis = new Body({
         inclination: 9,
         longitudeOfAscendingNode: 140,
         argumentOfPeriapsis: 345,
-        meanAnomoloyAtEpoch: toDegrees(3.141592654)
+        meanAnomoloyAtEpochRad: 3.141592654
     })
 });
 
@@ -31,12 +31,12 @@ const Nodens = new Body({
     name: 'Nodens',
     radius: 700000,
     geeAsl: 1.1,
-    atmosphereHeight: 72000,
-    highSpaceBorder: 350000,
-    rotationalPeriod: 239338.391437997,
+    atmosphere: atmosphereWithOxygen(72000, 18000),
+    highSpaceAltitude: 350000,
+    rotationalPeriod: 243000,
     orbit: new Orbit({
         parentBody: Grannus,
-        semiMajorAxis: 2455000000,
+        semiMajorAxis: 2479975746.7868,
         eccentricity: 0.02,
         inclination: 10,
         longitudeOfAscendingNode: 155,
@@ -49,16 +49,16 @@ const Belisama = new Body({
     name: 'Belisama',
     radius: 250000,
     geeAsl: 0.27,
-    highSpaceBorder: 125000,
+    highSpaceAltitude: 125000,
     tidallyLocked: true,
     orbit: new Orbit({
         parentBody: Nodens,
-        semiMajorAxis: 19720812.9222333,
+        semiMajorAxis: 19921441.0403497,
         eccentricity: 0.025,
         inclination: 9.5,
         longitudeOfAscendingNode: 135,
         argumentOfPeriapsis: 165,
-        meanAnomoloyAtEpoch: toDegrees(5.1)
+        meanAnomoloyAtEpochRad: 4.875
     })
 });
 
@@ -69,8 +69,8 @@ const Sirona = new Body({
     name: 'Sirona',
     radius: 3000000,
     geeAsl: 1,
-    atmosphereHeight: 540000,
-    highSpaceBorder: 1500000,
+    atmosphere: atmosphere(540000, 135000),
+    highSpaceAltitude: 1500000,
     rotationalPeriod: 57600,
     orbit: new Orbit({
         parentBody: Grannus,
@@ -79,7 +79,7 @@ const Sirona = new Body({
         inclination: 10,
         longitudeOfAscendingNode: 150,
         argumentOfPeriapsis: 0,
-        meanAnomoloyAtEpoch: toDegrees(3.141592654)
+        meanAnomoloyAtEpochRad: 3.141592654
     })
 });
 
@@ -87,7 +87,7 @@ const Airmed = new Body({
     name: 'Airmed',
     radius: 160000,
     geeAsl: 0.15,
-    highSpaceBorder: 80000,
+    highSpaceAltitude: 80000,
     tidallyLocked: true,
     orbit: new Orbit({
         parentBody: Sirona,
@@ -104,8 +104,8 @@ const Brovo = new Body({
     name: 'Brovo',
     radius: 300000,
     geeAsl: 0.35,
-    atmosphereHeight: 72000,
-    highSpaceBorder: 150000,
+    atmosphere: atmosphere(72000, 18000),
+    highSpaceAltitude: 150000,
     tidallyLocked: true,
     orbit: new Orbit({
         parentBody: Sirona,
@@ -114,7 +114,7 @@ const Brovo = new Body({
         inclination: 0.5,
         longitudeOfAscendingNode: 150,
         argumentOfPeriapsis: 30,
-        meanAnomoloyAtEpoch: toDegrees(3.141592654)
+        meanAnomoloyAtEpochRad: 3.141592654
     })
 });
 
@@ -122,7 +122,7 @@ const Damona = new Body({
     name: 'Damona',
     radius: 80000,
     geeAsl: 0.06,
-    highSpaceBorder: 40000,
+    highSpaceAltitude: 40000,
     tidallyLocked: true,
     orbit: new Orbit({
         parentBody: Sirona,
@@ -142,8 +142,8 @@ const Epona = new Body({
     name: 'Epona',
     radius: 500000,
     geeAsl: 0.6,
-    atmosphereHeight: 41000,
-    highSpaceBorder: 250000,
+    atmosphere: atmosphere(41000, 10000),
+    highSpaceAltitude: 250000,
     rotationalPeriod: 36000,
     orbit: new Orbit({
         parentBody: Grannus,
@@ -160,7 +160,7 @@ const Rosmerta = new Body({
     name: 'Rosmerta',
     radius: 50000,
     geeAsl: 0.03,
-    highSpaceBorder: 20000,
+    highSpaceAltitude: 20000,
     tidallyLocked: true,
     orbit: new Orbit({
         parentBody: Epona,
@@ -169,15 +169,15 @@ const Rosmerta = new Body({
         inclination: 6,
         longitudeOfAscendingNode: 180,
         argumentOfPeriapsis: 60,
-        meanAnomoloyAtEpoch: toDegrees(3.141592654)
+        meanAnomoloyAtEpochRad: 3.141592654
     })
 });
 
 const RAB58E = new Body({
     name: 'RAB-58E',
     radius: 10000,
-    geeAsl: 0.005,
-    highSpaceBorder: 10000,
+    geeAsl: 0.009,
+    highSpaceAltitude: 10000,
     rotationalPeriod: 14400,
     orbit: new Orbit({
         parentBody: Epona,
@@ -197,7 +197,7 @@ const Cernunnos = new Body({
     name: 'Cernunnos',
     radius: 120000,
     geeAsl: 0.07,
-    highSpaceBorder: 60000,
+    highSpaceAltitude: 60000,
     rotationalPeriod: 21600,
     orbit: new Orbit({
         parentBody: Grannus,
@@ -206,10 +206,10 @@ const Cernunnos = new Body({
         inclination: 4,
         longitudeOfAscendingNode: 120,
         argumentOfPeriapsis: 180,
-        meanAnomoloyAtEpoch: toDegrees(0.5)
+        meanAnomoloyAtEpochRad: 0.5
     })
 });
 
 Grannus.satellites = [Taranis, Nodens, Sirona, Epona, Cernunnos];
 
-export default new PlanetPack('Galileo\'s Planet Pack + Grannus Expansion', Ciro, Gael, gpp.calendar);
+export default new PlanetPack('Galileo\'s Planet Pack + Grannus Expansion', Ciro, Gael, gpp.calendar, gpp.rescales);

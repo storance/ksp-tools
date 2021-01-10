@@ -2,6 +2,8 @@ import Body from '../body.js';
 import Orbit from '../orbit.js';
 import PlanetPack from '../planetpack.js';
 import Calendar from '../calendar.js';
+import {atmosphere, atmosphereWithOxygen} from '../atmosphere.js';
+import { rescaleDefault } from '../rescale.js';
 
 const Sun = new Body({
     name: 'Sun',
@@ -15,7 +17,7 @@ const Mercury = new Body({
     name: 'Mercury',
     radius: 2439700,
     mass: 3.3022e23,
-    highSpaceBorder: 5000000,
+    highSpaceAltitude: 5000000,
     rotationalPeriod: 5067031.68,
     orbit: new Orbit({
         parentBody: Sun,
@@ -33,8 +35,8 @@ const Venus = new Body({
     name: 'Venus',
     radius: 6049000,
     mass: 4.8676e24,
-    atmosphereHeight: 145000,
-    highSpaceBorder: 5000000,
+    atmosphere: atmosphere(145000, 22000),
+    highSpaceAltitude: 5000000,
     rotationalPeriod: -20996797.016381,
     orbit: new Orbit({
         parentBody: Sun,
@@ -52,8 +54,8 @@ const Earth = new Body({
     name: 'Earth',
     radius: 6371000,
     mass: 5.9724369e24,
-    atmosphereHeight: 140000,
-    highSpaceBorder: 35786000,
+    atmosphere: atmosphereWithOxygen(140000, 50000),
+    highSpaceAltitude: 35786000,
     rotationalPeriod: 86164.098903691,
     orbit: new Orbit({
         parentBody: Sun,
@@ -69,7 +71,7 @@ const Moon = new Body({
     name: 'The Moon',
     radius: 1737100,
     mass: 7.34767309e22,
-    highSpaceBorder: 150000,
+    highSpaceAltitude: 150000,
     tidallyLocked: true,
     orbit: new Orbit({
         parentBody: Earth,
@@ -88,8 +90,8 @@ const Mars = new Body({
     name: 'Mars',
     radius: 3375800,
     mass: 6.4171876e23,
-    atmosphereHeight: 125000,
-    highSpaceBorder: 5000000,
+    atmosphere: atmosphere(125000, 12000),
+    highSpaceAltitude: 5000000,
     rotationalPeriod: 88642.6848,
     orbit: new Orbit({
         parentBody: Sun,
@@ -105,7 +107,7 @@ const Phobos = new Body({
     name: 'Phobos',
     radius: 7250,
     mass: 1.072e16,
-    highSpaceBorder: 5000,
+    highSpaceAltitude: 5000,
     tidallyLocked: true,
     orbit: new Orbit({
         parentBody: Mars,
@@ -121,7 +123,7 @@ const Deimos = new Body({
     name: 'Deimos',
     radius: 5456,
     mass: 1.48e15,
-    highSpaceBorder: 5000,
+    highSpaceAltitude: 5000,
     tidallyLocked: true,
     orbit: new Orbit({
         parentBody: Mars,
@@ -140,7 +142,7 @@ const Vesta = new Body({
     name: 'Vesta',
     radius: 262700,
     mass: 2.59e20,
-    highSpaceBorder: 300000,
+    highSpaceAltitude: 300000,
     rotationalPeriod: 19231.2,
     orbit: new Orbit({
         parentBody: Sun,
@@ -156,7 +158,7 @@ const Ceres = new Body({
     name: 'Ceres',
     radius: 473000,
     mass: 9.39e20, 
-    highSpaceBorder: 300000,
+    highSpaceAltitude: 300000,
     rotationalPeriod: 32666.4,
     orbit: new Orbit({
         parentBody: Sun,
@@ -174,8 +176,8 @@ const Jupiter = new Body({
     name: 'Jupiter',
     radius: 69373000,
     mass: 1.8981872e27,
-    atmosphereHeight: 1550000,
-    highSpaceBorder: 100000000,
+    atmosphere: atmosphere(1550000, 186000),
+    highSpaceAltitude: 40000000,
     rotationalPeriod: 35730,
     orbit: new Orbit({
         parentBody: Sun,
@@ -191,7 +193,7 @@ const Io = new Body({
     name: 'Io',
     radius: 1811300,
     mass: 8.9319e22,
-    highSpaceBorder: 2000000,
+    highSpaceAltitude: 500000,
     tidallyLocked: true,
     orbit: new Orbit({
         parentBody: Jupiter,
@@ -207,7 +209,7 @@ const Europa = new Body({
     name: 'Europa',
     radius: 1550800,
     mass: 4.7998E22,
-    highSpaceBorder: 2000000,
+    highSpaceAltitude: 500000,
     tidallyLocked: true,
     orbit: new Orbit({
         parentBody: Jupiter,
@@ -223,7 +225,7 @@ const Ganymede = new Body({
     name: 'Ganymede',
     radius: 2624100,
     mass: 1.4819E23,
-    highSpaceBorder: 2000000,
+    highSpaceAltitude: 500000,
     tidallyLocked: true,
     orbit: new Orbit({
         parentBody: Jupiter,
@@ -239,7 +241,7 @@ const Calisto = new Body({
     name: 'Calisto',
     radius: 69373000,
     mass: 1.89821e27,
-    highSpaceBorder: 2000000,
+    highSpaceAltitude: 500000,
     tidallyLocked: true,
     orbit: new Orbit({
         parentBody: Jupiter,
@@ -258,8 +260,8 @@ const Saturn = new Body({
     name: 'Saturn',
     radius: 57216000,
     mass: 5.6833582e26,
-    atmosphereHeight: 2000000,
-    highSpaceBorder: 100000000,
+    atmosphere: atmosphere(2000000, 410000),
+    highSpaceAltitude: 30000000,
     rotationalPeriod: 38052,
     orbit: new Orbit({
         parentBody: Sun,
@@ -273,10 +275,9 @@ const Saturn = new Body({
 });
 const Mimas = new Body({
     name: 'Mimas',
-    radius: 3375800,
-    mass: 6.4171876e23,
-    atmosphereHeight: 125000,
-    highSpaceBorder: 2000000,
+    radius: 198200,
+    mass: 3.7493E+19,
+    highSpaceAltitude: 7000,
     tidallyLocked: true,
     orbit: new Orbit({
         parentBody: Saturn,
@@ -292,7 +293,7 @@ const Enceladus = new Body({
     name: 'Enceladus',
     radius: 252100,
     mass: 1.08022e20, 
-    highSpaceBorder: 2000000,
+    highSpaceAltitude: 14000,
     tidallyLocked: true,
     orbit: new Orbit({
         parentBody: Saturn,
@@ -308,7 +309,7 @@ const Tethys = new Body({
     name: 'Tethys',
     radius: 531100,
     mass: 6.17449e20,
-    highSpaceBorder: 2000000,
+    highSpaceAltitude: 50000,
     tidallyLocked: true,
     orbit: new Orbit({
         parentBody: Saturn,
@@ -324,7 +325,7 @@ const Dione = new Body({
     name: 'Dione',
     radius: 561400,
     mass: 1.095452e21,
-    highSpaceBorder: 2000000,
+    highSpaceAltitude: 50000,
     tidallyLocked: true,
     orbit: new Orbit({
         parentBody: Saturn,
@@ -340,7 +341,7 @@ const Rhea = new Body({
     name: 'Rhea',
     radius: 763800,
     mass: 2.306518e21,
-    highSpaceBorder: 2000000,
+    highSpaceAltitude: 50000,
     tidallyLocked: true,
     orbit: new Orbit({
         parentBody: Saturn,
@@ -356,8 +357,8 @@ const Titan = new Body({
     name: 'Titan',
     radius: 2573300,
     mass: 1.3452241e23,
-    atmosphereHeight: 600000,
-    highSpaceBorder: 2000000,
+    atmosphere: atmosphere(600000, 80000),
+    highSpaceAltitude: 750000,
     tidallyLocked: true,
     orbit: new Orbit({
         parentBody: Saturn,
@@ -373,7 +374,7 @@ const Iapetus = new Body({
     name: 'Iapetus',
     radius: 734500,
     mass: 1.805e21,
-    highSpaceBorder: 2000000,
+    highSpaceAltitude: 10000,
     tidallyLocked: true,
     orbit: new Orbit({
         parentBody: Saturn,
@@ -392,8 +393,8 @@ const Uranus = new Body({
     name: 'Uranus',
     radius: 24702000,
     mass: 8.6812549e25,
-    atmosphereHeight: 1400000,
-    highSpaceBorder: 100000000,
+    atmosphere: atmosphere(1400000, 191000),
+    highSpaceAltitude: 30000000,
     rotationalPeriod: 62063.712,
     orbit: new Orbit({
         parentBody: Sun,
@@ -409,7 +410,7 @@ const Miranda = new Body({
     name: 'Miranda',
     radius: 235700,
     mass: 6.6e19,
-    highSpaceBorder: 200000,
+    highSpaceAltitude: 200000,
     tidallyLocked: true,
     orbit: new Orbit({
         parentBody: Uranus,
@@ -425,7 +426,7 @@ const Ariel = new Body({
     name: 'Ariel',
     radius: 578900,
     mass: 1.29e21,
-    highSpaceBorder: 200000,
+    highSpaceAltitude: 200000,
     tidallyLocked: true,
     orbit: new Orbit({
         parentBody: Uranus,
@@ -441,7 +442,7 @@ const Umbriel = new Body({
     name: 'Umbriel',
     radius: 584700,
     mass: 1.22e21,
-    highSpaceBorder: 200000,
+    highSpaceAltitude: 200000,
     tidallyLocked: true,
     orbit: new Orbit({
         parentBody: Uranus,
@@ -457,7 +458,7 @@ const Titania = new Body({
     name: 'Titania',
     radius: 788900,
     mass: 3.42e21,
-    highSpaceBorder: 200000,
+    highSpaceAltitude: 200000,
     tidallyLocked: true,
     orbit: new Orbit({
         parentBody: Uranus,
@@ -473,7 +474,7 @@ const Oberon = new Body({
     name: 'Oberon',
     radius: 761400,
     mass: 2.88e21,
-    highSpaceBorder: 200000,
+    highSpaceAltitude: 200000,
     tidallyLocked: true,
     orbit:new Orbit({
         parentBody: Uranus,
@@ -492,8 +493,8 @@ const Neptune = new Body({
     name: 'Neptune',
     radius: 24085000,
     mass: 1.0243403e26,
-    atmosphereHeight: 1250000,
-    highSpaceBorder: 100000000,
+    atmosphere: atmosphere(1250000, 191000),
+    highSpaceAltitude: 3000000,
     rotationalPeriod: 58000.32,
     orbit: new Orbit({
         parentBody: Sun,
@@ -509,8 +510,8 @@ const Triton = new Body({
     name: 'Triton',
     radius: 1353400,
     mass: 2.1394709e22,
-    atmosphereHeight: 110000,
-    highSpaceBorder: 2000000,
+    atmosphere: atmosphere(110000, 7000),
+    highSpaceAltitude: 80000,
     tidallyLocked: true,
     orbit: new Orbit({
         parentBody: Neptune,
@@ -529,8 +530,8 @@ const Pluto = new Body({
     name: 'Pluto',
     radius: 1187000,
     mass: 1.305e22,
-    atmosphereHeight: 110000,
-    highSpaceBorder: 2000000,
+    atmosphere: atmosphere(110000, 18000),
+    highSpaceAltitude: 100000,
     rotationalPeriod: 551856.672,
     orbit: new Orbit({
         parentBody: Sun,
@@ -546,7 +547,7 @@ const Charon = new Body({
     name: 'Charon',
     radius: 603500,
     mass: 1.52e21,
-    highSpaceBorder: 2000000,
+    highSpaceAltitude: 5000,
     tidallyLocked: true,
     orbit: new Orbit({
         parentBody: Pluto,
@@ -562,4 +563,4 @@ Pluto.satellites = [Charon];
 
 Sun.satellites = [Mercury, Venus, Earth, Mars, Vesta, Ceres, Jupiter, Saturn, Uranus, Neptune, Pluto];
 
-export default new PlanetPack('Real Solar System', Sun, Earth, new Calendar(86400, 31536000));
+export default new PlanetPack('Real Solar System', Sun, Earth, new Calendar(86400, 31536000), [rescaleDefault]);

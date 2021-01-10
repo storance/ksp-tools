@@ -1,9 +1,8 @@
 import { Map } from 'immutable';
 import { planetpacks, findPlanetPack } from '../planetpacks';
-import { rescales, findRescale } from '../rescale';
 
 const initialPlanetPack = planetpacks[0];
-const initialRescale = rescales[0];
+const initialRescale = initialPlanetPack.rescales[0];
 const initialBody = initialPlanetPack.homeworld;
 
 const initialState = Map({
@@ -20,7 +19,7 @@ function lookupPlanetPackAndBody(state) {
 
         if (!selectedPlanetPack) {
             const planetpack = findPlanetPack(state.get('planetpack'));
-            const rescale = findRescale(state.get('rescale'));
+            const rescale = planetpack.findRescale(state.get('rescale'));
 
             selectedPlanetPack = rescale.rescalePlanetPack(planetpack);
             state.set('selectedPlanetPack', selectedPlanetPack);

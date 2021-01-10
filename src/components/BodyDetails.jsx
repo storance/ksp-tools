@@ -66,29 +66,29 @@ export default class BodyDetails extends React.PureComponent {
                 }
 
                 <StaticTextField label={"Has Atmosphere?"}>
-                    {this.props.body.hasAtmosphere ? 'Yes' : 'No'}
+                    {this.props.body.atmosphere.enabled ? 'Yes' : 'No'}
                 </StaticTextField>
 
-                {this.props.body.hasAtmosphere &&
+                {this.props.body.atmosphere.enabled &&
                     <StaticTextField label={"Atmosphere Height"}>
-                        <NumberFormat value={this.props.body.atmosphereHeight} fractionDigits={3} units={DISTANCE_UNITS} />
+                        <NumberFormat value={this.props.body.atmosphere.height} fractionDigits={3} units={DISTANCE_UNITS} />
                     </StaticTextField>
                 }
 
-                {this.props.body.hasAtmosphere &&
+                {this.props.body.atmosphere.enabled &&
                     <StaticTextField label={"Has Oxygen?"}>
-                        {this.props.body.hasOxygen ? 'Yes' : 'No'}
+                        {this.props.body.atmosphere.hasOxygen ? 'Yes' : 'No'}
                     </StaticTextField>
                 }
 
-                {this.props.body.hasAtmosphere &&
+                {this.props.body.atmosphere.enabled &&
                     <StaticTextField label={"Flying High Threshold"}>
-                        <NumberFormat value={this.props.body.flyingHighAltitude} fractionDigits={3} units={DISTANCE_UNITS} />
+                        <NumberFormat value={this.props.body.atmosphere.flyingHighAltitude} fractionDigits={3} units={DISTANCE_UNITS} />
                     </StaticTextField>
                 }
 
                 <StaticTextField label={"High Space Threshold"}>
-                    <NumberFormat value={this.props.body.highSpaceBorder} fractionDigits={3} units={DISTANCE_UNITS} />
+                    <NumberFormat value={this.props.body.highSpaceAltitude} fractionDigits={3} units={DISTANCE_UNITS} />
                 </StaticTextField>
 
                 

@@ -8,6 +8,7 @@
   "license": "MIT",
   "scripts": {
     "start": "webpack serve",
+    "bundle": "webpack bundle --mode=production",
     "test": "mocha --compilers js:babel-core/register --require ./test/test_helper.js --recursive",
     "test:watch": "npm run test -- --watch"
   },

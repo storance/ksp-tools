@@ -1,6 +1,5 @@
 import React from 'react';
 import SelectField from './SelectField';
-import { rescales } from '../../rescale.js';
 
 export default class RescaleSelect extends React.PureComponent {
     render() {
@@ -12,7 +11,7 @@ export default class RescaleSelect extends React.PureComponent {
     }
 
     getOptions() {
-        return rescales.map(rescale => {
+        return this.props.selectedPlanetPack.rescales.map(rescale => {
             return {
                 value: rescale.name,
                 label: rescale.name

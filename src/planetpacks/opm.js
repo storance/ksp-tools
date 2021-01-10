@@ -2,6 +2,7 @@ import Body from '../body.js';
 import Orbit from '../orbit.js';
 import { toDegrees } from '../utils';
 import stock from './stock';
+import {atmosphere, atmosphereWithOxygen} from '../atmosphere.js';
 
 // not a selectable planetpack, just adds the ability to attach to another planet pack
 export function attachSarnus(parentBody, {
@@ -12,8 +13,8 @@ export function attachSarnus(parentBody, {
         name: 'Sarnus',
         radius: 5300000,
         mass: 1.2300220256e24,
-        atmosphereHeight: 580000,
-        highSpaceBorder: 3500000,
+        atmosphere: atmosphere(580000, 275000),
+        highSpaceAltitude: 3500000,
         rotationalPeriod: 28500,
         orbit: new Orbit({
             parentBody: parentBody,
@@ -30,7 +31,7 @@ export function attachSarnus(parentBody, {
         name: 'Hale',
         radius: 6000,
         mass: 1.21667678578e16,
-        highSpaceBorder: 5000,
+        highSpaceAltitude: 5000,
         tidallyLocked: true,
         sphereOfInfluence: 41000,
         orbit: new Orbit({
@@ -48,7 +49,7 @@ export function attachSarnus(parentBody, {
         name: 'Ovok',
         radius: 26000,
         mass: 1.98665098354e17,
-        highSpaceBorder: 20000,
+        highSpaceAltitude: 20000,
         tidallyLocked: true,
         sphereOfInfluence: 94000,
         orbit: new Orbit({
@@ -73,7 +74,7 @@ export function attachSarnus(parentBody, {
         name: 'Slate',
         radius: 540000,
         mass: 2.96509422593e22,
-        highSpaceBorder: 216000,
+        highSpaceAltitude: 216000,
         tidallyLocked: true,
         orbit: new Orbit({
             parentBody: Sarnus,
@@ -90,8 +91,8 @@ export function attachSarnus(parentBody, {
         name: 'Tekto',
         radius: 280000,
         mass: 2.88351222696e21,
-        atmosphereHeight: 95000,
-        highSpaceBorder: 208000,
+        atmosphere: atmosphere(95000, 20000),
+        highSpaceAltitude: 208000,
         tidallyLocked: true,
         orbit: new Orbit({
             parentBody: Sarnus,
@@ -137,8 +138,8 @@ export function attachUrlum(parentBody, {
         name: 'Urlum',
         radius: 2177000,
         mass: 1.78976028338e23,
-        atmosphereHeight: 325000,
-        highSpaceBorder: 1450000,
+        atmosphere: atmosphere(325000, 113000),
+        highSpaceAltitude: 1450000,
         rotationalPeriod: 41000,
         orbit: new Orbit({
             parentBody: parentBody,
@@ -155,7 +156,7 @@ export function attachUrlum(parentBody, {
         name: 'Tal',
         radius: 22000,
         mass: 3.2003889365e18,
-        highSpaceBorder: 20000,
+        highSpaceAltitude: 20000,
         tidallyLocked: true,
         orbit: new Orbit({
             parentBody: Urlum,
@@ -172,7 +173,7 @@ export function attachUrlum(parentBody, {
         name: 'Polta',
         radius: 220000,
         mass: 1.35127532875e21,
-        highSpaceBorder: 208000,
+        highSpaceAltitude: 208000,
         tidallyLocked: true,
         orbit: new Orbit({
             parentBody: Urlum,
@@ -189,7 +190,7 @@ export function attachUrlum(parentBody, {
         name: 'Priax',
         radius: 74000,
         mass: 5.06931027744e19,
-        highSpaceBorder: 5000,
+        highSpaceAltitude: 5000,
         tidallyLocked: true,
         orbit: new Orbit({
             parentBody: Urlum,
@@ -206,7 +207,7 @@ export function attachUrlum(parentBody, {
         name: 'Wal',
         radius: 370000,
         mass: 7.44303493116e21,
-        highSpaceBorder: 216000,
+        highSpaceAltitude: 216000,
         tidallyLocked: true,
         orbit: new Orbit({
             parentBody: Urlum,
@@ -231,8 +232,8 @@ export function attachNeidon(parentBody, {
         name: 'Neidon',
         radius: 2145000,
         mass: 2.12289799131e23,
-        atmosphereHeight: 260000,
-        highSpaceBorder: 1500000,
+        atmosphere: atmosphere(260000, 100000),
+        highSpaceAltitude: 1500000,
         rotationalPeriod: 40250,
         orbit: new Orbit({
             parentBody: parentBody,
@@ -249,8 +250,8 @@ export function attachNeidon(parentBody, {
         name: 'Thatmo',
         radius: 286000,
         mass: 2.7884633205e21,
-        atmosphereHeight: 35000,
-        highSpaceBorder: 216000,
+        atmosphere: atmosphere(35000, 12000),
+        highSpaceAltitude: 216000,
         tidallyLocked: true,
         orbit: new Orbit({
             parentBody: Neidon,
@@ -267,7 +268,7 @@ export function attachNeidon(parentBody, {
         name: 'Nissee',
         radius: 30000,
         mass: 5.95113645218e18,
-        highSpaceBorder: 20000,
+        highSpaceAltitude: 20000,
         rotationalPeriod: 27924.8723,
         orbit: new Orbit({
             parentBody: Neidon,
@@ -292,7 +293,7 @@ export function attachPlock(parentBody, {
         name: 'Plock',
         radius: 189000,
         mass: 7.76837547921e20,
-        highSpaceBorder: 53100,
+        highSpaceAltitude: 53100,
         rotationalPeriod: 106309.606989054,
         orbit: new Orbit({
             parentBody: parentBody,
@@ -309,7 +310,7 @@ export function attachPlock(parentBody, {
         name: 'Karen',
         radius: 85050,
         mass: 7.01515799187e19,
-        highSpaceBorder: 216000,
+        highSpaceAltitude: 216000,
         tidallyLocked: true,
         orbit: new Orbit({
             parentBody: Plock,

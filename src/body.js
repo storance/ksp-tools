@@ -1,5 +1,6 @@
 import { List} from 'immutable';
 import {GRAVITATIONAL_CONSTANT, GRAVITY, PI} from './consts';
+import {noAtmosphere} from './atmosphere';
 
 export default class Body {
     constructor({
@@ -8,10 +9,8 @@ export default class Body {
             mass=null,
             geeAsl=null,
             mu=null,
-            atmosphereHeight=0,
-            hasOxygen=false,
-            flyingHighAltitude=1,
-            highSpaceBorder=0,
+            atmosphere=noAtmosphere(),
+            highSpaceAltitude=0,
             rotationalPeriod=null,
             tidallyLocked=false,
             orbit=null,
@@ -22,20 +21,21 @@ export default class Body {
         if (mass !== null) {
             this.mass = mass;
             this.mu = this.mass * GRAVITATIONAL_CONSTANT;
+            this.geeAsl = this.mu / Math.pow(this.radius, 2);
         } else if (mu !== null) {
             this.mass = mu / GRAVITATIONAL_CONSTANT;
             this.mu = mu;
+            this.geeAsl = this.mu / Math.pow(this.radius, 2);
         } else if (geeAsl !== null) {
             this.mu = geeAsl * GRAVITY * Math.pow(radius, 2);
             this.mass = this.mu / GRAVITATIONAL_CONSTANT;
+            this.geeAsl = geeAsl;
         }
-        this.atmosphereHeight = atmosphereHeight;
-        this.hasOxygen = hasOxygen;
-        this.flyingHighAltitude = flyingHighAltitude;
-        this.highSpaceBorder = highSpaceBorder;
+        this.atmosphere = atmosphere;
+        this.highSpaceAltitude = highSpaceAltitude;
         this.tidallyLocked = tidallyLocked;
         if (tidallyLocked && orbit) {
-            const sign = rotationalPeriod < 0 ? -1 : 1;
+            const sign = rotationalPeriod === null || rotationalPeriod >= 0 ? 1 : -1;
             this.rotationalPeriod = orbit.period * sign;
         } else {
             this.rotationalPeriod = rotationalPeriod;
@@ -62,7 +62,7 @@ export default class Body {
     }
 
     get aslGravity() {
-        return this.gravityAt(0);
+        return this.geeAsl;
     }
 
     gravityAt(altitude) {
@@ -95,10 +95,6 @@ export default class Body {
         }
 
         return this.orbit.parentBody;
-    }
-
-    get hasAtmosphere() {
-        return this.atmosphereHeight > 0;
     }
 
     get stationaryOrbit() {
@@ -139,8 +135,8 @@ export default class Body {
             name: this.name,
             radius: this.radius,
             mass: this.mass,
-            atmosphereHeight: this.atmosphereHeight,
-            highSpaceBorder: this.highSpaceBorder,
+            atmosphere: this.atmosphere.clone(),
+            highSpaceAltitude: this.highSpaceAltitude,
             rotationalPeriod: this.rotationalPeriod,
             tidallyLocked: this.tidallyLocked,
             orbit: this.orbit ? this.orbit.clone(parentBody) : null,

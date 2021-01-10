@@ -75,6 +75,8 @@ module.exports = {
             }
         }]
     },
+    mode: "development",
+    devtool: 'inline-source-map',
     resolve: {
         extensions: ['.js', '.jsx']
     },
@@ -85,7 +87,8 @@ module.exports = {
     },
     devServer: {
         contentBase: './dist',
-        hot: true
+        hot: true,
+        compress: true
     },
     plugins: [
         HtmlWebpackPluginConfig,
