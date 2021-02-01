@@ -1,50 +1,81 @@
 import React from 'react';
+
+import Container from 'react-bootstrap/Container';
+
 import NumberFormat from './format/NumberFormat';
 import DurationFormat from './format/DurationFormat';
-import StaticTextField from './forms/StaticTextField';
-import { DISTANCE_UNITS, VELOCITY_UNITS } from '../consts.js';
-import { formatNumber, formatDuration } from '../format.js';
+import DefinitionList from './DefinitionList';
+import { DISTANCE_UNITS, VELOCITY_UNITS } from '../utils';
 
 export default class OrbitDetails extends React.PureComponent {
     render() {
-        return <fieldset>
-                <legend>Orbit Information</legend>
+        return <>
+                <h4>Orbit Information</h4>
 
-                <StaticTextField label={"Periapsis"} value={formatNumber(this.props.orbit.periapsis, {fractionDigits: 3, units: DISTANCE_UNITS})} />
+                <DefinitionList>
+                    <DefinitionList.Item label="Periapsis">
+                        <NumberFormat value={this.props.orbit.periapsis} fractionDigits={3} units={DISTANCE_UNITS} />
+                    </DefinitionList.Item>
 
-                <StaticTextField label={"Apoapsis"} value={formatNumber(this.props.orbit.apoapsis, {fractionDigits: 3, units: DISTANCE_UNITS})} />
+                    <DefinitionList.Item label="Apoapsis">
+                        <NumberFormat value={this.props.orbit.apoapsis} fractionDigits={3} units={DISTANCE_UNITS} />
+                    </DefinitionList.Item>
 
-                <StaticTextField label={"Radius of the Periapsis"} value={formatNumber(this.props.orbit.radiusOfPeriapsis, {fractionDigits: 3, units: DISTANCE_UNITS})} />
+                    <DefinitionList.Item label="Radius of the Periapsis">
+                        <NumberFormat value={this.props.orbit.radiusOfPeriapsis} fractionDigits={3} units={DISTANCE_UNITS} />
+                    </DefinitionList.Item>
 
-                <StaticTextField label={"Radius of the Apoapsis"} value={formatNumber(this.props.orbit.radiusOfApoapsis, {fractionDigits: 3, units: DISTANCE_UNITS})} />
+                    <DefinitionList.Item label="Radius of the Apoapsis">
+                        <NumberFormat value={this.props.orbit.radiusOfApoapsis} fractionDigits={3} units={DISTANCE_UNITS} />
+                    </DefinitionList.Item>
 
-                <StaticTextField label={"Semi-Major Axis"} value={formatNumber(this.props.orbit.semiMajorAxis, {fractionDigits: 3, units: DISTANCE_UNITS})} />
+                    <DefinitionList.Item label="Semi-Major Axis">
+                        <NumberFormat value={this.props.orbit.semiMajorAxis} fractionDigits={3} units={DISTANCE_UNITS} />
+                    </DefinitionList.Item>
 
-                <StaticTextField label={"Semi-Minor Axis"} value={formatNumber(this.props.orbit.semiMinorAxis, {fractionDigits: 3, units: DISTANCE_UNITS})} />
+                    <DefinitionList.Item label="Semi-Minor Axis">
+                        <NumberFormat value={this.props.orbit.semiMinorAxis} fractionDigits={3} units={DISTANCE_UNITS} />
+                    </DefinitionList.Item>
 
-                <StaticTextField label={"Eccentricity"} value={formatNumber(this.props.orbit.eccentricity, {fractionDigits: 6})} />
+                    <DefinitionList.Item label="Eccentricity">
+                        <NumberFormat value={this.props.orbit.eccentricity} fractionDigits={6} />
+                    </DefinitionList.Item>
 
-                {this.props.orbit.hasInclination && 
-                    <StaticTextField label={"Inclination"} value={formatNumber(this.props.orbit.inclination, {fractionDigits: 3, suffix: '\u00B0'})} />
-                }
+                    {this.props.orbit.hasInclination && 
+                        <DefinitionList.Item label="Inclination">
+                            <NumberFormat value={this.props.orbit.inclination} fractionDigits={6} suffix="&deg;" />
+                        </DefinitionList.Item>
+                    }
 
-                {this.props.orbit.hasLongitudeOfAscendingNode && 
-                    <StaticTextField label={"Longitude Of the Ascending Node"} value={formatNumber(this.props.orbit.longitudeOfAscendingNode, {fractionDigits: 3, suffix: '\u00B0'})} />
-                }
+                    {this.props.orbit.hasLongitudeOfAscendingNode && 
+                        <DefinitionList.Item label="Longitude Of the Ascending Node">
+                            <NumberFormat value={this.props.orbit.longitudeOfAscendingNode} fractionDigits={3} suffix="&deg;" />
+                        </DefinitionList.Item>                }
 
-                {this.props.orbit.hasArgumentOfPeriapsis && 
-                    <StaticTextField label={"Argument of the Periapsis"} value={formatNumber(this.props.orbit.argumentOfPeriapsis, {fractionDigits: 3, suffix: '\u00B0'})} />
-                }
+                    {this.props.orbit.hasArgumentOfPeriapsis && 
+                        <DefinitionList.Item label="Argument of the Periapsis">
+                            <NumberFormat value={this.props.orbit.argumentOfPeriapsis} fractionDigits={3} suffix="&deg;" />
+                        </DefinitionList.Item>  
+                    }
 
-                {this.props.orbit.hasMeanAnomoloyAtEpoch && 
-                    <StaticTextField label={"Mean Anomoly At Epoch"} value={formatNumber(this.props.orbit.meanAnomoloyAtEpoch, {fractionDigits: 3, suffix: ' radians'})} />
-                }
+                    {this.props.orbit.hasMeanAnomoloyAtEpoch && 
+                        <DefinitionList.Item label="Mean Anomoly At Epoch">
+                            <NumberFormat value={this.props.orbit.meanAnomoloyAtEpoch} fractionDigits={3} suffix=" radians" />
+                        </DefinitionList.Item>
+                     }
 
-                <StaticTextField label={"Velocity @ Periapsis"} value={formatNumber(this.props.orbit.periapsisVelocity, {fractionDigits: 3, units: VELOCITY_UNITS})} />
+                    <DefinitionList.Item label="Velocity @ Periapsis">
+                        <NumberFormat value={this.props.orbit.periapsisVelocity} fractionDigits={3} units={VELOCITY_UNITS} />
+                    </DefinitionList.Item>
 
-                <StaticTextField label={"Velocity @ Apoapsis"} value={formatNumber(this.props.orbit.apoapsisVelocity, {fractionDigits: 3, units: VELOCITY_UNITS})} />
+                    <DefinitionList.Item label="Velocity @ Apoapsis">
+                        <NumberFormat value={this.props.orbit.apoapsisVelocity} fractionDigits={3} units={VELOCITY_UNITS} />
+                    </DefinitionList.Item>
 
-                <StaticTextField label={"Orbital Period"} value={formatDuration(this.props.orbit.period, this.props.calendar, true)} />
-            </fieldset>;
+                    <DefinitionList.Item label="Orbital Period">
+                        <DurationFormat value={this.props.orbit.period} calendar={this.props.calendar} includeRaw />
+                    </DefinitionList.Item>
+                </DefinitionList>
+            </>;
     }
 };

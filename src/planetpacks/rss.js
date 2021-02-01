@@ -1,9 +1,5 @@
-import Body from '../body.js';
-import Orbit from '../orbit.js';
-import PlanetPack from '../planetpack.js';
-import Calendar from '../calendar.js';
-import {atmosphere, atmosphereWithOxygen} from '../atmosphere.js';
-import { rescaleDefault } from '../rescale.js';
+import {atmosphere, atmosphereWithOxygen, Body, Calendar, Orbit, PlanetPack} from '../utils';
+import { rescaleDefault } from './rescale';
 
 const Sun = new Body({
     name: 'Sun',
@@ -563,4 +559,4 @@ Pluto.satellites = [Charon];
 
 Sun.satellites = [Mercury, Venus, Earth, Mars, Vesta, Ceres, Jupiter, Saturn, Uranus, Neptune, Pluto];
 
-export default new PlanetPack('Real Solar System', Sun, Earth, new Calendar(86400, 31536000), [rescaleDefault]);
+export default new PlanetPack('RSS', Sun, Earth, new Calendar(86400, 31536000), [rescaleDefault]);

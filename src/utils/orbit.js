@@ -1,5 +1,5 @@
 import { PI } from './consts.js';
-import { toRadians } from './utils.js';
+import { toRadians } from '.';
 
 export default class Orbit {
     constructor({

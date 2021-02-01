@@ -35,3 +35,22 @@ export const VELOCITY_UNITS = [
         suffix: 'km/s'
     }
 ];
+
+export const ANTENNA_POWER = [
+    {
+        scale: 1000,
+        suffix: 'k'
+    },
+    {
+        scale: 1000000,
+        suffix: 'M'
+    },
+    {
+        scale: 1000000000,
+        suffix: 'G'
+    },
+    {
+        scale: 1000000000000,
+        suffix: 'T'
+    }
+];

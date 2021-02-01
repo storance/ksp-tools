@@ -1,8 +1,5 @@
+import { atmosphere, atmosphereWithOxygen, Body, Calendar, Orbit, PlanetPack } from '../utils';
 import gpp from './gpp';
-import PlanetPack from '../planetpack.js';
-import Body from '../body.js';
-import Orbit from '../orbit.js';
-import {atmosphere, atmosphereWithOxygen} from '../atmosphere.js';
 
 const Ciro = gpp.sun.clone();
 const Grannus = Ciro.findByName('Grannus');
@@ -212,4 +209,4 @@ const Cernunnos = new Body({
 
 Grannus.satellites = [Taranis, Nodens, Sirona, Epona, Cernunnos];
 
-export default new PlanetPack('Galileo\'s Planet Pack + Grannus Expansion', Ciro, Gael, gpp.calendar, gpp.rescales);
+export default new PlanetPack('GPP + GEP', Ciro, Gael, gpp.calendar, gpp.rescales);

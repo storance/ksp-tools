@@ -1,9 +1,5 @@
-import Body from '../body.js';
-import Orbit from '../orbit.js';
-import PlanetPack from '../planetpack.js';
-import Calendar from '../calendar.js';
-import {atmosphere, atmosphereWithOxygen} from '../atmosphere.js';
-import {allRescales} from '../rescale.js';
+import { atmosphere, atmosphereWithOxygen, Body, Calendar, Orbit, PlanetPack } from '../utils';
+import { allRescales } from './rescale';
 
 const Kerbol = new Body({
     name: 'Sun',

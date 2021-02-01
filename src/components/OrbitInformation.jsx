@@ -1,7 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { OrbitingBodySelectContainer } from './forms/OrbitingBodySelect';
+
+import Form from 'react-bootstrap/Form';
+
+import { OrbitInformationSelector } from '../selectors'
 import ApsisField from './forms/ApsisField';
+import BodySelect from './forms/BodySelect';
 import ButtonField from './forms/ButtonField';
 import TextField from './forms/TextField';
 import RadioSelectField from './forms/RadioSelectField';
@@ -25,60 +29,49 @@ const MODE_OPTIONS = [
 
 export class OrbitInformation extends React.PureComponent {
     render() {
-        return <div className="container">
+        return <>
             <h1>Orbit Information</h1>
             <p>Calculates details about the orbit given the apoapsis and periapsis, apoapsis and period, or the
             periapsis and period.  This will show details such as the semi-major axis, orbital period, eccentricity,
             and velocities at apoapsis and periapsis. </p>
-            <form>
-                <OrbitingBodySelectContainer />
-                <fieldset>
-                    <legend>Orbit Parameters</legend>
+            <Form>
+                <h4>Orbit Parameters</h4>
+                <BodySelect planetpack={this.props.planetpack} body={this.props.body.name} update={this.props.updateOrbitInformation}/>
+                <RadioSelectField label="From"
+                    name="mode"
+                    value={this.props.mode}
+                    update={this.props.updateOrbitInformation}
+                    options={MODE_OPTIONS} />
 
-                    <RadioSelectField label="From"
-                        name="mode"
-                        value={this.props.mode}
-                        update={newValue => this.props.updateOrbitInformation('mode', newValue)}
-                        options={MODE_OPTIONS} />
+                {this.hasApoapsis() &&
+                    <ApsisField label="Apoapsis"
+                        name="apoapsis"
+                        field={this.props.apoapsis}
+                        update={this.props.updateOrbitInformation} />
+                }
 
-                    {this.hasApoapsis() &&
-                        <ApsisField label="Apoapsis"
-                            name="apoapsis"
-                            value={this.props.apoapsis}
-                            unitsValue={this.props.apoapsisUnits}
-                            error={this.props.errors.apoapsis}
-                            update={newValue => this.props.updateOrbitInformation('apoapsis', newValue)}
-                            updateUnits={newValue => this.props.updateOrbitInformation('apoapsisUnits', newValue)} />
-                    }
+                {this.hasPeriapsis() &&
+                    <ApsisField label="Periapsis"
+                        name="periapsis"
+                        field={this.props.periapsis}
+                        update={this.props.updateOrbitInformation} />
+                }
 
-                    {this.hasPeriapsis() &&
-                        <ApsisField label="Periapsis"
-                            name="periapsis"
-                            value={this.props.periapsis}
-                            unitsValue={this.props.periapsisUnits}
-                            error={this.props.errors.periapsis}
-                            update={newValue => this.props.updateOrbitInformation('periapsis', newValue)}
-                            updateUnits={newValue => this.props.updateOrbitInformation('periapsisUnits', newValue)} />
-                    }
+                {this.hasPeriod() &&
+                    <TextField label="Period"
+                               type="number"
+                               name="period"
+                               field={this.props.period}
+                               update={this.props.updateOrbitInformation}
+                               suffix={"s"} />
+                }
 
-                    {this.hasPeriod() &&
-                        <TextField label={"Period"}
-                                   type="number"
-                                   name="period"
-                                   value={this.props.period}
-                                   error={this.props.errors.period}
-                                   update={newValue => this.props.updateOrbitInformation('period', newValue)}
-                                   suffix={"s"} />
-                    }
-
-                    <ButtonField label={"Calculate"}
-                                 onClick={() => this.props.calculateOrbitInformation(this.props.body)} />
-                </fieldset>
+                <ButtonField label={"Calculate"} onClick={() => this.props.calculateOrbitInformation()} />
                 {this.props.orbit &&
                     <OrbitDetails orbit={this.props.orbit} calendar={this.props.planetpack.calendar} />
                 }
-            </form>
-        </div>;
+            </Form>
+        </>;
     }
 
     hasPeriapsis() {
@@ -96,16 +89,13 @@ export class OrbitInformation extends React.PureComponent {
 
 function mapStateToProps(state) {
     return {
-        apoapsis: state.getIn(['orbitInformation', 'apoapsis']),
-        apoapsisUnits: state.getIn(['orbitInformation', 'apoapsisUnits']),
-        periapsis: state.getIn(['orbitInformation', 'periapsis']),
-        periapsisUnits: state.getIn(['orbitInformation', 'periapsisUnits']),
-        period: state.getIn(['orbitInformation', 'period']),
-        mode: state.getIn(['orbitInformation', 'mode']),
-        orbit: state.getIn(['orbitInformation', 'orbit']),
-        errors: state.getIn(['orbitInformation', 'errors']),
-        planetpack: state.getIn(['celestialBody', 'selectedPlanetPack']),
-        body: state.getIn(['celestialBody', 'selectedBody'])
+        apoapsis: OrbitInformationSelector.getApoapsis(state),
+        periapsis: OrbitInformationSelector.getPeriapsis(state),
+        period: OrbitInformationSelector.getPeriod(state),
+        mode: OrbitInformationSelector.getMode(state),
+        orbit: OrbitInformationSelector.getOrbit(state),
+        planetpack: OrbitInformationSelector.getPlanetPack(state),
+        body: OrbitInformationSelector.getBody(state)
     }
 }
 

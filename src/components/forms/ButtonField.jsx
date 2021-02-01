@@ -1,12 +1,17 @@
 import React from 'react';
 
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+
 export default class ButtonField extends React.PureComponent {
     render() {
-        return <div class="form-group row">
-            <div className="col-sm-6 offset-sm-3">
-                <button type="submit" className="btn btn-dark" onClick={e => {this.onClick(e)}}>{this.props.label}</button>
-            </div>
-        </div>;
+        return <Form.Group as={Row}>
+                <Col sm={{span: 8, offset: 4}}>
+                    <Button type="submit" variant="primary" onClick={e => this.onClick(e)}>{this.props.label}</Button>
+                </Col>
+            </Form.Group>;
     }
 
     onClick(event) {

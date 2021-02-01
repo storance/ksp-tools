@@ -1,9 +1,5 @@
-import Body from '../body.js';
-import Orbit from '../orbit.js';
-import PlanetPack from '../planetpack.js';
-import Calendar from '../calendar.js';
-import {atmosphere, atmosphereWithOxygen} from '../atmosphere.js';
-import {allRescales} from '../rescale.js';
+import {atmosphere, atmosphereWithOxygen, Body, Calendar, Orbit, PlanetPack} from '../utils';
+import { allRescales}  from './rescale';
 
 const Ciro = new Body({
     name: 'Ciro',
@@ -546,4 +542,4 @@ const Grannus = new Body({
 
 Ciro.satellites = [Icarus, Thalia, Niven, Gael, Tellumo, Gratian, Otho, Gauss, Nero, Hox, Leto, Grannus];
 
-export default new PlanetPack('Galileo\'s Planet Pack', Ciro, Gael, new Calendar(21600, 9201600), allRescales);
+export default new PlanetPack('GPP', Ciro, Gael, new Calendar(21600, 9201600), allRescales);

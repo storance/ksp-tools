@@ -1,66 +1,60 @@
 export function updatePlanetPack(planetpack) {
     return {
-        type: 'CELESTIAL_BODY.UPDATE_PLANET_PACK',
-        planetpack
+        type: 'CORE.UPDATE_PLANET_PACK',
+        payload: {
+            planetpack
+        }
     };
 }
 
 export function updateRescale(rescale) {
     return {
-        type: 'CELESTIAL_BODY.UPDATE_RESCALE',
-        rescale
+        type: 'CORE.UPDATE_RESCALE',
+        payload: {
+            rescale
+        }
     };
 }
 
-export function updateBody(body) {
+export function updateBodyInformation(field, value) {
     return {
-        type: 'CELESTIAL_BODY.UPDATE_BODY',
-        body
+        type: 'BODY_INFORMATION.FORM_UPDATE',
+        payload: {
+            field,
+            value
+        }
     };
 }
 
 export function updateOrbitInformation(field, value) {
     return {
         type: 'ORBIT_INFORMATION.FORM_UPDATE',
-        field,
-        value
+        payload: {
+            field,
+            value
+        }
     };
 }
 
-export function calculateOrbitInformation(orbitingBody) {
+export function calculateOrbitInformation() {
     return {
-        type: 'ORBIT_INFORMATION.CALCULATE',
-        orbitingBody
-    };
-}
-
-export function updateManeuverPlanner(field, value) {
-    return {
-        type: 'MANEUVER_PLANNER.FORM_UPDATE',
-        field,
-        value
-    };
-}
-
-export function calculateManeuverPlan(orbitingBody) {
-    return {
-        type: 'MANEUVER_PLANNER.CALCULATE',
-        orbitingBody
+        type: 'ORBIT_INFORMATION.CALCULATE'
     };
 }
 
 export function updateDarknessTime(field, value) {
     return {
         type: 'DARKNESS_TIME.FORM_UPDATE',
-        field,
-        value
+        payload: {
+            field,
+            value
+        }
     };
 }
 
-export function calculateDarknessTime(orbitingBody) {
+export function calculateDarknessTime() {
     return {
-        type: 'DARKNESS_TIME.CALCULATE_DARKNESS_TIME',
-        orbitingBody
+        type: 'DARKNESS_TIME.CALCULATE_DARKNESS_TIME'
     };
 }
 
@@ -70,47 +64,66 @@ export function calculateBatteryStorage() {
     };
 }
 
-export function updateSatelliteSingleLaunch(field, value) {
+export function updateConstellationSingleLaunch(field, value) {
     return {
-        type: 'SATELLITE.SINGLE_LAUNCH.FORM_UPDATE',
-        field,
-        value
+        type: 'CONSTELLATION.SINGLE_LAUNCH.FORM_UPDATE',
+        payload: {
+            field,
+            value
+        }
     };
 }
 
-export function calculateSatelliteSingleLaunch(orbitingBody) {
+export function calculateConstellationSingleLaunch() {
     return {
-        type: 'SATELLITE.SINGLE_LAUNCH.CALCULATE',
-        orbitingBody
+        type: 'CONSTELLATION.SINGLE_LAUNCH.CALCULATE'
     };
 }
 
-export function updateSatelliteMultipleLaunch(field, value) {
+export function updateConstellationMultipleLaunch(field, value) {
     return {
-        type: 'SATELLITE.MUTIPLE_LAUNCH.FORM_UPDATE',
-        field,
-        value
+        type: 'CONSTELLATION.MUTIPLE_LAUNCH.FORM_UPDATE',
+        payload: {
+            field,
+            value
+        }
     };
 }
 
-export function calculateSatelliteMultipleLaunch(orbitingBody) {
+export function calculateConstellationMultipleLaunch() {
     return {
-        type: 'SATELLITE.MUTIPLE_LAUNCH.CALCULATE',
-        orbitingBody
+        type: 'CONSTELLATION.MUTIPLE_LAUNCH.CALCULATE'
     };
 }
 
-export function updateDeltavMap(field, value) {
+export function updateAscentDeltaV(field, value) {
     return {
-        type: 'DELTAVMAP.FORM_UPDATE',
-        field,
-        value
+        type: 'ASCENT_PLANNER.FORM_UPDATE',
+        payload: {
+            field,
+            value
+        }
     };
 }
 
-export function calculateAscentDeltav(orbitingBody) {
+export function calculateAscentDeltaV() {
     return {
-        type: 'DELTAVMAP.CALCULATE',
-        orbitingBody
+        type: 'ASCENT_PLANNER.CALCULATE'
+    };
+}
+
+export function updateManeuverDeltaV(field, value) {
+    return {
+        type: 'MANEUVER_PLANNER.FORM_UPDATE',
+        payload: {
+            field,
+            value
+        }
+    };
+}
+
+export function calculateManeuverDeltaV() {
+    return {
+        type: 'MANEUVER_PLANNER.CALCULATE'
     };
 }

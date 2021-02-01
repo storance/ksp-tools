@@ -1,9 +1,6 @@
+import { atmosphere, atmosphereWithOxygen, Body, Calendar, Orbit, PlanetPack } from '../utils';
+import { attachSarnus, attachUrlum, attachNeidon, attachPlock } from './opm';
 import gppgep from './gppgep';
-import PlanetPack from '../planetpack.js';
-import Body from '../body.js';
-import Orbit from '../orbit.js';
-import {atmosphere, atmosphereWithOxygen} from '../atmosphere.js';
-import {attachSarnus, attachUrlum, attachNeidon, attachPlock } from './opm';
 
 const Ciro = gppgep.sun.clone();
 const Gael = Ciro.findByName('Gael');
@@ -37,4 +34,4 @@ attachUrlum(Robau, {semiMajorAxis: 114775000000});
 attachNeidon(Robau, {semiMajorAxis: 184744000000});
 attachPlock(Robau, {semiMajorAxis: 241825000000});
 
-export default new PlanetPack('Galileo\'s Planet Pack + Grannus Expansion + OPM', Ciro, Gael, gppgep.calendar, gppgep.rescales);
+export default new PlanetPack('GPP + GEP + OPM', Ciro, Gael, gppgep.calendar, gppgep.rescales);

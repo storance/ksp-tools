@@ -21,15 +21,12 @@ export default class Body {
         if (mass !== null) {
             this.mass = mass;
             this.mu = this.mass * GRAVITATIONAL_CONSTANT;
-            this.geeAsl = this.mu / Math.pow(this.radius, 2);
         } else if (mu !== null) {
             this.mass = mu / GRAVITATIONAL_CONSTANT;
             this.mu = mu;
-            this.geeAsl = this.mu / Math.pow(this.radius, 2);
         } else if (geeAsl !== null) {
             this.mu = geeAsl * GRAVITY * Math.pow(radius, 2);
             this.mass = this.mu / GRAVITATIONAL_CONSTANT;
-            this.geeAsl = geeAsl;
         }
         this.atmosphere = atmosphere;
         this.highSpaceAltitude = highSpaceAltitude;
@@ -62,7 +59,7 @@ export default class Body {
     }
 
     get aslGravity() {
-        return this.geeAsl;
+        return this.gravityAt(0);
     }
 
     gravityAt(altitude) {

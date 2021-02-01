@@ -1,20 +1,8 @@
 import React from 'react';
+import { formatDuration } from '../../utils';
 
 export default class DurationFormat extends React.PureComponent {
     render() {
-        return <span>{this.formattedValue()}</span>
-    }
-
-    formattedValue() {
-        const calendar = this.props.calendar;
-        const value = this.props.value;
-
-        let formmatedDuration = calendar.formatDuration(value);
-
-        if (this.props.includeRaw) {
-            formmatedDuration = formmatedDuration + ' (' + value.toFixed(3) + ' s)';
-        }
-
-        return formmatedDuration;
+        return <span>{formatDuration(this.props.value, this.props.calendar, this.props.includeRaw)}</span>
     }
 }

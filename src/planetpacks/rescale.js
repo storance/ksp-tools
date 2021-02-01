@@ -1,9 +1,5 @@
-import Calendar from './calendar';
-import PlanetPack from './planetpack';
-import Body from './body';
-import Orbit from './orbit';
-import { GRAVITATIONAL_CONSTANT } from './consts';
 import { Map, fromJS, List} from 'immutable';
+import { Atmosphere, Body, Calendar, Orbit, PlanetPack, GRAVITATIONAL_CONSTANT } from '../utils';
 
 export class Rescale {
     constructor({
@@ -38,7 +34,7 @@ export class Rescale {
             calendar = new Calendar(dayLength, daysInYear * dayLength);
         }
 
-        return new PlanetPack(planetpack.name + ' ' + this.name, rescaledSun, homeworld, calendar);
+        return new PlanetPack(planetpack.name + ' ' + this.name, rescaledSun, homeworld, calendar, planetpack.rescales);
     }
 
     rescaleBody(body, parentBody=null) {
@@ -64,12 +60,19 @@ export class Rescale {
             });
         }
 
+        const atmosphere = new Atmosphere({
+            enabled: body.atmosphere.enabled,
+            hasOxygen: body.atmosphere.hasOxygen,
+            height: body.atmosphere.height * atmosphereHeightMultiplier,
+            flyingHighAltitude: body.flyingHighAltitude * atmosphereHeightMultiplier
+        });
+
         const rescaledBody = new Body({
             name: body.name,
             radius: body.radius * resizeFactor,
             mass: Math.pow(body.radius * resizeFactor, 2) * body.aslGravity / GRAVITATIONAL_CONSTANT,
-            atmosphereHeight: body.atmosphereHeight * atmosphereHeightMultiplier,
-            highSpaceBorder: body.highSpaceBorder * resizeFactor,
+            atmosphere: atmosphere,
+            highSpaceAltitude: body.highSpaceAltitude * resizeFactor,
             rotationalPeriod: body.rotationalPeriod * dayLengthMultiplier,
             tidallyLocked: body.tidallyLocked,
             orbit: orbit,

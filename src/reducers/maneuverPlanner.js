@@ -1,108 +1,77 @@
 import { Map } from 'immutable';
-import { ManeuverPlan } from '../maneuver.js';
-import { convertAltitude, isPositiveNumber, isEmpty } from '../utils.js';
+import { convertAltitudeToMeters, ManeuverPlan, formUpdate, lookupBody, resetBodyOnPlanetPackUpdate } from '../utils';
+import { validatePositiveNumberField, validateApsisFields } from '../validators';
 
 const initialState = Map({
-    'currentApoapsis' : '',
-    'currentApoapsisUnits' : 'km',
-    'currentPeriapsis' : '',
-    'currentPeriapsisUnits' : 'km',
-    'desiredApoapsis' : '',
-    'desiredApoapsisUnits' : 'km',
-    'desiredPeriapsis' : '',
-    'desiredPeriapsisUnits' : 'km',
-    'errors' : {}
+    'currentApoapsis' : Map({
+        'value' : '',
+        'units' : 'km',
+        'error' : null
+    }),
+    'currentPeriapsis' : Map({
+        'value' : '',
+        'units' : 'km',
+        'error' : null
+    }),
+    'desiredApoapsis' : Map({
+        'value' : '',
+        'units' : 'km',
+        'error' : null
+    }),
+    'desiredPeriapsis' : Map({
+        'value' : '',
+        'units' : 'km',
+        'error' : null
+    })
 });
 
-function formUpdate(state, field, value) {
-    return state.set(field, value);
-}
-
-function calculate(state, body) {
-    const errors = validate(state);
-    if (!isEmpty(errors)) {
-        return state.set('errors', errors)
-                    .remove('maneuverPlan');
+function calculate(state, planetpack) {
+    let newState = validate(state);
+    if (newState.get('hasErrors')) {
+        return newState;
     }
 
-    const currentApoapsis = convertAltitude(state.get('currentApoapsis'), state.get('currentApoapsisUnits'), 'm');
-    const currentPeriapsis = convertAltitude(state.get('currentPeriapsis'), state.get('currentPeriapsisUnits'), 'm');
-    const desiredApoapsis = convertAltitude(state.get('desiredApoapsis'), state.get('desiredApoapsisUnits'), 'm');
-    const desiredPeriapsis = convertAltitude(state.get('desiredPeriapsis'), state.get('desiredPeriapsisUnits'), 'm');
+    const body = lookupBody(newState.get('body'), planetpack);
+    const currentApoapsis = convertAltitudeToMeters(newState.get('currentApoapsis'));
+    const currentPeriapsis = convertAltitudeToMeters(newState.get('currentPeriapsis'));
+    const desiredApoapsis = convertAltitudeToMeters(newState.get('desiredApoapsis'));
+    const desiredPeriapsis = convertAltitudeToMeters(newState.get('desiredPeriapsis'));
+
     const maneuverPlan = new ManeuverPlan(body, currentApoapsis, currentPeriapsis, desiredApoapsis, desiredPeriapsis);
 
-    return state.set('maneuverPlan', maneuverPlan)
-                .set('errors', {});
+    return newState.set('maneuverPlan', maneuverPlan);
 }
 
 function validate(state) {
-    const currentApoapsis = state.get('currentApoapsis');
-    const currentApoapsisUnits = state.get('currentApoapsisUnits');
-    const currentPeriapsis = state.get('currentPeriapsis');
-    const currentPeriapsisUnits = state.get('currentPeriapsisUnits');
+    return state.withMutations(tempState => {
+        let currentErrors = validatePositiveNumberField(tempState, 'currentApoapsis') ||
+            validatePositiveNumberField(tempState, 'currentPeriapsis');
 
-    const currentErrors = {};
+        let desiredErrors = validatePositiveNumberField(tempState, 'desiredApoapsis') ||
+            validatePositiveNumberField(tempState, 'desiredPeriapsis');
 
-    if (currentApoapsis === "") {
-        currentErrors.currentApoapsis = "Please enter an apoapsis.";
-    } else if (!isPositiveNumber(currentApoapsis)) {
-        currentErrors.currentApoapsis = "Please enter a valid number greater than or equal to 0.";
-    }
-
-    if (currentPeriapsis === "") {
-        currentErrors.currentPeriapsis = "Please enter a periapsis.";
-    } else if (!isPositiveNumber(currentPeriapsis)) {
-        currentErrors.currentPeriapsis = "Please enter a valid number greater than or equal to 0.";
-    }
-
-    if (isEmpty(currentErrors)) {
-        const pe = convertAltitude(currentPeriapsis, currentPeriapsisUnits, 'm');
-        const ap = convertAltitude(currentApoapsis, currentApoapsisUnits, 'm');
-
-        if (pe > ap) { 
-            currentErrors.currentPeriapsis = "Please enter a periapsis that is less than or equal to the apoapsis.";
+        if (!currentErrors) {
+            currentErrors = currentErrors || validateApsisFields(tempState, 'currentApoapsis', 'currentPeriapsis');
         }
-    }
 
-    const desiredApoapsis = state.get('desiredApoapsis');
-    const desiredApoapsisUnits = state.get('desiredApoapsisUnits');
-    const desiredPeriapsis = state.get('desiredPeriapsis');
-    const desiredPeriapsisUnits = state.get('desiredPeriapsisUnits');
-
-    const desiredErrors = {}
-    if (desiredApoapsis === "") {
-        desiredErrors.desiredApoapsis = "Please enter an apoapsis.";
-    } else if (!isPositiveNumber(desiredApoapsis)) {
-        desiredErrors.desiredApoapsis = "Please enter a valid number greater than or equal to 0.";
-    }
-
-    if (desiredPeriapsis === "") {
-        desiredErrors.desiredPeriapsis = "Please enter a periapsis.";
-    } else if (!isPositiveNumber(desiredPeriapsis)) {
-        desiredErrors.desiredPeriapsis = "Please enter a valid number greater than or equal to 0.";
-    }
-
-    if (isEmpty(desiredErrors)) {
-        const pe = convertAltitude(desiredPeriapsis, desiredPeriapsisUnits, 'm');
-        const ap = convertAltitude(desiredApoapsis, desiredApoapsisUnits, 'm');
-
-        if (pe > ap) { 
-            desiredErrors.desiredPeriapsis = "Please enter a periapsis that is less than or equal to the apoapsis.";
+        if (!desiredErrors) {
+            desiredErrors = desiredErrors || validateApsisFields(tempState, 'desiredApoapsis', 'desiredPeriapsis');
         }
-    }
 
-    return {
-        ...currentErrors,
-        ...desiredErrors
-    };
+        tempState.set('hasErrors', currentErrors || desiredErrors);
+        tempState.remove('maneuverPlan');
+    });
 }
 
 export default function(state = initialState, action) {
+    let newState = state;
     switch (action.type) {
         case 'MANEUVER_PLANNER.FORM_UPDATE':
-            return formUpdate(state, action.field, action.value);
+            newState = formUpdate(newState, action.payload.field, action.payload.value);
+            break;
         case 'MANEUVER_PLANNER.CALCULATE':
-            return calculate(state, action.orbitingBody);
+            newState = calculate(newState, action.planetpack);
+            break;
     }
-    return state;
+    return resetBodyOnPlanetPackUpdate(newState, action);
 }

@@ -1,8 +1,5 @@
-import Body from '../body.js';
-import Orbit from '../orbit.js';
-import { toDegrees } from '../utils';
+import {atmosphere, atmosphereWithOxygen, Body, Calendar, Orbit, PlanetPack, toDegrees} from '../utils';
 import stock from './stock';
-import {atmosphere, atmosphereWithOxygen} from '../atmosphere.js';
 
 // not a selectable planetpack, just adds the ability to attach to another planet pack
 export function attachSarnus(parentBody, {

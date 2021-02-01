@@ -16,11 +16,11 @@ export function loadState() {
 export const saveStateMiddleware = store => next => action => {
     const result = next(action);
     const state = store.getState();
-    const celestialBodyState = state.get('celestialBody');
+    const coreState = state.get('core');
 
     let persistState = {
-        celestialBody : celestialBodyState.withMutations(state => {
-                state.delete('body').delete('selectedBody').delete('selectedPlanetPack')
+        core : coreState.withMutations(state => {
+                state.delete('planetpack')
             }).toJS()
     };
 
