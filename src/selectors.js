@@ -163,6 +163,22 @@ export class AntennaRangeSelector extends CoreSelector {
 
 export class ConstellationMinOrbitSelector extends SingleBodySelector {
     static reducerName = 'constellationMinOrbit';
+
+    static getAtmOcclusion(state) {
+        return state.getIn([this.reducerName, 'atmOcclusion']);
+    }
+
+    static getVacOcclusion(state) {
+        return state.getIn([this.reducerName, 'vacOcclusion']);
+    }
+
+    static getSatelliteCount(state) {
+        return state.getIn([this.reducerName, 'satelliteCount']);
+    }
+
+    static getMinOrbit(state) {
+        return state.getIn([this.reducerName, 'minOrbit']);
+    }
 }
 
 export class TransferWindowSelector extends CoreSelector {

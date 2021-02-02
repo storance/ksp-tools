@@ -96,6 +96,22 @@ export function calculateConstellationMultipleLaunch() {
     };
 }
 
+export function updateConstellationMinOrbit(field, value) {
+    return {
+        type: 'CONSTELLATION.MIN_ORBIT.FORM_UPDATE',
+        payload: {
+            field,
+            value
+        }
+    };
+}
+
+export function calculateConstellationMinOrbit() {
+    return {
+        type: 'CONSTELLATION.MIN_ORBIT.CALCULATE'
+    };
+}
+
 export function updateAscentDeltaV(field, value) {
     return {
         type: 'ASCENT_PLANNER.FORM_UPDATE',

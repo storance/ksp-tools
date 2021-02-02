@@ -32,7 +32,7 @@ function calculate(state, planetpack) {
 
     const orbit = Orbit.fromApAndPe(body, apoapsis, periapsis);
     const angleRadians = (2 * PI) / satelliteCount;
-    const separation = orbit.semiMajorAxis * 2 * Math.sin(angleRadians / 2)
+    const separation = orbit.semiMajorAxis * 2 * Math.sin(angleRadians / 2);
 
     return state.set('separation', separation);
 }
@@ -46,7 +46,7 @@ function validate(state) {
             errors = errors || validateApsisFields(tempState, 'apoapsis', 'periapsis');
         }
 
-        errors = errors || validatePositiveNumberField(tempState, 'satelliteCount')
+        errors = errors || validatePositiveNumberField(tempState, 'satelliteCount');
 
         tempState.set('hasErrors', errors);
         tempState.remove('separation');

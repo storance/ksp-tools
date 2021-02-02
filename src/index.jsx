@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import { HashRouter as Router, Route, Link, Switch, Redirect } from 'react-router-dom';
 
 import Nav from 'react-bootstrap/Nav';
@@ -26,7 +26,9 @@ import { PlanetPackSelectContainer } from './components/forms/PlanetPackSelect';
 import { loadState, saveStateMiddleware } from './localStorage.js';
 import rootReducer from './reducers';
 
-const store = createStore(rootReducer, loadState(), applyMiddleware(saveStateMiddleware));
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const store = createStore(rootReducer, loadState(), composeEnhancers(applyMiddleware(saveStateMiddleware)));
 
 ReactDOM.render(
     <Provider store={store}>
