@@ -7,7 +7,7 @@ import Col from 'react-bootstrap/Col';
 export default class SelectField extends React.PureComponent {
     render() {
         const updateFunc = event => this.props.update(this.props.name, event.target.value);
-        return <Form.Group as={Row} controlId="{this.props.name}">
+        return <Form.Group as={Row} controlId={this.props.name}>
                 <Form.Label column sm={4} className="text-right font-weight-bold">{this.props.label}</Form.Label>
                 <Col sm={8}>
                     <Form.Control as="select"

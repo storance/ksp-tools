@@ -159,6 +159,22 @@ export class ConstellationMultipleLaunchSelector extends SingleBodySelector {
 
 export class AntennaRangeSelector extends CoreSelector {
     static reducerName = 'antennaRange';
+
+    static getDsnRangeMultiplier(state) {
+        return state.getIn([this.reducerName, 'dsnRangeMultiplier']);
+    }
+
+    static getAntennaRangeMultiplier(state) {
+        return state.getIn([this.reducerName, 'antennaRangeMultiplier']);
+    }
+
+    static getDsnLevel(state) {
+        return state.getIn([this.reducerName, 'dsnLevel']);
+    }
+
+    static getDsnCustomPower(state) {
+        return state.getIn([this.reducerName, 'dsnCustomPower']);
+    }
 }
 
 export class ConstellationMinOrbitSelector extends SingleBodySelector {
@@ -183,4 +199,72 @@ export class ConstellationMinOrbitSelector extends SingleBodySelector {
 
 export class TransferWindowSelector extends CoreSelector {
     static reducerName = 'transferWindow';
+}
+
+export class ProfilesSelector {
+    static reducerName = 'profiles';
+
+    static getAllById(state) {
+        return state.getIn([this.reducerName, 'allById']);
+    }
+
+    static getForm(state) {
+        return new ProfileForm(state.getIn([this.reducerName, 'form']));
+    }
+
+    static getShowFormModal(state) {
+        return state.getIn([this.reducerName, 'showFormModal']);
+    }
+}
+
+export class ProfileForm {
+    static reducerName = 'form';
+
+    constructor(state) {
+        this.state = state;
+    }
+
+    getId() {
+        return this.state.get('id');
+    }
+
+    getName() {
+        return this.state.get('name');
+    }
+
+    getPlanetPack() {
+        return this.state.get('planetpack');
+    }
+
+    getRescale() {
+        return this.state.get('rescale');
+    }
+
+    getDifficultyPreset() {
+        return this.state.get('difficultyPreset');
+    }
+
+    getDsnModifier() {
+        return this.state.get('dsnModifier');
+    }
+
+    getRangeModifier() {
+        return this.state.get('rangeModifier');
+    }
+
+    isUseCustomDsnLevels() {
+        return this.state.get('useCustomDsnLevels');
+    }
+
+    getCustomDsnLevels() {
+        return this.state.get('customDsnLevels');
+    }
+
+    getAtmOcclusion() {
+        return this.state.get('atmOcclusion');
+    }
+
+    getVacOcclusion() {
+        return this.state.get('vacOcclusion');
+    }
 }

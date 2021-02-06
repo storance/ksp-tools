@@ -64,6 +64,16 @@ export function calculateBatteryStorage() {
     };
 }
 
+export function updateAntennaRange(field, value) {
+    return {
+        type: 'ANTENNA_RANGE.FORM_UPDATE',
+        payload: {
+            field,
+            value
+        }
+    };
+}
+
 export function updateConstellationSingleLaunch(field, value) {
     return {
         type: 'CONSTELLATION.SINGLE_LAUNCH.FORM_UPDATE',
@@ -141,5 +151,57 @@ export function updateManeuverDeltaV(field, value) {
 export function calculateManeuverDeltaV() {
     return {
         type: 'MANEUVER_PLANNER.CALCULATE'
+    };
+}
+
+export function addProfile() {
+    return {
+        type: 'PROFILES.ADD'
+    };
+}
+
+export function saveProfile() {
+    return {
+        type: 'PROFILES.FORM.SAVE'
+    };
+}
+
+export function addCustomDsnLevel() {
+    return {
+        type: 'PROFILES.FORM.ADD_CUSTOM_DSN_LEVEL'
+    };
+}
+
+export function deleteCustomDsnLevel(index) {
+    return {
+        type: 'PROFILES.FORM.DELETE_CUSTOM_DSN_LEVEL',
+        payload: {
+            index
+        }
+    };
+}
+
+export function cancelProfileForm() {
+    return {
+        type: 'PROFILES.FORM.CANCEL'
+    };
+}
+
+export function updateProfileForm(field, value) {
+    return {
+        type: 'PROFILES.FORM.UPDATE',
+        payload: {
+            field,
+            value
+        }
+    };
+}
+
+export function applyProfileDifficultySettings(field, value) {
+    return {
+        type: 'PROFILES.FORM.APPLY_PRESET',
+        payload: {
+            preset: value
+        }
     };
 }

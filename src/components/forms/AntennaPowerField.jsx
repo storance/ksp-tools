@@ -7,7 +7,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-export default class ApsisField extends React.PureComponent {
+export default class AntennaPowerField extends React.PureComponent {
     render() {
         const valueUpdateFunc = event => this.props.update([this.props.name, 'value'], event.target.value);
         const unitsUpdateFunc = event => this.props.update([this.props.name, 'units'], event.target.value);
@@ -31,10 +31,10 @@ export default class ApsisField extends React.PureComponent {
                             value={field.units}
                             onChange={unitsUpdateFunc}>
 
-                            <option value="m">m</option>
-                            <option value="km">km</option>
-                            <option value="Mm">Mm</option>
-                            <option value="Gm">Gm</option>
+                            <option value="k">k</option>
+                            <option value="M">M</option>
+                            <option value="G">G</option>
+                            <option value="T">T</option>
                         </Form.Control>
                     </InputGroup.Append>
                     {field.error && <FormControl.Feedback type="invalid">{field.error}</FormControl.Feedback>}

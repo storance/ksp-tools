@@ -9,6 +9,7 @@ import constellationSingleLaunch from './constellationSingleLaunch';
 import darknessTime from './darknessTime';
 import maneuverPlanner from './maneuverPlanner';
 import transferWindow from './transferWindow';
+import profiles from './profiles';
 
 import orbitInformation from './orbitInformation';
 
@@ -22,6 +23,7 @@ const reducers = {
     darknessTime,
     maneuverPlanner,
     orbitInformation,
+    profiles,
     transferWindow
 }
 

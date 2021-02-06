@@ -23,6 +23,7 @@ import { ConstellationMinOrbitContainer } from './components/commnet/Constellati
 import { ConstellationSingleLaunchContainer } from './components/commnet/ConstellationSingleLaunch';
 import { ConstellationMultipleLaunchContainer } from './components/commnet/ConstellationMultipleLaunch';
 import { PlanetPackSelectContainer } from './components/forms/PlanetPackSelect';
+import { ProfilesContainer } from './components/Profiles';
 import { loadState, saveStateMiddleware } from './localStorage.js';
 import rootReducer from './reducers';
 
@@ -52,6 +53,7 @@ ReactDOM.render(
                             <NavDropdown.Item href="#/deltav/transferwindow">Transfer Window</NavDropdown.Item>
                             <NavDropdown.Item href="#/deltav/maneuver">Maneuver Planner</NavDropdown.Item>
                         </NavDropdown>
+                        <Nav.Link href="#/profiles">Profiles</Nav.Link>
                     </Nav>
                     <PlanetPackSelectContainer />
                 </Navbar.Collapse>
@@ -71,6 +73,8 @@ ReactDOM.render(
                     <Route path="/deltav/ascent" component={AscentPlannerContainer} />
                     <Route path="/deltav/transferwindow" component={TransferWindowContainer} />
                     <Route path="/deltav/maneuver" component={ManeuverPlannerContainer} />
+
+                    <Route path="/profiles" component={ProfilesContainer} />
                 </Switch>
             </Container>
         </Router>
