@@ -1,26 +1,30 @@
 import { Map } from 'immutable';
-import { Orbit, convertAltitudeToMeters, formUpdate, lookupBody, resetBodyOnPlanetPackUpdate } from '../utils';
+import { DISTANCE_UNITS_MAP,
+         Orbit,
+         createValidatedField,
+         createValidatedUnitField,
+         getValidatedNumericField,
+         getValidatedUnitField,
+         formUpdate,
+         resetBodyOnProfileSelect,
+         lookupBody } from '../utils';
 import { validatePositiveNumberField } from '../validators';
 
 const initialState = Map({
-    'altitude' : Map({
-        'value': '',
-        'units': 'km',
-        'error': null
-    })
+    'altitude' : createValidatedUnitField({units: 'km'})
 });
 
-function calculate(state, planetpack) {
+function calculate(state, profile) {
     let newState = validate(state);
     if (newState.get('hasErrors')) {
         return newState;
     }
 
-    const body = lookupBody(newState.get('body'), planetpack);
-    const altitude = convertAltitudeToMeters(newState.get('altitude'));
+    const body = lookupBody(newState.get('body'), profile.planetpack);
+    const altitude = getValidatedUnitField(newState.get('altitude'), 'm', DISTANCE_UNITS_MAP);
 
-    const orbit1 = Orbit.fromApAndPe(body, altitude, 0);
-    const orbit2 = Orbit.fromApAndPe(body, altitude, altitude);
+    const orbit1 = Orbit.from(body, {apoapsis: altitude, periapsis: 0});
+    const orbit2 = Orbit.from(body, {apoapsis: altitude, periapsis: altitude});
 
     const burn1 = orbit1.periapsisVelocity - body.rotationalVelocity;
     const burn2 = orbit2.apoapsisVelocity - orbit1.apoapsisVelocity;
@@ -44,8 +48,8 @@ export default function(state = initialState, action) {
             newState = formUpdate(newState, action.payload.field, action.payload.value);
             break;
         case 'ASCENT_PLANNER.CALCULATE':
-            newState = calculate(newState, action.planetpack);
+            newState = calculate(newState, action.activeProfile);
             break;
     }
-    return resetBodyOnPlanetPackUpdate(newState, action);
+    return resetBodyOnProfileSelect(newState, action);
 }

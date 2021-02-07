@@ -1,39 +1,33 @@
 import { Map } from 'immutable';
-import { convertAltitudeToMeters, Orbit, formUpdate, lookupBody, resetBodyOnPlanetPackUpdate } from '../utils';
+import { DISTANCE_UNITS_MAP,
+         Orbit,
+         createValidatedField,
+         createValidatedUnitField,
+         getValidatedNumericField,
+         getValidatedUnitField,
+         formUpdate,
+         resetBodyOnProfileSelect,
+         lookupBody } from '../utils';
 import { validatePositiveNumberField, validateApsisFields } from '../validators';
 
 const initialState = Map({
-    'apoapsis' : Map({
-        'value' : '',
-        'units' : 'km',
-        'error' : null,
-    }),
-    'periapsis' : Map({
-        'value' : '',
-        'units' : 'km',
-        'error' : null,
-    }),
-    'darknessTime' : Map({
-        'value' : '',
-        'error' : null
-    }),
-    'energyUse' : Map({
-        'value' : '',
-        'error' : null
-    })
+    'apoapsis' : createValidatedUnitField({units: 'km'}),
+    'periapsis' : createValidatedUnitField({units: 'km'}),
+    'darknessTime' : createValidatedField(),
+    'energyUse' : createValidatedField()
 });
 
-function calculateDarknessTime(state, planetpack) {
+function calculateDarknessTime(state, profile) {
     let newState = validateDarknessTime(state);
     if (newState.get('hasErrors')) {
         return newState;
     }
 
-    const body = lookupBody(newState.get('body'), planetpack);
-    const apoapsis = convertAltitudeToMeters(newState.get('apoapsis'));
-    const periapsis = convertAltitudeToMeters(newState.get('periapsis'));
+    const body = lookupBody(newState.get('body'), profile.planetpack);
+    const apoapsis = getValidatedUnitField(newState.get('apoapsis'), 'm', DISTANCE_UNITS_MAP);
+    const periapsis = getValidatedUnitField(newState.get('periapsis'), 'm', DISTANCE_UNITS_MAP);
 
-    const orbit = Orbit.fromApAndPe(body, apoapsis, periapsis);
+    const orbit = Orbit.from(body, {apoapsis, periapsis});
     const darknessTime = ((2 * orbit.semiMajorAxis * orbit.semiMinorAxis) / orbit.specificAngularMomentum) * 
         Math.asin(orbit.parentBody.radius / orbit.semiMinorAxis) +
         ((orbit.eccentricity * orbit.parentBody.radius) / orbit.semiMinorAxis);
@@ -85,11 +79,11 @@ export default function(state = initialState, action) {
             newState = formUpdate(newState, action.payload.field, action.payload.value);
             break;
         case 'DARKNESS_TIME.CALCULATE_DARKNESS_TIME':
-            newState = calculateDarknessTime(newState, action.planetpack);
+            newState = calculateDarknessTime(newState, action.activeProfile);
             break;
         case 'DARKNESS_TIME.CALCULATE_BATTERY_STORAGE':
             newState = calculateBatteryStorage(newState);
             break;
     }
-    return resetBodyOnPlanetPackUpdate(newState, action);
+    return resetBodyOnProfileSelect(newState, action);
 }

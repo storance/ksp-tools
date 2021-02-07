@@ -6,6 +6,7 @@ export default class Orbit {
             parentBody,
             semiMajorAxis,
             eccentricity,
+            mu=0,
             inclination=null,
             longitudeOfAscendingNode=null,
             argumentOfPeriapsis=null,
@@ -13,6 +14,7 @@ export default class Orbit {
             meanAnomoloyAtEpochRad=null
         }) {
         this.parentBody = parentBody;
+        this.mu = mu;
         this.semiMajorAxis = semiMajorAxis;
         this.eccentricity = eccentricity;
         this.inclination = inclination;
@@ -25,43 +27,121 @@ export default class Orbit {
         }
     }
 
-    static fromApAndPe(parentBody, ap, pe) {
-        const ra = ap + parentBody.radius;
-        const rp = pe + parentBody.radius;
-        const semiMajorAxis = (ra + rp) / 2;
-        const eccentricity = (ra - rp) / (ra + rp);
+    static from(parentBody, {
+        semiMajorAxis=null,
+        eccentricity=null,
+        apoapsis=null,
+        periapsis=null,
+        period=null
+    }) {
+        if (semiMajorAxis != null) {
+            if (eccentricity != null) {
+                return new Orbit({
+                    parentBody,
+                    semiMajorAxis,
+                    eccentricity
+                });
+            }
 
-        return new Orbit({
-            parentBody: parentBody,
-            semiMajorAxis: semiMajorAxis,
-            eccentricity: eccentricity
-        });
-    }
+            if (apoapsis != null) {
+                const ra = apoapsis + parentBody.radius;
+                const rp = (2 * semiMajorAxis) - ra;
+                const e = (ra - rp) / (ra + rp);
 
-    static fromApAndPeriod(parentBody, ap, period) {
-        const semiMajorAxis = Math.pow(Math.pow(period / (2 * PI), 2) * parentBody.mu, 1/3);
-        const ra = ap + parentBody.radius;
-        const rp = (2 * semiMajorAxis) - ra;
-        const eccentricity = (ra - rp) / (ra + rp);
+                return new Orbit({
+                    parentBody,
+                    semiMajorAxis,
+                    eccentricity: e
+                });
+            }
 
-        return new Orbit({
-            parentBody: parentBody,
-            semiMajorAxis: semiMajorAxis,
-            eccentricity: eccentricity
-        });
-    }
+            if (periapsis != null) {
+                const rp = periapsis + parentBody.radius;
+                const ra = (2 * semiMajorAxis) - rp;
+                const e = (ra - rp) / (ra + rp);
 
-    static fromPeAndPeriod(parentBody, pe, period) {
-        const semiMajorAxis = Math.pow(Math.pow(period / (2 * PI), 2) * parentBody.mu, 1/3);
-        const rp = pe + parentBody.radius;
-        const ra = (2 * semiMajorAxis) - rp;
-        const eccentricity = (ra - rp) / (ra + rp);
+                return new Orbit({
+                    parentBody,
+                    semiMajorAxis,
+                    eccentricity: e
+                });
+            }
+        }
 
-        return new Orbit({
-            parentBody: parentBody,
-            semiMajorAxis: semiMajorAxis,
-            eccentricity: eccentricity
-        });
+        if (period != null) {
+            const sma = Math.pow(Math.pow(period / (2 * PI), 2) * parentBody.mu, 1/3);
+
+            if (eccentricity != null) {
+                return new Orbit({
+                    parentBody,
+                    semiMajorAxis: sma,
+                    eccentricity
+                });
+            }
+
+            if (apoapsis != null) {
+                const ra = apoapsis + parentBody.radius;
+                const rp = (2 * sma) - ra;
+                const e = (ra - rp) / (ra + rp);
+
+                return new Orbit({
+                    parentBody,
+                    semiMajorAxis: sma,
+                    eccentricity: e
+                });
+            }
+
+            if (periapsis != null) {
+                const rp = periapsis + parentBody.radius;
+                const ra = (2 * sma) - rp;
+                const e = (ra - rp) / (ra + rp);
+
+                return new Orbit({
+                    parentBody,
+                    semiMajorAxis: sma,
+                    eccentricity: e
+                });
+            }
+        }
+
+        if (eccentricity != null) {
+            if (apoapsis != null) {
+                const ra = apoapsis + parentBody.radius;
+                const sma = ra / (1 + e);
+
+                return new Orbit({
+                    parentBody,
+                    semiMajorAxis: sma,
+                    eccentricity
+                });
+            }
+
+            if (periapsis != null) {
+                const rp = periapsis + parentBody.radius;
+                const sma = rp / (1 - e);
+
+                return new Orbit({
+                    parentBody,
+                    semiMajorAxis: sma,
+                    eccentricity
+                });
+            }
+        }
+
+        if (apoapsis != null && periapsis != null) {
+            const ra = apoapsis + parentBody.radius;
+            const rp = periapsis + parentBody.radius;
+            const sma = (ra + rp) / 2;
+            const e = (ra - rp) / (ra + rp);
+
+            return new Orbit({
+                parentBody,
+                semiMajorAxis: sma,
+                eccentricity: e
+            });
+        }
+
+        return null;
     }
 
     get hasInclination() {
@@ -130,7 +210,7 @@ export default class Orbit {
     }
 
     get period() {
-        return 2 * PI * Math.sqrt( Math.pow(this.semiMajorAxis, 3) / this.parentBody.mu);
+        return 2 * PI * Math.sqrt( Math.pow(this.semiMajorAxis, 3) / (this.parentBody.mu + this.mu));
     }
 
     velocityAtAltitude(altitude) {

@@ -1,5 +1,4 @@
 import { Map } from 'immutable';
-import core from './core';
 import antennaRange from './antennaRange';
 import ascentPlanner from './ascentPlanner';
 import bodyInformation from './bodyInformation';
@@ -29,15 +28,15 @@ const reducers = {
 
 export default function rootReducer(state = Map(), action) {
     const reducerKeys = Object.keys(reducers);
-    const planetpack = state.getIn(['core', 'planetpack']);
+    const activeProfile = state.getIn(['profiles', 'active']);
 
-    return state.withMutations((tempState) => {
-        tempState.set('core', core(tempState.get('core'), action));
+    return state.withMutations(tempState => {
+        tempState.set('profiles', profiles(tempState.get('profiles'), action));
 
-        reducerKeys.forEach((reducerName) => {
+        reducerKeys.forEach(reducerName => {
             const reducer = reducers[reducerName];
             const currentState = tempState.get(reducerName);
-            const nextState = reducer(currentState, {...action, planetpack});
+            const nextState = reducer(currentState, {...action, activeProfile});
 
             tempState.set(reducerName, nextState);
         });

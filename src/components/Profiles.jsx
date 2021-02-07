@@ -9,19 +9,25 @@ import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-import { XCircle } from 'react-bootstrap-icons';
+import { Trash, PencilSquare, ClipboardPlus } from 'react-bootstrap-icons';
 
 import { ProfilesSelector } from '../selectors'
 import ButtonField from './forms/ButtonField';
 import CheckboxField from './forms/CheckboxField';
 import TextField from './forms/TextField';
 import SelectField from './forms/SelectField';
+import NumberFormat from './format/NumberFormat';
 import * as actionCreators from '../action_creators';
-import { DIFFICULTY_PRESETS } from '../utils';
+import { DIFFICULTY_PRESETS, POWER_UNITS } from '../utils';
 import { planetpacks, findPlanetPack } from '../planetpacks';
 
 export class Profiles extends React.PureComponent {
     render() {
+        const addOnclick = e => {
+            e.preventDefault();
+            this.props.addProfile();
+        };
+
         return <>
             <h1>Profiles</h1>
             <Table striped bordered hover>
@@ -30,18 +36,73 @@ export class Profiles extends React.PureComponent {
                         <th>Name</th>
                         <th>Plantpack</th>
                         <th>Rescale</th>
-                        <th>DSN Modifier</th>
+                        <th>DSN</th>
                         <th>Antenna Range Modifier</th>
                         <th>Vacuum Occlusion</th>
                         <th>Atmosphere Occlusion</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
-                {Array.from(this.props.profiles.values()).map(this.renderProfile)}
+                <tbody>
+                    {Array.from(this.props.profiles.values()).map(profile => this.renderProfile(profile))}
+                </tbody>
             </Table>
-            <Button type="submit" variant="primary" onClick={e => this.onClickWrapper(e, this.props.addProfile)}>Add Profile</Button>
+            <Button type="submit" variant="primary" onClick={addOnclick}>Add Profile</Button>
 
-            {this.props.showFormModal && <Modal show onHide={this.props.cancelProfileForm} size="lg">
+            {this.props.form.isShow() && this.renderFormModal()}
+            </>;
+    }
+
+    renderProfile(profile) {
+        const editOnClick = e => {
+            e.preventDefault();
+            this.props.editProfile(profile.id);
+        };
+        const deleteOnClick = e => {
+            e.preventDefault();
+            this.props.deleteProfile(profile.id);
+        };
+        const cloneOnClick = (e => {
+            e.preventDefault();
+            this.props.cloneProfile(profile.id);
+        }).bind(this);
+
+        return <tr key={profile.id}>
+                <td>{profile.name}</td>
+                <td>{profile.planetpack}</td>
+                <td>{profile.rescale}</td>
+                <td>
+                    {profile.customDsnLevels 
+                        ? <ol> {profile.customDsnLevels.map(this.renderDsnLevel) }</ol>
+                        : <>Modifier: <NumberFormat value={profile.dsnModifier} fractionDigits={2} /> </>}
+                </td>
+                <td><NumberFormat value={profile.rangeModifier} fractionDigits={2} /></td>
+                <td><NumberFormat value={profile.vacOcclusion} fractionDigits={2} /></td>
+                <td><NumberFormat value={profile.atmOcclusion} fractionDigits={2} /></td>
+                <td>
+                    <a href="#" title="Clone" onClick={cloneOnClick}><ClipboardPlus size="1em" /></a>
+                    {profile.editable && <>
+                        <a href="#" title="Edit" className="pl-1" onClick={editOnClick}><PencilSquare size="1em" /></a>
+                        <a href="#" title="Delete" className="pl-1" onClick={deleteOnClick}><Trash size="1em" /></a>
+                    </>}</td>
+            </tr>;
+    }
+
+    renderDsnLevel(dsnLevel) {
+        return <li><NumberFormat value={dsnLevel} fractionDigits={3} units={POWER_UNITS} /></li>
+    }
+
+    renderFormModal() {
+        const cancelOnClick = e => {
+            e.preventDefault();
+            this.props.cancelProfileForm();
+        };
+        const saveOnClick = e => {
+            e.preventDefault();
+            this.props.saveProfile();
+        };
+
+        return <Modal show onHide={this.props.cancelProfileForm} size="lg">
                 <Modal.Header closeButton>
                     <Modal.Title>{this.props.form.getId() ? "Edit Profile" : "Add Profile"}</Modal.Title>
                 </Modal.Header>
@@ -82,7 +143,7 @@ export class Profiles extends React.PureComponent {
                                         name="dsnModifier"
                                         field={this.props.form.getDsnModifier()}
                                         update={this.props.updateProfileForm} />
-                            : this.renderCustomDsnLevels()
+                            : this.renderCustomDsnLevelsForm()
                         }
 
                         <h4>CommNet Settings</h4>
@@ -104,16 +165,10 @@ export class Profiles extends React.PureComponent {
                 </Modal.Body>
 
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={e => this.onClickWrapper(e, this.props.cancelProfileForm)}>Cancel</Button>
-                    <Button variant="primary">Save</Button>
+                    <Button variant="secondary" onClick={cancelOnClick}>Cancel</Button>
+                    <Button variant="primary" onClick={saveOnClick}>Save</Button>
                 </Modal.Footer>
-            </Modal>}
-            </>;
-    }
-
-    onClickWrapper(event, func) {
-        event.preventDefault();
-        func();
+            </Modal>;
     }
 
     getDifficultyPresetOptions() {
@@ -121,8 +176,8 @@ export class Profiles extends React.PureComponent {
 
         for (var preset of DIFFICULTY_PRESETS) {
             options.push({
-                label: preset.name,
-                value: preset.value
+                label: preset.get('name'),
+                value: preset.get('name')
             });
         }
 
@@ -157,20 +212,10 @@ export class Profiles extends React.PureComponent {
         });
     }
 
-    renderProfile(profile) {
-        return <tr>
-                <td>{profile.name}</td>
-                <td>{profile.planetpack}</td>
-                <td>{profile.rescale}</td>
-                <td>{profile.dsnModifier}</td>
-                <td>{profile.rangeModifier}</td>
-                <td>{profile.vacOcclusion}</td>
-                <td>{profile.atmOcclusion}</td>
-                <td></td>
-            </tr>;
-    }
+    renderCustomDsnLevelsForm() {
+        const customDsnLevels = this.props.form.getCustomDsnLevels();
+        const isLastDsnLevel = customDsnLevels <= 1;
 
-    renderCustomDsnLevels() {
         return <>
                 <Row>
                     <Col sm={4} className="text-right font-weight-bold mt-3">
@@ -185,7 +230,10 @@ export class Profiles extends React.PureComponent {
                                     <th>Delete</th>
                                 </tr>
                             </thead>
-                            {this.props.form.getCustomDsnLevels().map(this.renderDsnLevel.bind(this))}
+                            <tbody>
+                                {customDsnLevels.map((power, level) => 
+                                    this.renderDsnLevelForm(power, level, isLastDsnLevel))}
+                            </tbody>
                         </Table>
                     </Col>
                 </Row>
@@ -193,16 +241,21 @@ export class Profiles extends React.PureComponent {
             </>;
     }
 
-    renderDsnLevel(power, level) {
-        const updateFunc = e => {
+    renderDsnLevelForm(power, level, isLast) {
+        const onChange = e => {
             this.props.updateProfileForm(['customDsnLevels', level, 'value'], e.target.value);
         };
 
-        const unitsUpdateFunc = e => {
+        const onUnitsChange = e => {
             this.props.updateProfileForm(['customDsnLevels', level, 'units'], e.target.value);
         };
 
-        return <tr>
+        const deleteOnClick = e => {
+            e.preventDefault();
+            this.props.deleteCustomDsnLevel(level);
+        };
+
+        return <tr key={level+1}>
                 <td>{level+1}</td>
                 <td>
                     <InputGroup>
@@ -211,14 +264,14 @@ export class Profiles extends React.PureComponent {
                            name="customDsnPower"
                            value={power.get('value')}
                            isInvalid={power.get('error') !== null}
-                           onChange={updateFunc} />
+                           onChange={onChange} />
                         <InputGroup.Append>
                             <Form.Control
                                 as="select"
                                 custom
                                 name="customDsnPowerUnits"
                                 value={power.get('units')}
-                                onChange={unitsUpdateFunc}>
+                                onChange={onUnitsChange}>
 
                                 <option value="k">k</option>
                                 <option value="M">M</option>
@@ -226,11 +279,12 @@ export class Profiles extends React.PureComponent {
                                 <option value="T">T</option>
                             </Form.Control>
                         </InputGroup.Append>
-                        {power.get('error') && <Form.Control.Feedback type="invalid">{power.get('error')}</Form.Control.Feedback>}
+                        {power.get('error') && 
+                            <Form.Control.Feedback type="invalid">{power.get('error')}</Form.Control.Feedback>}
                     </InputGroup>
                 </td>
                 <td>
-                    <a href="#" onClick={e => {e.preventDefault(); this.props.deleteCustomDsnLevel(level);}}><XCircle color="#D11A2A" size={24} /></a>
+                    {!isLast && <a href="#" title="Delete" onClick={deleteOnClick}><Trash size="1em" /></a> }
                 </td>
             </tr>
     }
@@ -239,8 +293,7 @@ export class Profiles extends React.PureComponent {
 function mapStateToProps(state) {
     return {
         profiles: ProfilesSelector.getAllById(state),
-        form: ProfilesSelector.getForm(state),
-        showFormModal: ProfilesSelector.getShowFormModal(state)
+        form: ProfilesSelector.getForm(state)
     }
 }
 

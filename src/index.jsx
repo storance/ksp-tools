@@ -22,7 +22,7 @@ import { AntennaRangeContainer } from './components/commnet/AntennaRange';
 import { ConstellationMinOrbitContainer } from './components/commnet/ConstellationMinOrbit';
 import { ConstellationSingleLaunchContainer } from './components/commnet/ConstellationSingleLaunch';
 import { ConstellationMultipleLaunchContainer } from './components/commnet/ConstellationMultipleLaunch';
-import { PlanetPackSelectContainer } from './components/forms/PlanetPackSelect';
+import { ProfileSelectContainer } from './components/forms/ProfileSelect';
 import { ProfilesContainer } from './components/Profiles';
 import { loadState, saveStateMiddleware } from './localStorage.js';
 import rootReducer from './reducers';
@@ -30,6 +30,7 @@ import rootReducer from './reducers';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(rootReducer, loadState(), composeEnhancers(applyMiddleware(saveStateMiddleware)));
+store.dispatch({type: 'APP.INITIALIZED'});
 
 ReactDOM.render(
     <Provider store={store}>
@@ -44,9 +45,15 @@ ReactDOM.render(
                         <Nav.Link href="#/orbit/darknesstime">Darkness Time</Nav.Link>
                         <NavDropdown title="CommNet" id="ksp-tools-commnet-dropdown">
                             <NavDropdown.Item href="#/commnet/antennarange">Antenna Range</NavDropdown.Item>
-                            <NavDropdown.Item href="#/commnet/constellation/minorbit">Constellation: Minimum Orbit</NavDropdown.Item>
-                            <NavDropdown.Item href="#/commnet/constellation/singlelaunch">Constellation: Single Launch</NavDropdown.Item>
-                            <NavDropdown.Item href="#/commnet/constellation/multiplelaunch">Constellation: Multiple Launch</NavDropdown.Item>
+                            <NavDropdown.Item href="#/commnet/constellation/minorbit">
+                                Constellation: Minimum Orbit
+                            </NavDropdown.Item>
+                            <NavDropdown.Item href="#/commnet/constellation/singlelaunch">
+                                Constellation: Single Launch
+                            </NavDropdown.Item>
+                            <NavDropdown.Item href="#/commnet/constellation/multiplelaunch">
+                                Constellation: Multiple Launch
+                            </NavDropdown.Item>
                         </NavDropdown>
                         <NavDropdown title="&Delta;V" id="ksp-tools-deltav-dropdown">
                             <NavDropdown.Item href="#/deltav/ascent">Ascent/Descent</NavDropdown.Item>
@@ -55,7 +62,7 @@ ReactDOM.render(
                         </NavDropdown>
                         <Nav.Link href="#/profiles">Profiles</Nav.Link>
                     </Nav>
-                    <PlanetPackSelectContainer />
+                    <ProfileSelectContainer />
                 </Navbar.Collapse>
             </Navbar>
             <Container fluid="xl">
@@ -66,9 +73,12 @@ ReactDOM.render(
                     <Route path="/orbit/darknesstime" component={DarknessTimeContainer} />
 
                     <Route path="/commnet/antennarange" component={AntennaRangeContainer} />
-                    <Route path="/commnet/constellation/minorbit" component={ConstellationMinOrbitContainer} />
-                    <Route path="/commnet/constellation/singlelaunch" component={ConstellationSingleLaunchContainer} />
-                    <Route path="/commnet/constellation/multiplelaunch" component={ConstellationMultipleLaunchContainer} />
+                    <Route path="/commnet/constellation/minorbit" 
+                        component={ConstellationMinOrbitContainer} />
+                    <Route path="/commnet/constellation/singlelaunch"
+                        component={ConstellationSingleLaunchContainer} />
+                    <Route path="/commnet/constellation/multiplelaunch"
+                        component={ConstellationMultipleLaunchContainer} />
 
                     <Route path="/deltav/ascent" component={AscentPlannerContainer} />
                     <Route path="/deltav/transferwindow" component={TransferWindowContainer} />

@@ -1,4 +1,4 @@
-import {atmosphere, atmosphereWithOxygen, Body, Calendar, Orbit, PlanetPack} from '../utils';
+import {atmosphere, atmosphereWithOxygen, Body, CalendarDefinition, Orbit, PlanetPack} from '../utils';
 import { allRescales}  from './rescale';
 
 const Ciro = new Body({
@@ -542,4 +542,4 @@ const Grannus = new Body({
 
 Ciro.satellites = [Icarus, Thalia, Niven, Gael, Tellumo, Gratian, Otho, Gauss, Nero, Hox, Leto, Grannus];
 
-export default new PlanetPack('GPP', Ciro, Gael, new Calendar(21600, 9201600), allRescales);
+export default new PlanetPack('GPP', Ciro, Gael, new CalendarDefinition({customDay: 21600, customYear: 9201600}), allRescales);

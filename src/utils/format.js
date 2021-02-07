@@ -9,16 +9,14 @@ export function formatNumber(value, {
     if (value === null || value === undefined) {
         return value
     }
-
+    
     if (units) {
-        let unitSuffix = ' ' + units[0].suffix;
+        let unitSuffix = ' ' + units.get(0).get('suffix');
 
         for (const unit of Array.from(units).reverse()) {
-            const threshold = unit.threshold || unit.scale;
-            
-            if (Math.abs(value) >= threshold) {
-                value = value / unit.scale;
-                unitSuffix = ' ' + unit.suffix;
+            if (Math.abs(value) >= unit.get('scale')) {
+                value = value / unit.get('scale');
+                unitSuffix = ' ' + unit.get('suffix');
                 break;
             }
         }

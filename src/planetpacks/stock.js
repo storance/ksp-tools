@@ -1,4 +1,4 @@
-import { atmosphere, atmosphereWithOxygen, Body, Calendar, Orbit, PlanetPack } from '../utils';
+import { atmosphere, atmosphereWithOxygen, Body, CalendarDefinition, Orbit, PlanetPack } from '../utils';
 import { allRescales } from './rescale';
 
 const Kerbol = new Body({
@@ -291,4 +291,4 @@ const Eeloo = new Body({
 
 Kerbol.satellites = [Moho, Eve, Kerbin, Duna, Dres, Jool, Eeloo];
 
-export default new PlanetPack('Stock', Kerbol, Kerbin, new Calendar(21600, 9201600), allRescales);
+export default new PlanetPack('Stock', Kerbol, Kerbin, new CalendarDefinition({customDay: 21600, customYear: 9201600}), allRescales);

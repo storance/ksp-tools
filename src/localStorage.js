@@ -1,4 +1,5 @@
 import { fromJS } from 'immutable';
+import { Profile } from './utils';
 
 export function loadState() {
     try {
@@ -7,27 +8,38 @@ export function loadState() {
             return undefined;
         }
 
-        return fromJS(JSON.parse(serializedState));
+        return fromJS(convertProfiles(JSON.parse(serializedState)));
     } catch (err) {
+        console.log(err);
         return undefined;
     }
 };
 
+function convertProfiles(state) {
+    for (var key of Object.keys(state.profiles.allById)) {
+        state.profiles.allById[key] = new Profile(state.profiles.allById[key]);
+    }
+
+    return state;
+}
+
 export const saveStateMiddleware = store => next => action => {
     const result = next(action);
     const state = store.getState();
-    const coreState = state.get('core');
+    const profilesState = state.get('profiles');
 
     let persistState = {
-        core : coreState.withMutations(state => {
-                state.delete('planetpack')
-            }).toJS()
+        profiles: profilesState.withMutations(state => {
+            state.delete('form');
+            state.delete('active');
+        }).toJS()
     };
 
     try {
         const serializedState = JSON.stringify(persistState);
         localStorage.setItem('state', serializedState);
     } catch (err) {
+        console.log(err);
         // ignore
     }
 

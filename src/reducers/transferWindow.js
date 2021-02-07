@@ -1,5 +1,5 @@
 import { Map } from 'immutable';
-import { Orbit, convertAltitudeToMeters, formUpdate, lookupBody, resetBodyOnPlanetPackUpdate } from '../utils';
+import { Orbit, convertAltitudeToMeters, formUpdate, lookupBody, resetBodyOnProfileSelect } from '../utils';
 import { validatePositiveNumberField } from '../validators';
 
 const initialState = Map({

@@ -1,41 +1,31 @@
 import { Map } from 'immutable';
-import { convertAltitudeToMeters, ManeuverPlan, formUpdate, lookupBody, resetBodyOnPlanetPackUpdate } from '../utils';
+import { DISTANCE_UNITS_MAP,
+         ManeuverPlan,
+         createValidatedUnitField,
+         getValidatedUnitField,
+         formUpdate,
+         resetBodyOnProfileSelect,
+         lookupBody } from '../utils';
 import { validatePositiveNumberField, validateApsisFields } from '../validators';
 
 const initialState = Map({
-    'currentApoapsis' : Map({
-        'value' : '',
-        'units' : 'km',
-        'error' : null
-    }),
-    'currentPeriapsis' : Map({
-        'value' : '',
-        'units' : 'km',
-        'error' : null
-    }),
-    'desiredApoapsis' : Map({
-        'value' : '',
-        'units' : 'km',
-        'error' : null
-    }),
-    'desiredPeriapsis' : Map({
-        'value' : '',
-        'units' : 'km',
-        'error' : null
-    })
+    'currentApoapsis' : createValidatedUnitField({units: 'km'}),
+    'currentPeriapsis' : createValidatedUnitField({units: 'km'}),
+    'desiredApoapsis' : createValidatedUnitField({units: 'km'}),
+    'desiredPeriapsis' : createValidatedUnitField({units: 'km'})
 });
 
-function calculate(state, planetpack) {
+function calculate(state, profile) {
     let newState = validate(state);
     if (newState.get('hasErrors')) {
         return newState;
     }
 
-    const body = lookupBody(newState.get('body'), planetpack);
-    const currentApoapsis = convertAltitudeToMeters(newState.get('currentApoapsis'));
-    const currentPeriapsis = convertAltitudeToMeters(newState.get('currentPeriapsis'));
-    const desiredApoapsis = convertAltitudeToMeters(newState.get('desiredApoapsis'));
-    const desiredPeriapsis = convertAltitudeToMeters(newState.get('desiredPeriapsis'));
+    const body = lookupBody(newState.get('body'), profile.planetpack);
+    const currentApoapsis = getValidatedUnitField(newState.get('currentApoapsis'), 'm', DISTANCE_UNITS_MAP);
+    const currentPeriapsis = getValidatedUnitField(newState.get('currentPeriapsis'), 'm', DISTANCE_UNITS_MAP);
+    const desiredApoapsis = getValidatedUnitField(newState.get('desiredApoapsis'), 'm', DISTANCE_UNITS_MAP);
+    const desiredPeriapsis = getValidatedUnitField(newState.get('desiredPeriapsis'), 'm', DISTANCE_UNITS_MAP);
 
     const maneuverPlan = new ManeuverPlan(body, currentApoapsis, currentPeriapsis, desiredApoapsis, desiredPeriapsis);
 
@@ -44,18 +34,30 @@ function calculate(state, planetpack) {
 
 function validate(state) {
     return state.withMutations(tempState => {
-        let currentErrors = validatePositiveNumberField(tempState, 'currentApoapsis') ||
-            validatePositiveNumberField(tempState, 'currentPeriapsis');
-
-        let desiredErrors = validatePositiveNumberField(tempState, 'desiredApoapsis') ||
-            validatePositiveNumberField(tempState, 'desiredPeriapsis');
-
-        if (!currentErrors) {
-            currentErrors = currentErrors || validateApsisFields(tempState, 'currentApoapsis', 'currentPeriapsis');
+        let currentErrors = false;
+        if (validatePositiveNumberField(tempState, 'currentApoapsis')) {
+            currentErrors = true;
         }
 
-        if (!desiredErrors) {
-            desiredErrors = desiredErrors || validateApsisFields(tempState, 'desiredApoapsis', 'desiredPeriapsis');
+        if (validatePositiveNumberField(tempState, 'currentPeriapsis')) {
+            currentErrors = true;
+        }
+
+        let desiredErrors = false;
+        if (validatePositiveNumberField(tempState, 'desiredApoapsis')) {
+            desiredErrors = true;
+        }
+
+        if (validatePositiveNumberField(tempState, 'desiredPeriapsis')) {
+            desiredErrors = true;
+        }
+
+        if (!currentErrors && validateApsisFields(tempState, 'currentApoapsis', 'currentPeriapsis')) {
+            currentErrors = true;
+        }
+
+        if (!desiredErrors && validateApsisFields(tempState, 'desiredApoapsis', 'desiredPeriapsis')) {
+            desiredErrors = true;
         }
 
         tempState.set('hasErrors', currentErrors || desiredErrors);
@@ -70,8 +72,8 @@ export default function(state = initialState, action) {
             newState = formUpdate(newState, action.payload.field, action.payload.value);
             break;
         case 'MANEUVER_PLANNER.CALCULATE':
-            newState = calculate(newState, action.planetpack);
+            newState = calculate(newState, action.activeProfile);
             break;
     }
-    return resetBodyOnPlanetPackUpdate(newState, action);
+    return resetBodyOnProfileSelect(newState, action);
 }

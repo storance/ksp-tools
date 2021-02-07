@@ -24,7 +24,10 @@ export class DarknessTime extends React.PureComponent {
             passing through the dark side of the celestial body it's orbiting based on it's energy use.</p>
             <Form>
                 <h4>Darkness Time Calculator</h4>
-                <BodySelect planetpack={this.props.planetpack} body={this.props.body.name} update={this.props.updateBodyInformation}/>
+                <BodySelect
+                    planetpack={this.props.planetpack}
+                    body={this.props.body.name}
+                    update={this.props.updateBodyInformation} />
                 <ApsisField label="Apoapsis"
                     name="apoapsis"
                     field={this.props.apoapsis}
@@ -40,7 +43,10 @@ export class DarknessTime extends React.PureComponent {
                 {this.props.darknessTimeComputed  &&
                     <DefinitionList>
                         <DefinitionList.Item label="Darkness Time">
-                            <DurationFormat value={this.props.darknessTimeComputed} calendar={this.props.planetpack.calendar} includeRaw />
+                            <DurationFormat
+                                value={this.props.darknessTimeComputed}
+                                calendar={this.props.planetpack.calendar}
+                                includeRaw />
                         </DefinitionList.Item>
                     </DefinitionList>
                 }

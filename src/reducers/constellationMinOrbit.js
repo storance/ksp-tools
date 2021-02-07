@@ -1,44 +1,34 @@
 import { Map } from 'immutable';
-import { Orbit, convertAltitudeToMeters, formUpdate, lookupBody, resetBodyOnPlanetPackUpdate } from '../utils';
+import { PI,
+        createValidatedField,
+        getValidatedNumericField,
+        formUpdate,
+        lookupBody,
+        resetBodyOnProfileSelect } from '../utils';
 import { validatePositiveNumberField } from '../validators';
 
 const initialState = Map({
-    'satelliteCount' : Map({
-        'value': '',
-        'error': null
-    }),
-    'atmOcclusion' : Map({
-        'value': '0.75',
-        'error': null
-    }),
-    'vacOcclusion' : Map({
-        'value': '0.9',
-        'error': null
-    })
+    'satelliteCount' : createValidatedField()
 });
 
-function calculate(state, planetpack) {
+function calculate(state, profile) {
     let newState = validate(state);
     if (newState.get('hasErrors')) {
         return newState;
     }
 
-    const body = lookupBody(state.get('body'), planetpack);
-    const vacOcclusion = parseFloat(state.getIn(['vacOcclusion', 'value']));
-    const atmOcclusion = parseFloat(state.getIn(['atmOcclusion', 'value']));
-    const satelliteCount = parseFloat(state.getIn(['satelliteCount', 'value']));
+    const body = lookupBody(state.get('body'), profile.planetpack);
+    const satelliteCount = getValidatedNumericField(state.get('satelliteCount'));
 
-    const occlusion = body.atmosphere.enabled ? atmOcclusion : vacOcclusion;
-    const minOrbit = ( body.radius * occlusion ) / (Math.cos(Math.PI / satelliteCount)) - body.radius;
+    const occlusion = body.atmosphere.enabled ? profile.atmOcclusion : profile.vacOcclusion;
+    const minOrbit = ( body.radius * occlusion ) / (Math.cos(PI / satelliteCount)) - body.radius;
 
     return state.set('minOrbit', minOrbit);
 }
 
 function validate(state) {
     return state.withMutations(tempState => {
-        let errors = validatePositiveNumberField(tempState, 'vacOcclusion') ||
-            validatePositiveNumberField(tempState, 'atmOcclusion') ||
-            validatePositiveNumberField(tempState, 'satelliteCount');
+        let errors = validatePositiveNumberField(tempState, 'satelliteCount');
 
         tempState.set('hasErrors', errors);
         tempState.remove('minOrbit');
@@ -52,8 +42,8 @@ export default function(state = initialState, action) {
             newState = formUpdate(newState, action.payload.field, action.payload.value);
             break;
         case 'CONSTELLATION.MIN_ORBIT.CALCULATE':
-            newState = calculate(newState, action.planetpack); 
+            newState = calculate(newState, action.activeProfile); 
             break;
     }
-    return resetBodyOnPlanetPackUpdate(newState, action);
+    return resetBodyOnProfileSelect(newState, action);
 }

@@ -7,7 +7,7 @@ import { PERIAPSIS, PROGRADE } from '../../utils';
 export default class ManeuverBurn extends React.PureComponent {
     render() {
         return <DefinitionList.Item label={this.label()}>
-                <NumberFormat value={this.props.burn.deltav} fractionDigits={3} suffix=" m/s" />
+                <NumberFormat value={this.props.burn.deltav} fractionDigits={2} suffix=" m/s" />
             </DefinitionList.Item>
     }
 

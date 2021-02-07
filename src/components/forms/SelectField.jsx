@@ -21,7 +21,8 @@ export default class SelectField extends React.PureComponent {
     }
 
     renderOption(option) {
-        const key = option.key || option.value;
-        return <option key={key} value={option.value}>{option.label}</option>;
+        const key = option.key ? option.key : option.value;
+        const disabled = !!option.disabled;
+        return <option key={key} value={option.value} disabled={disabled}>{option.label}</option>;
     }
 };

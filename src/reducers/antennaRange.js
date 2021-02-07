@@ -1,22 +1,13 @@
 import { Map } from 'immutable';
-import { Orbit, convertAltitudeToMeters, formUpdate, lookupBody, resetBodyOnPlanetPackUpdate } from '../utils';
+import { createValidatedField,
+         createValidatedUnitField,
+         getValidatedNumericField,
+         getValidatedUnitField,
+         formUpdate } from '../utils';
 import { validatePositiveNumberField } from '../validators';
 
 const initialState = Map({
-    dsnRangeMultiplier: Map({
-        value: '1.0',
-        error: null
-    }),
-    antennaRangeMultiplier: Map({
-        value: '1.0',
-        error: null
-    }),
-    dsnLevel: 'level1',
-    dsnCustomPower: {
-        value: '',
-        units: 'G',
-        error: null
-    }
+    dsnLevel: 1,
 });
 
 export default function(state = initialState, action) {

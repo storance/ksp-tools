@@ -1,5 +1,5 @@
 import { Map, fromJS, List} from 'immutable';
-import { Atmosphere, Body, Calendar, Orbit, PlanetPack, GRAVITATIONAL_CONSTANT } from '../utils';
+import { Atmosphere, Body, CalendarDefinition, Orbit, PlanetPack, GRAVITATIONAL_CONSTANT } from '../utils';
 
 export class Rescale {
     constructor({
@@ -9,12 +9,12 @@ export class Rescale {
             atmosphereHeightMultiplier=1,
             dayLengthMultiplier=1,
             overrides={}}) {
-    	this.name = name;
-    	this.resize = resize;
-    	this.rescale = rescale;
-    	this.atmosphereHeightMultiplier = atmosphereHeightMultiplier;
-    	this.dayLengthMultiplier = dayLengthMultiplier;
-    	this.overrides = fromJS(overrides);
+        this.name = name;
+        this.resize = resize;
+        this.rescale = rescale;
+        this.atmosphereHeightMultiplier = atmosphereHeightMultiplier;
+        this.dayLengthMultiplier = dayLengthMultiplier;
+        this.overrides = fromJS(overrides);
     }
 
     rescalePlanetPack(planetpack) {
@@ -96,7 +96,7 @@ export const rescale2_5x = new Rescale({
         'Gael' : {
             'semiMajorAxis' :  34948895994.9601,
             'dayLengthMultiplier' : 1.66666666666667,
-            'calendar' : new Calendar(36000, 14544000)
+            'calendar' : new CalendarDefinition({customDay: 3600, customYear: 14544000})
         },
         'Icarus' : {
             'dayLengthMultiplier' : 1.58113883008419
@@ -132,7 +132,7 @@ export const rescale3_2x = new Rescale({
         'Gael' : {
             'semiMajorAxis' :  44742819242.0888,
             'dayLengthMultiplier' : 2,
-            'calendar' : new Calendar(43200, 16459200)
+            'calendar' : new CalendarDefinition({customDay: 43200, customYear: 16459200})
         },
         'Icarus' : {
             'dayLengthMultiplier' : 1.78885438199983
@@ -168,7 +168,7 @@ export const rescale6_4x = new Rescale({
         'Gael' : {
             'semiMajorAxis' : 89450717932.7214,
             'dayLengthMultiplier' : 3,
-            'calendar' : new Calendar(64800, 23263200), 
+            'calendar' : new CalendarDefinition({customDay: 64800, customYear: 23263200}), 
         },
         'Icarus' : {
             'dayLengthMultiplier' : 2.5298221281347
@@ -204,7 +204,7 @@ export const rescale10x = new Rescale({
         'Gael' : {
             'semiMajorAxis' :  139887843072.6100,
             'dayLengthMultiplier' : 4,
-            'calendar' : new Calendar(86400, 29116800), 
+            'calendar' : new CalendarDefinition({customDay: 86400, customYear: 29116800}), 
         },
         'Icarus' : {
             'dayLengthMultiplier' : 3.16227766016838
@@ -240,7 +240,7 @@ export const rescale10_65x = new Rescale({
         'Gael' : {
             'semiMajorAxis' : 148524802065.2240,
             'dayLengthMultiplier' : 4,
-            'calendar' : new Calendar(86400, 29116800), 
+            'calendar' : new CalendarDefinition({customDay: 86400, customYear: 29116800}), 
         },
         'Icarus' : {
             'dayLengthMultiplier' : 3.25960120260132

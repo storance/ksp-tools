@@ -1,7 +1,26 @@
-export default class Calendar {
-    constructor(dayLengthSeconds, yearLengthSeconds) {
+export class CalendarDefinition{
+    constructor({
+    useHomeDay=false,
+    useHomeYear=false,
+    useLeapYears=false,
+    customYear=null,
+    customDay=null}) {
+        this.useHomeDay = useHomeDay;
+        this.useHomeYear = useHomeYear;
+        this.useLeapYears = useLeapYears;
+        this.customYear = customYear;
+        this.customDay = customDay;
+    }
+}
+
+const HOUR_IN_SECONDS = 3600.0;
+const MINUTE_IN_SECONDS = 60.0;
+
+export class Calendar {
+    constructor(dayLengthSeconds, yearLengthSeconds, useLeapYears=false) {
         this.dayLengthSeconds = dayLengthSeconds;
         this.yearLengthSeconds = yearLengthSeconds;
+        this.useLeapYears = useLeapYears;
     }
 
     formatDuration(ut) {
@@ -10,28 +29,21 @@ export default class Calendar {
             hours = 0,
             minutes = 0,
             seconds = ut;
+        years = Math.floor(seconds / this.yearLengthSeconds);
+        seconds -= years * this.yearLengthSeconds;
 
-        if (seconds >= this.yearLengthSeconds) {
-            years = Math.floor(seconds / this.yearLengthSeconds);
-            seconds = (seconds % this.yearLengthSeconds).toFixed(3);
-        }
+        days = Math.floor(seconds / this.dayLengthSeconds);
+        seconds -= days * this.dayLengthSeconds;
 
-        if (seconds >= this.dayLengthSeconds) {
-            days = Math.floor(seconds / this.dayLengthSeconds);
-            seconds = seconds % this.dayLengthSeconds;
-        }
+        hours = Math.floor(seconds / HOUR_IN_SECONDS);
+        seconds -= hours * HOUR_IN_SECONDS;
 
-        if (seconds >= 60) {
-            minutes = Math.floor(seconds / 60);
-            seconds = (seconds % 60).toFixed(3);
-        }
+        minutes = Math.floor(seconds / MINUTE_IN_SECONDS);
+        seconds -= minutes * MINUTE_IN_SECONDS;
 
-        if (minutes >= 60) {
-            hours = Math.floor(minutes / 60);
-            minutes = minutes % 60;
-        }
+        seconds = seconds.toFixed(3);
 
-        var humanizedText = seconds + "s";
+        let humanizedText = seconds + "s";
         if (minutes > 0 || hours > 0 || days > 0 || years > 0) {
             humanizedText = minutes + "m " + humanizedText;
         }
@@ -49,5 +61,35 @@ export default class Calendar {
         }
 
         return humanizedText;
+    }
+
+    formatDate(ut) {
+        let years = 0,
+            days = 0,
+            hours = 0,
+            minutes = 0,
+            seconds = 0;
+
+        // TODO: Implement leap year logic
+
+        years = Math.floor(ut / this.yearLengthSeconds);
+        let startOfYear = years * this.yearLengthSeconds;
+
+        days = Math.floor(ut / this.dayLengthSeconds) - Math.floor(startOfYear / this.dayLengthSeconds);
+
+        let left = ut % this.dayLengthSeconds;
+
+        hours = Math.floor(left / HOUR_IN_SECONDS);
+        left -= hours * HOUR_IN_SECONDS;
+
+        minutes = Math.floor(left / MINUTE_IN_SECONDS);
+        seconds = left - minutes * MINUTE_IN_SECONDS;
+
+        years += 1;
+        days += 1;
+
+        seconds = seconds.toFixed(3);
+
+        return  years + "y " + days + "d " + hours + "h " + minutes + "m " + seconds + "s";
     }
 }

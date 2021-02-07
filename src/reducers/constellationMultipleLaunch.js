@@ -1,36 +1,34 @@
 import { Map } from 'immutable';
-import { PI, convertAltitudeToMeters, Orbit, formUpdate, lookupBody, resetBodyOnPlanetPackUpdate } from '../utils';
+import { PI, 
+         DISTANCE_UNITS_MAP,
+         Orbit,
+         createValidatedField,
+         createValidatedUnitField,
+         getValidatedNumericField,
+         getValidatedUnitField,
+         formUpdate,
+         resetBodyOnProfileSelect,
+         lookupBody } from '../utils';
 import { validatePositiveNumberField, validateApsisFields } from '../validators';
 
 const initialState = Map({
-    'apoapsis' : Map({
-        'value': '',
-        'units': 'km',
-        'error': null
-    }),
-    'periapsis' : Map({
-        'value': '',
-        'units': 'km',
-        'error': null
-    }),
-    'satelliteCount' : Map({
-        'value': '',
-        'error': null
-    })
+    'apoapsis' : createValidatedUnitField({units: 'km'}),
+    'periapsis' : createValidatedUnitField({units: 'km'}),
+    'satelliteCount' : createValidatedField()
 });
 
-function calculate(state, planetpack) {
+function calculate(state, profile) {
     let newState = validate(state);
     if (newState.get('hasErrors')) {
         return newState;
     }
 
-    const body = lookupBody(state.get('body'), planetpack);
-    const apoapsis = convertAltitudeToMeters(state.get('apoapsis'));
-    const periapsis = convertAltitudeToMeters(state.get('periapsis'));
-    const satelliteCount = parseFloat(state.getIn(['satelliteCount', 'value']));
+    const body = lookupBody(state.get('body'), profile.planetpack);
+    const apoapsis = getValidatedUnitField(newState.get('apoapsis'), 'm', DISTANCE_UNITS_MAP);
+    const periapsis = getValidatedUnitField(newState.get('periapsis'), 'm', DISTANCE_UNITS_MAP);
+    const satelliteCount = getValidatedNumericField(state.get('satelliteCount'));
 
-    const orbit = Orbit.fromApAndPe(body, apoapsis, periapsis);
+    const orbit = Orbit.from(body, {apoapsis, periapsis});
     const angleRadians = (2 * PI) / satelliteCount;
     const separation = orbit.semiMajorAxis * 2 * Math.sin(angleRadians / 2);
 
@@ -39,14 +37,23 @@ function calculate(state, planetpack) {
 
 function validate(state) {
     return state.withMutations(tempState => {
-        let errors = validatePositiveNumberField(tempState, 'apoapsis') ||
-            validatePositiveNumberField(tempState, 'periapsis');
+        let errors = false;
 
-        if (!errors) {
-            errors = errors || validateApsisFields(tempState, 'apoapsis', 'periapsis');
+        if (validatePositiveNumberField(tempState, 'apoapsis')) {
+            errors = true;
         }
 
-        errors = errors || validatePositiveNumberField(tempState, 'satelliteCount');
+        if (validatePositiveNumberField(tempState, 'periapsis')) {
+            errors = true;
+        }
+
+        if (!errors && validateApsisFields(tempState, 'apoapsis', 'periapsis')) {
+            errors = true
+        }
+
+        if (validatePositiveNumberField(tempState, 'satelliteCount')) {
+            errors = true;
+        }
 
         tempState.set('hasErrors', errors);
         tempState.remove('separation');
@@ -60,8 +67,8 @@ export default function(state = initialState, action) {
             newState = formUpdate(newState, action.payload.field, action.payload.value);
             break;
         case 'CONSTELLATION.MUTIPLE_LAUNCH.CALCULATE':
-            newState = calculate(newState, action.planetpack);
+            newState = calculate(newState, action.activeProfile);
             break;
     }
-    return resetBodyOnPlanetPackUpdate(newState, action);
+    return resetBodyOnProfileSelect(newState, action);
 }

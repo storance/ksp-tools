@@ -1,5 +1,5 @@
 import { Map } from 'immutable';
-import { formUpdate, resetBodyOnPlanetPackUpdate } from '../utils';
+import { formUpdate, resetBodyOnProfileSelect } from '../utils';
 
 const initialState = Map({
     'body' : null
@@ -13,5 +13,5 @@ export default function(state = initialState, action) {
             break;
     }
 
-    return resetBodyOnPlanetPackUpdate(newState, action, 'body');
+    return resetBodyOnProfileSelect(newState, action, 'body');
 }

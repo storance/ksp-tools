@@ -1,17 +1,34 @@
 import { isPositiveNumber, convertAltitudeToMeters } from './utils';
 
-
-export function validatePositiveNumberField(state, fieldName) {
-    const value = state.getIn([fieldName, 'value']);
+export function validateRequiredField(state, fieldName) {
+    const fieldPath = Array.isArray(fieldName) ? fieldName : [fieldName];
+    const valuePath = fieldPath.concat('value');
+    const errorPath = fieldPath.concat('error');
+    const value = state.getIn(valuePath);
 
     if (value === '') {
-        state.setIn([fieldName, 'error'], 'Required.');
-        return true;
-    } else if (!isPositiveNumber(value)) {
-        state.setIn([fieldName, 'error'], 'Please enter a valid number greater than or equal to 0.');
+        state.setIn(errorPath, 'Required.');
         return true;
     } else {
-        state.setIn([fieldName, 'error'], null);
+        state.setIn(errorPath, null);
+        return false;
+    }
+}
+
+export function validatePositiveNumberField(state, fieldName) {
+    const fieldPath = Array.isArray(fieldName) ? fieldName : [fieldName];
+    const valuePath = fieldPath.concat('value');
+    const errorPath = fieldPath.concat('error');
+    const value = state.getIn(valuePath);
+
+    if (value === '') {
+        state.setIn(errorPath, 'Required.');
+        return true;
+    } else if (!isPositiveNumber(value)) {
+        state.setIn(errorPath, 'Please enter a valid number greater than or equal to 0.');
+        return true;
+    } else {
+        state.setIn(errorPath, null);
         return false;
     }
 }

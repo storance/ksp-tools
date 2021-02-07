@@ -2,14 +2,25 @@ import { PI, GRAVITY } from './consts';
 
 export * from './atmosphere';
 export Body from './body';
-export Calendar from './calendar';
 export Orbit from './orbit';
 export PlanetPack from './planetpack';
+export * from './calendar';
 export * from './profile';
 export * from './consts';
 export * from './maneuver';
 export * from './format';
 export * from './reducers';
+
+export function convertValue(value, fromUnit, toUnit, unitsMap) {
+    return value * unitsMap.get(fromUnit) / unitsMap.get(toUnit);
+}
+
+export function convertField(field, unitsMap) {
+    const units = field.get('units');
+    const value = parseFloat(field.get('value'));
+
+    return value * unitsMap.get(units);
+}
 
 export function convertAltitudeToMeters(field) {
     var unitMult = {
@@ -33,6 +44,10 @@ export function toDegrees(rad) {
 }
 
 export function isPositiveNumber(n) {
+    if (typeof n === 'string' && !n.match(/^-?\d+(\.\d+)?$/)) {
+        return false;
+    }
+
     const floatVal = parseFloat(n);
     return Number.isFinite(floatVal) && floatVal >= 0;
 }

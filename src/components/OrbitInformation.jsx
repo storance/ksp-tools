@@ -8,7 +8,7 @@ import ApsisField from './forms/ApsisField';
 import BodySelect from './forms/BodySelect';
 import ButtonField from './forms/ButtonField';
 import TextField from './forms/TextField';
-import RadioSelectField from './forms/RadioSelectField';
+import SelectField from './forms/SelectField';
 import OrbitDetails from './OrbitDetails';
 import * as actionCreators from '../action_creators';
 
@@ -31,17 +31,35 @@ export class OrbitInformation extends React.PureComponent {
     render() {
         return <>
             <h1>Orbit Information</h1>
-            <p>Calculates details about the orbit given the apoapsis and periapsis, apoapsis and period, or the
-            periapsis and period.  This will show details such as the semi-major axis, orbital period, eccentricity,
+            <p>Calculates details about the orbit given two of periapsis, apoapsis, period, semi-major axis and 
+            eccentricity.   This will show details such as the semi-major axis, orbital period, eccentricity,
             and velocities at apoapsis and periapsis. </p>
+            <p><strong>Note:</strong> Semi-major axis and period can not be the two orbital elements. </p>
             <Form>
                 <h4>Orbit Parameters</h4>
-                <BodySelect planetpack={this.props.planetpack} body={this.props.body.name} update={this.props.updateOrbitInformation}/>
-                <RadioSelectField label="From"
-                    name="mode"
-                    value={this.props.mode}
+                <BodySelect
+                    planetpack={this.props.planetpack}
+                    body={this.props.body.name}
+                    update={this.props.updateOrbitInformation} />
+
+                <SelectField label="First Orbital Element"
+                    name="firstElement"
+                    value={this.props.firstElement}
                     update={this.props.updateOrbitInformation}
-                    options={MODE_OPTIONS} />
+                    options={this.getOrbitalElements(true)} />
+
+                <SelectField label="Second Orbital Element"
+                    name="secondElement"
+                    value={this.props.secondElement}
+                    update={this.props.updateOrbitInformation}
+                    options={this.getOrbitalElements(false)} />
+
+                {this.hasSemiMajorAxis() &&
+                    <ApsisField label="Semi-Major Axis"
+                        name="semiMajorAxis"
+                        field={this.props.semiMajorAxis}
+                        update={this.props.updateOrbitInformation} />
+                }
 
                 {this.hasApoapsis() &&
                     <ApsisField label="Apoapsis"
@@ -55,6 +73,14 @@ export class OrbitInformation extends React.PureComponent {
                         name="periapsis"
                         field={this.props.periapsis}
                         update={this.props.updateOrbitInformation} />
+                }
+
+                {this.hasEccentricity() &&
+                    <TextField label="Eccentricity"
+                               type="number"
+                               name="eccentricity"
+                               field={this.props.eccentricity}
+                               update={this.props.updateOrbitInformation} />
                 }
 
                 {this.hasPeriod() &&
@@ -74,16 +100,57 @@ export class OrbitInformation extends React.PureComponent {
         </>;
     }
 
+    getOrbitalElements(first) {
+        const selectedElement = first ?  this.props.firstElement : this.props.secondElement;
+        const otherElement = first ? this.props.secondElement : this.props.firstElement;
+
+        return [
+             {
+                value: 'semimajoraxis',
+                label: 'Semi-Major Axis',
+                disabled: otherElement === 'semimajoraxis' || otherElement == 'period'
+            },
+            {
+                value: 'apoapsis',
+                label: 'Apoapsis',
+                disabled: otherElement === 'apoapsis'
+            },
+            {
+                value: 'periapsis',
+                label: 'Periapsis',
+                disabled: otherElement === 'periapsis'
+            },
+            {
+                value: 'period',
+                label: 'Period',
+                disabled: otherElement === 'semimajoraxis' || otherElement == 'period'
+            },
+            {
+                value: 'eccentricity',
+                label: 'Eccentricity',
+                disabled: otherElement === 'eccentricity'
+            }
+        ].filter(option => !option.disabled);
+    }
+
     hasPeriapsis() {
-        return this.props.mode === 'ap+pe' || this.props.mode == 'pe+period';
+        return this.props.firstElement === 'periapsis' || this.props.secondElement === 'periapsis';
     }
 
     hasApoapsis() {
-        return this.props.mode === 'ap+pe' || this.props.mode == 'ap+period';
+        return this.props.firstElement === 'apoapsis' || this.props.secondElement === 'apoapsis';
     }
 
     hasPeriod() {
-        return this.props.mode === 'ap+period' || this.props.mode == 'pe+period';
+        return this.props.firstElement === 'period' || this.props.secondElement === 'period';
+    }
+
+    hasEccentricity() {
+        return this.props.firstElement === 'eccentricity' || this.props.secondElement === 'eccentricity';
+    }
+
+    hasSemiMajorAxis() {
+        return this.props.firstElement === 'semimajoraxis' || this.props.secondElement === 'semimajoraxis';
     }
 };
 
@@ -92,7 +159,10 @@ function mapStateToProps(state) {
         apoapsis: OrbitInformationSelector.getApoapsis(state),
         periapsis: OrbitInformationSelector.getPeriapsis(state),
         period: OrbitInformationSelector.getPeriod(state),
-        mode: OrbitInformationSelector.getMode(state),
+        semiMajorAxis: OrbitInformationSelector.getSemiMajorAxis(state),
+        eccentricity: OrbitInformationSelector.getEccentricity(state),
+        firstElement: OrbitInformationSelector.getFirstElement(state),
+        secondElement: OrbitInformationSelector.getSecondElement(state),
         orbit: OrbitInformationSelector.getOrbit(state),
         planetpack: OrbitInformationSelector.getPlanetPack(state),
         body: OrbitInformationSelector.getBody(state)

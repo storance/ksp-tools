@@ -12,7 +12,7 @@ import DefinitionList from '../DefinitionList';
 import TextField from '../forms/TextField';
 import NumberFormat from '../format/NumberFormat';
 import * as actionCreators from '../../action_creators';
-import { DISTANCE_UNITS } from '../../utils';
+import { DISTANCE_UNITS_DISPLAY } from '../../utils';
 
 export class ConstellationMultipleLaunch extends React.PureComponent {
     render() {
@@ -61,7 +61,10 @@ export class ConstellationMultipleLaunch extends React.PureComponent {
                     <h4>Satellite Separation</h4>
                     <DefinitionList>
                         <DefinitionList.Item label="Separation">
-                            <NumberFormat value={this.props.separation} fractionDigits={3} units={DISTANCE_UNITS} />
+                            <NumberFormat
+                                value={this.props.separation}
+                                fractionDigits={3}
+                                units={DISTANCE_UNITS_DISPLAY} />
                         </DefinitionList.Item>
                     </DefinitionList>
                 </>

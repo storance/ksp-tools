@@ -1,4 +1,4 @@
-import {atmosphere, atmosphereWithOxygen, Body, Calendar, Orbit, PlanetPack} from '../utils';
+import {atmosphere, atmosphereWithOxygen, Body, CalendarDefinition, Orbit, PlanetPack} from '../utils';
 import { rescaleDefault } from './rescale';
 
 const Sun = new Body({
@@ -559,4 +559,4 @@ Pluto.satellites = [Charon];
 
 Sun.satellites = [Mercury, Venus, Earth, Mars, Vesta, Ceres, Jupiter, Saturn, Uranus, Neptune, Pluto];
 
-export default new PlanetPack('RSS', Sun, Earth, new Calendar(86400, 31536000), [rescaleDefault]);
+export default new PlanetPack('RSS', Sun, Earth, new CalendarDefinition({customDay: 86400, customYear: 31536000}), [rescaleDefault]);

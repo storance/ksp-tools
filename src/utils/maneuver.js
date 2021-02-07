@@ -18,27 +18,34 @@ export class ManeuverPlan {
     constructor(body, currentAp, currentPe, desiredAp, desiredPe) {
         this.burns = []
 
-        const currentOrbit = Orbit.fromApAndPe(body, currentAp, currentPe);
-        const desiredOrbit = Orbit.fromApAndPe(body, desiredAp, desiredPe);
+        const currentOrbit = Orbit.from(body, {apoapsis: currentAp, periapsis: currentPe});
+        const desiredOrbit = Orbit.from(body, {apoapsis: desiredAp, periapsis: desiredPe});
         if (currentPe === desiredPe) {
             // burn at periapsis to change apoapsis
-            this.burns.push(new ManeuverBurn(PERIAPSIS, desiredOrbit.periapsisVelocity - currentOrbit.periapsisVelocity));
+            this.burns.push(new ManeuverBurn(PERIAPSIS,
+                desiredOrbit.periapsisVelocity - currentOrbit.periapsisVelocity));
         } else if (currentAp === desiredAp) {
             // burn at apoapsis to change periapsis
-            this.burns.push(new ManeuverBurn(APOAPSIS, desiredOrbit.apoapsisVelocity - currentOrbit.apoapsisVelocity));
+            this.burns.push(new ManeuverBurn(APOAPSIS,
+                desiredOrbit.apoapsisVelocity - currentOrbit.apoapsisVelocity));
         } else if (currentAp === desiredPe) {
             // burn at apoapsis to increase periapsis to be the new apoapsis
-            this.burns.push(new ManeuverBurn(APOAPSIS, PROGRADE, desiredOrbit.periapsisVelocity - currentOrbit.apoapsisVelocity));
+            this.burns.push(new ManeuverBurn(APOAPSIS, PROGRADE,
+                desiredOrbit.periapsisVelocity - currentOrbit.apoapsisVelocity));
         } else {
             // two burns
             if (currentPe > desiredAp) {
                 const intermediateOrbit = Orbit.fromApAndPe(body, currentPe, desiredAp);
-                this.burns.push(new ManeuverBurn(PERIAPSIS, intermediateOrbit.apoapsisVelocity - currentOrbit.periapsisVelocity));
-                this.burns.push(new ManeuverBurn(PERIAPSIS, desiredOrbit.periapsisVelocity - intermediateOrbit.periapsisVelocity));
+                this.burns.push(new ManeuverBurn(PERIAPSIS,
+                    intermediateOrbit.apoapsisVelocity - currentOrbit.periapsisVelocity));
+                this.burns.push(new ManeuverBurn(PERIAPSIS,
+                    desiredOrbit.periapsisVelocity - intermediateOrbit.periapsisVelocity));
             } else {
                 const intermediateOrbit = Orbit.fromApAndPe(body, desiredAp, currentPe);
-                this.burns.push(new ManeuverBurn(PERIAPSIS, intermediateOrbit.periapsisVelocity - currentOrbit.periapsisVelocity));
-                this.burns.push(new ManeuverBurn(APOAPSIS, desiredOrbit.apoapsisVelocity - intermediateOrbit.apoapsisVelocity));
+                this.burns.push(new ManeuverBurn(PERIAPSIS,
+                    intermediateOrbit.periapsisVelocity - currentOrbit.periapsisVelocity));
+                this.burns.push(new ManeuverBurn(APOAPSIS,
+                    desiredOrbit.apoapsisVelocity - intermediateOrbit.apoapsisVelocity));
             }
         }
     }

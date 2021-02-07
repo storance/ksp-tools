@@ -154,16 +154,46 @@ export function calculateManeuverDeltaV() {
     };
 }
 
+export function selectProfile(id) {
+    return {
+        type: 'PROFILES.SELECT',
+        payload: {
+            id
+        }
+    };
+}
+
 export function addProfile() {
     return {
         type: 'PROFILES.ADD'
     };
 }
 
-export function saveProfile() {
+export function editProfile(id) {
     return {
-        type: 'PROFILES.FORM.SAVE'
+        type: 'PROFILES.EDIT',
+        payload: {
+            id
+        }
     };
+}
+
+export function cloneProfile(id) {
+    return {
+        type: 'PROFILES.CLONE',
+        payload: {
+            id
+        }
+    };
+}
+
+export function deleteProfile(id) {
+    return {
+        type: 'PROFILES.DELETE',
+        payload: {
+            id
+        }
+    }
 }
 
 export function addCustomDsnLevel() {
@@ -178,12 +208,6 @@ export function deleteCustomDsnLevel(index) {
         payload: {
             index
         }
-    };
-}
-
-export function cancelProfileForm() {
-    return {
-        type: 'PROFILES.FORM.CANCEL'
     };
 }
 
@@ -203,5 +227,17 @@ export function applyProfileDifficultySettings(field, value) {
         payload: {
             preset: value
         }
+    };
+}
+
+export function saveProfile() {
+    return {
+        type: 'PROFILES.FORM.SAVE'
+    };
+}
+
+export function cancelProfileForm() {
+    return {
+        type: 'PROFILES.FORM.CANCEL'
     };
 }

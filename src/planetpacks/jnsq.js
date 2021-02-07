@@ -1,4 +1,4 @@
-import {atmosphere, atmosphereWithOxygen, Body, Calendar, Orbit, PlanetPack} from '../utils';
+import {atmosphere, atmosphereWithOxygen, Body, CalendarDefinition, Orbit, PlanetPack} from '../utils';
 import { rescaleDefault } from './rescale';
 
 const Kerbol = new Body({
@@ -552,4 +552,4 @@ Nara.satellites = [Amos, Enon, Prax]
 
 Kerbol.satellites = [Moho, Eve, Kerbin, Duna, Edna, Dres, Jool, Lindor, Eeloo, Hamek, Nara];
 
-export default new PlanetPack('JNSQ', Kerbol, Kerbin, new Calendar(43200, 15769326.67544813), [rescaleDefault]);
+export default new PlanetPack('JNSQ', Kerbol, Kerbin, new CalendarDefinition({useHomeDay: true, useHomeYear: true}), [rescaleDefault]);

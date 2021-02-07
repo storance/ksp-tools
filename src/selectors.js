@@ -1,20 +1,38 @@
+import { Map } from 'immutable';
 import { lookupBody } from './utils';
 
-export class CoreSelector {
-    static getSelectedPlanetPack(state) {
-        return state.getIn(['core', 'selectedPlanetpack']);
+export class ProfilesSelector {
+    static reducerName = 'profiles';
+
+    static getAllById(state) {
+        return state.getIn([this.reducerName, 'allById']);
     }
 
-    static getSelectedRescale(state) {
-        return state.getIn(['core', 'selectedRescale']);
+    static getActiveId(state) {
+        return state.getIn([this.reducerName, 'activeId']);
     }
 
-    static getPlanetPack(state) {
-        return state.getIn(['core', 'planetpack']);
+    static getActive(state) {
+        return state.getIn([this.reducerName, 'active']);
+    }
+
+    static getForm(state) {
+        return new ProfileForm(state.getIn([this.reducerName, 'form']));
     }
 }
 
-class SingleBodySelector extends CoreSelector {
+
+export class BaseSelector {
+    static getPlanetPack(state) {
+        return ProfilesSelector.getActive(state).planetpack;
+    }
+
+    static getActiveProfile(state) {
+        return ProfilesSelector.getActive(state);
+    }
+}
+
+class SingleBodySelector extends BaseSelector {
     static reducerName = '';
 
     static getBody(state) {
@@ -44,8 +62,20 @@ export class OrbitInformationSelector extends SingleBodySelector {
         return state.getIn([this.reducerName, 'period']);
     }
 
-    static getMode(state) {
-        return state.getIn([this.reducerName, 'mode']);
+    static getSemiMajorAxis(state) {
+        return state.getIn([this.reducerName, 'semiMajorAxis']);
+    }
+
+    static getEccentricity(state) {
+        return state.getIn([this.reducerName, 'eccentricity']);
+    }
+
+    static getFirstElement(state) {
+        return state.getIn([this.reducerName, 'firstElement']);
+    }
+
+    static getSecondElement(state) {
+        return state.getIn([this.reducerName, 'secondElement']);
     }
 
     static getOrbit(state) {
@@ -157,36 +187,16 @@ export class ConstellationMultipleLaunchSelector extends SingleBodySelector {
     }
 }
 
-export class AntennaRangeSelector extends CoreSelector {
+export class AntennaRangeSelector extends BaseSelector {
     static reducerName = 'antennaRange';
-
-    static getDsnRangeMultiplier(state) {
-        return state.getIn([this.reducerName, 'dsnRangeMultiplier']);
-    }
-
-    static getAntennaRangeMultiplier(state) {
-        return state.getIn([this.reducerName, 'antennaRangeMultiplier']);
-    }
 
     static getDsnLevel(state) {
         return state.getIn([this.reducerName, 'dsnLevel']);
-    }
-
-    static getDsnCustomPower(state) {
-        return state.getIn([this.reducerName, 'dsnCustomPower']);
     }
 }
 
 export class ConstellationMinOrbitSelector extends SingleBodySelector {
     static reducerName = 'constellationMinOrbit';
-
-    static getAtmOcclusion(state) {
-        return state.getIn([this.reducerName, 'atmOcclusion']);
-    }
-
-    static getVacOcclusion(state) {
-        return state.getIn([this.reducerName, 'vacOcclusion']);
-    }
 
     static getSatelliteCount(state) {
         return state.getIn([this.reducerName, 'satelliteCount']);
@@ -197,31 +207,15 @@ export class ConstellationMinOrbitSelector extends SingleBodySelector {
     }
 }
 
-export class TransferWindowSelector extends CoreSelector {
+export class TransferWindowSelector extends BaseSelector {
     static reducerName = 'transferWindow';
 }
 
-export class ProfilesSelector {
-    static reducerName = 'profiles';
-
-    static getAllById(state) {
-        return state.getIn([this.reducerName, 'allById']);
-    }
-
-    static getForm(state) {
-        return new ProfileForm(state.getIn([this.reducerName, 'form']));
-    }
-
-    static getShowFormModal(state) {
-        return state.getIn([this.reducerName, 'showFormModal']);
-    }
-}
-
 export class ProfileForm {
-    static reducerName = 'form';
-
     constructor(state) {
-        this.state = state;
+        this.state = state || Map({
+            'show' : false
+        });
     }
 
     getId() {
@@ -266,5 +260,9 @@ export class ProfileForm {
 
     getVacOcclusion() {
         return this.state.get('vacOcclusion');
+    }
+
+    isShow() {
+        return this.state.get('show');
     }
 }

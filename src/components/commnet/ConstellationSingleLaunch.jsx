@@ -14,7 +14,7 @@ import DurationFormat from '../format/DurationFormat';
 import NumberFormat from '../format/NumberFormat';
 import * as actionCreators from '../../action_creators';
 
-import { DISTANCE_UNITS } from '../../utils';
+import { DISTANCE_UNITS_DISPLAY } from '../../utils';
 
 export class ConstellationSingleLaunch extends React.PureComponent {
     render() {
@@ -71,13 +71,22 @@ export class ConstellationSingleLaunch extends React.PureComponent {
                 <h4>Transfer Orbit: {transferOrbit.type}</h4>
                 <DefinitionList>
                     <DefinitionList.Item label="Apoapsis">
-                        <NumberFormat value={transferOrbit.orbit.apoapsis} fractionDigits={3} units={DISTANCE_UNITS} />
+                        <NumberFormat
+                            value={transferOrbit.orbit.apoapsis}
+                            fractionDigits={3}
+                            units={DISTANCE_UNITS_DISPLAY} />
                     </DefinitionList.Item>
                     <DefinitionList.Item label="Periapsis">
-                        <NumberFormat value={transferOrbit.orbit.periapsis} fractionDigits={3} units={DISTANCE_UNITS} />
+                        <NumberFormat
+                            value={transferOrbit.orbit.periapsis}
+                            fractionDigits={3}
+                            units={DISTANCE_UNITS_DISPLAY} />
                     </DefinitionList.Item>
                     <DefinitionList.Item label="Orbital Period">
-                        <DurationFormat value={transferOrbit.orbit.period} calendar={planetpack.calendar} includeRaw />
+                        <DurationFormat
+                            value={transferOrbit.orbit.period}
+                            calendar={planetpack.calendar}
+                            includeRaw />
                     </DefinitionList.Item>
                     <DefinitionList.Item label="Insertion &Delta;v">
                         <NumberFormat value={transferOrbit.deltaV} fractionDigits={3} suffix=" m/s" />

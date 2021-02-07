@@ -34,16 +34,28 @@ export default class Body {
         if (tidallyLocked && orbit) {
             const sign = rotationalPeriod === null || rotationalPeriod >= 0 ? 1 : -1;
             this.rotationalPeriod = orbit.period * sign;
+        } else if (orbit) {
+            this.rotationalPeriod = rotationalPeriod * orbit.period / (orbit.period  + rotationalPeriod);
         } else {
             this.rotationalPeriod = rotationalPeriod;
         }
         this.orbit = orbit;
+        if (this.orbit) {
+            this.orbit.mu = this.mu;
+        }
         this._satellites = List(satellites);
         this.sphereOfInfluenceManual = sphereOfInfluence;
     }
 
     get equitorialCircumference() {
         return 2 * PI * this.radius;
+    }
+
+    get solarDayLength() {
+        if (!this.orbit) {
+            return this.rotationalPeriod;
+        }
+        return  (this.orbit.period * this.rotationalPeriod) / (this.orbit.period - this.rotationalPeriod);
     }
 
     get surfaceArea() {
