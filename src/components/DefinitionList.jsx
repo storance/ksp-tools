@@ -17,7 +17,7 @@ class DefinitionItem extends React.PureComponent {
 
 class DefinitionList extends React.PureComponent {
     render() {
-        return <Row as="dl">
+        return <Row as="dl" className={this.props.className}>
                 {this.props.children}
             </Row>;
     }

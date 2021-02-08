@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Form from 'react-bootstrap/Form';
+import { faCalculator } from '@fortawesome/free-solid-svg-icons';
 
 import  { DarknessTimeSelector } from '../selectors';
 import ApsisField from './forms/ApsisField';
@@ -38,6 +39,7 @@ export class DarknessTime extends React.PureComponent {
                     update={this.props.updateDarknessTime} />
 
                 <ButtonField label="Calculate"
+                             icon={faCalculator}
                              onClick={this.props.calculateDarknessTime} />
 
                 {this.props.darknessTimeComputed  &&
@@ -65,7 +67,7 @@ export class DarknessTime extends React.PureComponent {
                            update={this.props.updateDarknessTime}
                            suffix={"ec/s"} />
 
-                <ButtonField label="Calculate" onClick={this.props.calculateBatteryStorage} />
+                <ButtonField label="Calculate" icon={faCalculator} onClick={this.props.calculateBatteryStorage} />
 
                 {this.props.energyCapacity && 
                     <DefinitionList>

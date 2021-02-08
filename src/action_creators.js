@@ -74,6 +74,58 @@ export function updateAntennaRange(field, value) {
     };
 }
 
+export function addVesselAntenna() {
+    return {
+        type: 'ANTENNA_RANGE.VESSEL.ADD_ANTENNA'
+    };
+}
+
+export function deleteVesselAntenna(index) {
+    return {
+        type: 'ANTENNA_RANGE.VESSEL.DELETE_ANTENNA',
+        payload: {
+            index
+        }
+    };
+}
+
+export function editVesselAntenna(index) {
+    return {
+        type: 'ANTENNA_RANGE.VESSEL.EDIT_ANTENNA',
+        payload: {
+            index
+        }
+    };
+}
+
+export function saveVesselAntenna() {
+    return {
+        type: 'ANTENNA_RANGE.VESSEL.FORM_SAVE'
+    };
+}
+
+export function cancelVesselAntenna() {
+    return {
+        type: 'ANTENNA_RANGE.VESSEL.FORM_CANCEL'
+    };
+}
+
+export function updateVesselAntennaForm(field, value) {
+    return {
+        type: 'ANTENNA_RANGE.VESSEL.FORM_UPDATE',
+        payload: {
+            field,
+            value
+        }
+    };
+}
+
+export function calculateSignal() {
+    return {
+        type: 'ANTENNA_RANGE.CALCULATE_SIGNAL',
+    };
+}
+
 export function updateConstellationSingleLaunch(field, value) {
     return {
         type: 'CONSTELLATION.SINGLE_LAUNCH.FORM_UPDATE',

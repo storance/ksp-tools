@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Form from 'react-bootstrap/Form';
+import { faCalculator } from '@fortawesome/free-solid-svg-icons';
 
 import  { AscentPlannerSelector } from '../../selectors';
 import ApsisField from '../forms/ApsisField';
@@ -30,7 +31,7 @@ export class AscentPlanner extends React.PureComponent {
                     field={this.props.altitude}
                     update={this.props.updateAscentDeltaV} />
 
-                <ButtonField label="Calculate" onClick={this.props.calculateAscentDeltaV} />
+                <ButtonField label="Calculate" icon={faCalculator} onClick={this.props.calculateAscentDeltaV} />
 
                 {this.props.ascentDeltav  &&
                     <DefinitionList>

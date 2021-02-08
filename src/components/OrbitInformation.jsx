@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Form from 'react-bootstrap/Form';
+import { faCalculator } from '@fortawesome/free-solid-svg-icons';
 
 import { OrbitInformationSelector } from '../selectors'
 import ApsisField from './forms/ApsisField';
@@ -92,7 +93,10 @@ export class OrbitInformation extends React.PureComponent {
                                suffix={"s"} />
                 }
 
-                <ButtonField label={"Calculate"} onClick={() => this.props.calculateOrbitInformation()} />
+                <ButtonField
+                    label={"Calculate"}
+                    icon={faCalculator}
+                    onClick={() => this.props.calculateOrbitInformation()} />
                 {this.props.orbit &&
                     <OrbitDetails orbit={this.props.orbit} calendar={this.props.planetpack.calendar} />
                 }

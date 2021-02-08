@@ -193,6 +193,64 @@ export class AntennaRangeSelector extends BaseSelector {
     static getDsnLevel(state) {
         return state.getIn([this.reducerName, 'dsnLevel']);
     }
+
+    static getVesselAntennas(state) {
+        return state.getIn([this.reducerName, 'vesselAntennas']);
+    }
+
+    static getVesselAntennasForm(state) {
+        return new VesselAntennasForm(state.getIn([this.reducerName, 'vesselAntennasForm']));
+    }
+
+    static getSignalToBodies(state) {
+        return state.getIn([this.reducerName, 'signalToBodies']);
+    }
+}
+
+export class VesselAntennasForm {
+    constructor(state) {
+        this.state = state;
+    }
+
+    isShow() {
+        return this.state.get('show');
+    }
+
+    getIndex() {
+        return this.state.get('index');
+    }
+
+    getAntennaName() {
+        return this.state.get('antennaName');
+    }
+
+    getAntenna() {
+        return this.state.get('antenna');
+    }
+
+    getType() {
+        return this.state.get('type');
+    }
+
+    getPower() {
+        return this.state.get('power');
+    }
+
+    isCombinable() {
+        return this.state.get('combinable');
+    }
+
+    getCombinabilityExponent() {
+        return this.state.get('combinabilityExponent');
+    }
+
+    getFeedScale() {
+        return this.state.get('feedScale');
+    }
+
+    getCount() {
+        return this.state.get('count');
+    }
 }
 
 export class ConstellationMinOrbitSelector extends SingleBodySelector {

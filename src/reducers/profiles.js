@@ -2,6 +2,7 @@ import { Map, List } from 'immutable';
 import { v4 as uuidv4 } from 'uuid';
 import { DIFFICULTY_PRESETS,
     DSN_LEVELS,
+    ANTENNAS,
     POWER_UNITS_MAP,
     formUpdate,
     convertValue,
@@ -95,12 +96,14 @@ function toActiveProfile(profile) {
         dsnLevels = DSN_LEVELS.map(power => power * profile.dsnModifier);
     }
 
+    const antennas = ANTENNAS.map(antenna => antenna.applyRangeModifier(profile.rangeModifier));
+
     return new ActiveProfile({
         id: profile.id,
         name: profile.name,
         planetpack: scaledPlanetpack,
         dsnLevels: dsnLevels,
-        rangeModifier: profile.rangeModifier,
+        antennas: antennas,
         atmOcclusion: profile.atmOcclusion,
         vacOcclusion: profile.vacOcclusion
     })

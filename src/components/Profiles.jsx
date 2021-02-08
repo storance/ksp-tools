@@ -9,7 +9,8 @@ import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-import { Trash, PencilSquare, ClipboardPlus } from 'react-bootstrap-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faTrashAlt, faClone, faEdit } from '@fortawesome/free-solid-svg-icons';
 
 import { ProfilesSelector } from '../selectors'
 import ButtonField from './forms/ButtonField';
@@ -29,8 +30,15 @@ export class Profiles extends React.PureComponent {
         };
 
         return <>
-            <h1>Profiles</h1>
-            <Table striped bordered hover>
+            <Row className="mt-2">
+                <Col sm="10">
+                    <h1>Profiles</h1>
+                </Col>
+                <Col sm="2" className="my-auto">
+                    <Button type="submit" variant="primary" size="sm" onClick={addOnclick}><FontAwesomeIcon icon={faPlus} /> Add</Button>
+                </Col>
+            </Row>
+            <Table className="mt-4" striped bordered hover>
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -47,7 +55,6 @@ export class Profiles extends React.PureComponent {
                     {Array.from(this.props.profiles.values()).map(profile => this.renderProfile(profile))}
                 </tbody>
             </Table>
-            <Button type="submit" variant="primary" onClick={addOnclick}>Add Profile</Button>
 
             {this.props.form.isShow() && this.renderFormModal()}
             </>;
@@ -80,16 +87,16 @@ export class Profiles extends React.PureComponent {
                 <td><NumberFormat value={profile.vacOcclusion} fractionDigits={2} /></td>
                 <td><NumberFormat value={profile.atmOcclusion} fractionDigits={2} /></td>
                 <td>
-                    <a href="#" title="Clone" onClick={cloneOnClick}><ClipboardPlus size="1em" /></a>
+                    <a href="#" title="Clone" onClick={cloneOnClick}><FontAwesomeIcon icon={faClone} /></a>
                     {profile.editable && <>
-                        <a href="#" title="Edit" className="pl-1" onClick={editOnClick}><PencilSquare size="1em" /></a>
-                        <a href="#" title="Delete" className="pl-1" onClick={deleteOnClick}><Trash size="1em" /></a>
+                        <a href="#" title="Edit" className="pl-1" onClick={editOnClick}><FontAwesomeIcon icon={faEdit} /></a>
+                        <a href="#" title="Delete" className="pl-1" onClick={deleteOnClick}><FontAwesomeIcon icon={faTrashAlt} /></a>
                     </>}</td>
             </tr>;
     }
 
     renderDsnLevel(dsnLevel) {
-        return <li><NumberFormat value={dsnLevel} fractionDigits={3} units={POWER_UNITS} /></li>
+        return <li><NumberFormat value={dsnLevel} fractionDigits={3} units={POWER_UNITS} unitsSeparator="" /></li>
     }
 
     renderFormModal() {
@@ -284,7 +291,7 @@ export class Profiles extends React.PureComponent {
                     </InputGroup>
                 </td>
                 <td>
-                    {!isLast && <a href="#" title="Delete" onClick={deleteOnClick}><Trash size="1em" /></a> }
+                    {!isLast && <a href="#" title="Delete" onClick={deleteOnClick}><FontAwesomeIcon icon={faTrashAlt} /></a> }
                 </td>
             </tr>
     }

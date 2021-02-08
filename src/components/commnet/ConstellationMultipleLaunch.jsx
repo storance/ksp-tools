@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Form from 'react-bootstrap/Form';
+import { faCalculator } from '@fortawesome/free-solid-svg-icons';
 
 import  { ConstellationMultipleLaunchSelector } from '../../selectors';
 
@@ -54,7 +55,7 @@ export class ConstellationMultipleLaunch extends React.PureComponent {
                     field={this.props.satelliteCount}
                     update={this.props.updateConstellationMultipleLaunch} />
 
-                <ButtonField label="Calculate" onClick={this.props.calculateConstellationMultipleLaunch} />
+                <ButtonField label="Calculate" icon={faCalculator} onClick={this.props.calculateConstellationMultipleLaunch} />
             </Form>
             {this.props.separation &&
                 <>

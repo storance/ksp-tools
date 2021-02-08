@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Form from 'react-bootstrap/Form';
+import { faCalculator } from '@fortawesome/free-solid-svg-icons';
 
 import  { ManeuverPlannerSelector } from '../../selectors';
 import ApsisField from '../forms/ApsisField';
@@ -42,7 +43,7 @@ export class ManeuverPlanner extends React.PureComponent {
                     field={this.props.desiredPeriapsis}
                     update={this.props.updateManeuverDeltaV} />
 
-                <ButtonField label="Calculate" onClick={this.props.calculateManeuverDeltaV} />
+                <ButtonField label="Calculate" icon={faCalculator} onClick={this.props.calculateManeuverDeltaV} />
                 {this.props.maneuverPlan && <ManeuverPlanDetails maneuverPlan={this.props.maneuverPlan} />}
             </Form>
         </>;

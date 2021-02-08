@@ -4,6 +4,7 @@ export function formatNumber(value, {
     suffix = '',
     fractionDigits = 20,
     units = null,
+    unitsSeparator = '',
     exponential = false
 }) {
     if (value === null || value === undefined) {
@@ -11,12 +12,12 @@ export function formatNumber(value, {
     }
     
     if (units) {
-        let unitSuffix = ' ' + units.get(0).get('suffix');
+        let unitSuffix = unitsSeparator + units.get(0).get('suffix');
 
         for (const unit of Array.from(units).reverse()) {
             if (Math.abs(value) >= unit.get('scale')) {
                 value = value / unit.get('scale');
-                unitSuffix = ' ' + unit.get('suffix');
+                unitSuffix = unitsSeparator + unit.get('suffix');
                 break;
             }
         }

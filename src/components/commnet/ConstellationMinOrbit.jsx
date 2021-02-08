@@ -2,9 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Form from 'react-bootstrap/Form';
+import { faCalculator } from '@fortawesome/free-solid-svg-icons';
 
 import  { ConstellationMinOrbitSelector } from '../../selectors';
-
 import BodySelect from '../forms/BodySelect';
 import ButtonField from '../forms/ButtonField';
 import DefinitionList from '../DefinitionList';
@@ -35,7 +35,7 @@ export class ConstellationMinOrbit extends React.PureComponent {
                     field={this.props.satelliteCount}
                     update={this.props.updateConstellationMinOrbit} />
 
-                <ButtonField label="Calculate" onClick={this.props.calculateConstellationMinOrbit} />
+                <ButtonField label="Calculate" icon={faCalculator} onClick={this.props.calculateConstellationMinOrbit} />
             </Form>
             {this.props.minOrbit &&
                 <>

@@ -8,13 +8,13 @@ export default class CheckboxField extends React.PureComponent {
     render() {
         const updateFunc = event => this.props.update(this.props.name, event.target.checked);
         return <Form.Group as={Row} controlId={this.props.name}>
-                <Col sm={{span: 8, offset: 4}}>
+                <Form.Label column sm={4} className="text-right font-weight-bold">{this.props.label}</Form.Label>
+                <Col sm="8" className="my-auto">
                     <Form.Check 
                         type="switch"
                         id={this.props.name}
-                        value={this.props.value}
+                        checked={this.props.value}
                         name={this.props.name}
-                        label={this.props.label}
                         onChange={updateFunc} />
                 </Col>
             </Form.Group>;

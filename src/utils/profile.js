@@ -33,7 +33,7 @@ export class ActiveProfile {
         name,
         planetpack,
         dsnLevels,
-        rangeModifier,
+        antennas,
         atmOcclusion,
         vacOcclusion
     }) {
@@ -41,8 +41,16 @@ export class ActiveProfile {
         this.name = name;
         this.planetpack = planetpack;
         this.dsnLevels = dsnLevels;
-        this.rangeModifier = rangeModifier;
+        this.antennas = antennas;
         this.atmOcclusion = atmOcclusion;
         this.vacOcclusion = vacOcclusion;
+    }
+
+    findBodyByName(bodyName) {
+        return this.planetpack.findByName(bodyName);
+    }
+
+    findAntennaByName(antennaName) {
+        return this.antennas.find(antenna => antenna.name === antennaName);
     }
 }
