@@ -1,6 +1,6 @@
 import { List} from 'immutable';
-import {GRAVITATIONAL_CONSTANT, GRAVITY, PI} from './consts';
-import {noAtmosphere} from './atmosphere';
+import { GRAVITATIONAL_CONSTANT, GRAVITY, PI } from './consts';
+import { noAtmosphere } from './atmosphere';
 
 export default class Body {
     constructor({

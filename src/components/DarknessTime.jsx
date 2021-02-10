@@ -24,7 +24,8 @@ export class DarknessTime extends React.PureComponent {
             <p>The battery storage calculator calculates the amount of battery capacity a spacecraft requires to last
             passing through the dark side of the celestial body it's orbiting based on it's energy use.</p>
             <Form>
-                <h4>Darkness Time Calculator</h4>
+                <h3>Darkness Time Calculator</h3>
+                <hr />
                 <BodySelect
                     planetpack={this.props.planetpack}
                     body={this.props.body.name}
@@ -53,7 +54,8 @@ export class DarknessTime extends React.PureComponent {
                     </DefinitionList>
                 }
 
-                <h4>Battery Storage Calculator</h4>
+                <h3>Battery Storage Calculator</h3>
+                <hr />
                 <TextField label="Darkness Time"
                            type="number"
                            name="darknessTime"

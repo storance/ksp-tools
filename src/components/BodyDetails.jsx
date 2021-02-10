@@ -8,7 +8,8 @@ import { DISTANCE_UNITS_DISPLAY, DISTANCE_SQUARED_UNITS, VELOCITY_UNITS, toGees 
 export default class BodyDetails extends React.PureComponent {
     render() {
         return <>
-                <h4>Body Information</h4>
+                <h3>Body Information</h3>
+                <hr />
                 <DefinitionList>
                     <DefinitionList.Item label="Radius">
                         <NumberFormat

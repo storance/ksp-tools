@@ -3,13 +3,13 @@ import { v4 as uuidv4 } from 'uuid';
 import { DIFFICULTY_PRESETS,
     DSN_LEVELS,
     ANTENNAS,
+    POWER_UNITS,
     POWER_UNITS_MAP,
     formUpdate,
     convertValue,
     createValidatedField,
     createValidatedUnitField,
     setValidatedField,
-    setValidatedUnitField,
     getValidatedField,
     getValidatedUnitField,
     Profile,
@@ -33,7 +33,7 @@ const DEFAULT_PROFILE = new Profile({
 });
 
 const initialState = Map({
-    allById: DEFAULT_PROFILE,
+    allById: Map([[DEFAULT_PROFILE.id, DEFAULT_PROFILE]]),
     activeId: '716a901b-4ae5-4456-b1f0-40db7667dd13',
     form: Map({
         id: '',
@@ -51,21 +51,20 @@ const initialState = Map({
     }),
 });
 
-const DSN_LEVELS_FORM = DSN_LEVELS.map(power => createValidatedUnitField(
-    {
-        value: convertValue(power, '', 'G', POWER_UNITS_MAP),
-        units: 'G'
-    }
-));
+const DSN_LEVELS_FORM = DSN_LEVELS.map(power => createValidatedUnitField({value: power, allUnits: POWER_UNITS}));
 
 function appInitialized(state) {
     let newState = state;
-    const allProfiles = newState.get('allById');
+    const allProfiles = newState.get('allById', Map());
     const activeId = newState.get('activeId');
 
     let activeProfile = allProfiles.get(activeId);
     if (!activeProfile) {
         activeProfile = DEFAULT_PROFILE;
+    }
+
+    if (!Map.isMap(allProfiles)) {
+        newState = newState.set('allById', Map());
     }
 
     return newState.setIn(['allById', DEFAULT_PROFILE.id], DEFAULT_PROFILE)
@@ -133,10 +132,7 @@ function cloneProfile(state, id) {
     return state.withMutations((tempState) => {
         const hasCustomDsnLevels = existingProfile.customDsnLevels !== null;
         const customDsnLevels = !hasCustomDsnLevels ? DSN_LEVELS_FORM : existingProfile.customDsnLevels.map(
-            power => createValidatedUnitField({
-                value: convertValue(power, '', 'G', POWER_UNITS_MAP),
-                units: 'G'
-            }));
+            power => createValidatedUnitField({value: power, allUnits: POWER_UNITS}));
 
         setValidatedField(tempState, ['form', 'name'], existingProfile.name + ' - Copy');
         setValidatedField(tempState, ['form', 'dsnModifier'], existingProfile.dsnModifier);
@@ -161,10 +157,7 @@ function editProfile(state, id) {
     return state.withMutations((tempState) => {
         const hasCustomDsnLevels = existingProfile.customDsnLevels !== null;
         const customDsnLevels = !hasCustomDsnLevels ? DSN_LEVELS_FORM : existingProfile.customDsnLevels.map(
-            power => createValidatedUnitField({
-                value: convertValue(power, '', 'G', POWER_UNITS_MAP),
-                units: 'G'
-            }));
+            power => createValidatedUnitField({value: power, allUnits: POWER_UNITS}));
 
         setValidatedField(tempState, ['form', 'name'], existingProfile.name);
         setValidatedField(tempState, ['form', 'dsnModifier'], existingProfile.dsnModifier);
@@ -208,18 +201,15 @@ function applyDifficultyPreset(state, presetName) {
 
 function addCustomDsnLevel(state) {
     const levels = state.getIn(['form', 'customDsnLevels']);
+    const newLevels = levels.push(createValidatedUnitField({units: 'G'}));
 
-    return state.setIn(['form', 'customDsnLevels'], levels.push(Map({
-            'value': '',
-            'units': 'G',
-            'error': null
-        })));
+    return state.setIn(['form', 'customDsnLevels'], newLevels);
 }
 
 function deleteCustomDsnLevel(state, index) {
     const levels = state.getIn(['form', 'customDsnLevels']);
 
-    if (level.size <= 1) {
+    if (levels.size <= 1) {
         return state;
     }
 

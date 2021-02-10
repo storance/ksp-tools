@@ -18,10 +18,11 @@ export class ConstellationMinOrbit extends React.PureComponent {
         return <>
             <h1>Constellation: Min Orbit</h1>
             <p>Helper to calculate the minimum orbit for a satellite constellation to ensure the satellites can 
-            maintain line of sight with it's neighbors.  Under construction...</p>
+            maintain line of sight with it's neighbors.</p>
 
             <Form>
-                <h4>Satellites</h4>
+                <h3>Satellites</h3>
+                <hr />
 
                 <BodySelect
                     planetpack={this.props.planetpack}
@@ -39,7 +40,8 @@ export class ConstellationMinOrbit extends React.PureComponent {
             </Form>
             {this.props.minOrbit &&
                 <>
-                    <h4>Minimum Orbit</h4>
+                    <h3>Minimum Orbit</h3>
+                    <hr />
                     <DefinitionList>
                         <DefinitionList.Item label="Altitude">
                             <NumberFormat

@@ -10,7 +10,8 @@ import { DISTANCE_UNITS_DISPLAY, VELOCITY_UNITS } from '../utils';
 export default class OrbitDetails extends React.PureComponent {
     render() {
         return <>
-                <h4>Orbit Information</h4>
+                <h3>Orbit Information</h3>
+                <hr />
 
                 <DefinitionList>
                     <DefinitionList.Item label="Periapsis">

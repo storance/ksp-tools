@@ -37,7 +37,8 @@ export class OrbitInformation extends React.PureComponent {
             and velocities at apoapsis and periapsis. </p>
             <p><strong>Note:</strong> Semi-major axis and period can not be the two orbital elements. </p>
             <Form>
-                <h4>Orbit Parameters</h4>
+                <h3>Orbit Parameters</h3>
+                <hr />
                 <BodySelect
                     planetpack={this.props.planetpack}
                     body={this.props.body.name}

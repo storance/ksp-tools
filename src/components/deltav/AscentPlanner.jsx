@@ -21,7 +21,8 @@ export class AscentPlanner extends React.PureComponent {
             of a given altitude. The calculation only works for atmosphere-less bodies, so if the body does 
             have an atmosphere, you'll want to budget an extra 30%-50% more &Delta;V.</p>
             <Form className="form-horizontal">
-                <h4>Orbit Details</h4>
+                <h3>Orbit Details</h3>
+                <hr />
                 <BodySelect
                     planetpack={this.props.planetpack}
                     body={this.props.body.name}

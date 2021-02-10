@@ -42,6 +42,7 @@ export class ActiveProfile {
         this.planetpack = planetpack;
         this.dsnLevels = dsnLevels;
         this.antennas = antennas;
+        this.antennasByMod = antennas.groupBy(a => a.mod);
         this.atmOcclusion = atmOcclusion;
         this.vacOcclusion = vacOcclusion;
     }

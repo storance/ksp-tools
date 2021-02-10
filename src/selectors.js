@@ -21,7 +21,6 @@ export class ProfilesSelector {
     }
 }
 
-
 export class BaseSelector {
     static getPlanetPack(state) {
         return ProfilesSelector.getActive(state).planetpack;
@@ -246,6 +245,18 @@ export class VesselAntennasForm {
 
     getFeedScale() {
         return this.state.get('feedScale');
+    }
+
+    getReflectorName() {
+        return this.state.get('reflectorName');
+    }
+
+    getReflector() {
+        return this.state.get('reflector');
+    }
+
+    getReflectorAddedPower() {
+        return this.state.get('reflectorAddedPower');
     }
 
     getCount() {

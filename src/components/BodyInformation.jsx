@@ -15,7 +15,8 @@ export class BodyInformation extends React.PureComponent {
             <h1>Body Information</h1>
             <p>Displays some useful information about a celestial body and it's orbit.</p>
             <Form>
-                <h4>Celestial Body</h4>
+                <h3>Celestial Body</h3>
+                <hr />
                 <BodySelect
                     planetpack={this.props.planetpack}
                     body={this.props.body.name}

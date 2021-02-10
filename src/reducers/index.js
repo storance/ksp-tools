@@ -22,7 +22,6 @@ const reducers = {
     darknessTime,
     maneuverPlanner,
     orbitInformation,
-    profiles,
     transferWindow
 }
 

@@ -41,13 +41,3 @@ export function formatNumber(value, {
 
     return prefix + formattedNumber + suffix;
 }
-
-export function formatDuration(value, calendar, includeRaw=false) {
-    let formmatedDuration = calendar.formatDuration(value);
-
-    if (includeRaw) {
-        formmatedDuration += ' (' + value.toFixed(3) + ' s)';
-    }
-
-    return formmatedDuration;
-}

@@ -27,7 +27,8 @@ export class ConstellationMultipleLaunch extends React.PureComponent {
 
             <p>See the <a href="https://remotetechnologiesgroup.github.io/RemoteTech/tutorials/keo/#method-1-separate-launches">Remote Tech: Creating a Keosynchronous Satellite Network</a> tutorial for more details.</p>
             <Form>
-                <h4>Desired Orbit</h4>
+                <h3>Desired Orbit</h3>
+                <hr />
                 
                 <BodySelect
                     planetpack={this.props.planetpack}
@@ -46,7 +47,8 @@ export class ConstellationMultipleLaunch extends React.PureComponent {
                     field={this.props.periapsis}
                     update={this.props.updateConstellationMultipleLaunch} />
 
-                <h4>Satellites</h4>
+                <h3>Satellites</h3>
+                <hr />
 
                 <TextField
                     label="# of Satellites"
@@ -59,7 +61,8 @@ export class ConstellationMultipleLaunch extends React.PureComponent {
             </Form>
             {this.props.separation &&
                 <>
-                    <h4>Satellite Separation</h4>
+                    <h3>Satellite Separation</h3>
+                    <hr />
                     <DefinitionList>
                         <DefinitionList.Item label="Separation">
                             <NumberFormat

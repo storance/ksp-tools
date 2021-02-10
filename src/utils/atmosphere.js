@@ -1,6 +1,3 @@
-import { List} from 'immutable';
-import {GRAVITATIONAL_CONSTANT, GRAVITY, PI} from './consts';
-
 export class Atmosphere {
     constructor({
         enabled = false,

@@ -7,6 +7,7 @@ export default class BodySelect extends React.PureComponent {
         
         return <SelectField name={name}
                             label="Body"
+                            searchable
                             value={this.props.body}
                             update={this.props.update}
                             options={this.getOptions()} />;

@@ -16,6 +16,19 @@ export function convertValue(value, fromUnit, toUnit, unitsMap) {
     return value * unitsMap.get(fromUnit) / unitsMap.get(toUnit);
 }
 
+export function getBestFitUnit(value, units) {
+    for (const unit of Array.from(units).reverse()) {
+        if (Math.abs(value) >= unit.get('scale')) {
+            return {
+                value: value / unit.get('scale'),
+                units: unit.get('suffix')
+            };
+        }
+    }
+
+    return {value: value, units: ''};
+}
+
 export function convertField(field, unitsMap) {
     const units = field.get('units');
     const value = parseFloat(field.get('value'));
@@ -45,7 +58,7 @@ export function toDegrees(rad) {
 }
 
 export function isNumber(n, min=null, max=null) {
-    if (typeof n === 'string' && !n.match(/^-?\d+(\.\d+)?$/)) {
+    if (typeof n === 'string' && !n.match(/^-?(\d+(\.\d+)?|\.\d+)$/)) {
         return false;
     }
 

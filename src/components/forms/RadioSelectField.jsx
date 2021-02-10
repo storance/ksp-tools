@@ -20,7 +20,9 @@ export default class RadioSelectField extends React.PureComponent {
         const selectedValue = this.props.value;
         const updateFunc = event => this.props.update(this.props.name, event.target.value);
 
-        return <Form.Check type="radio"
+        return <Form.Check 
+                key={key}
+                type="radio"
                 custom
                 id={name + "_" + option.value}
                 name={name}

@@ -2,10 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import Form from 'react-bootstrap/Form';
-import { faCalculator } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faExclamationCircle, faCalculator } from '@fortawesome/free-solid-svg-icons';
 
 import  { ConstellationSingleLaunchSelector } from '../../selectors';
-
 import ApsisField from '../forms/ApsisField';
 import BodySelect from '../forms/BodySelect';
 import ButtonField from '../forms/ButtonField';
@@ -25,7 +25,7 @@ export class ConstellationSingleLaunch extends React.PureComponent {
             in a constellation at the desired orbit. After putting your spacecraft in the transfer orbit, release 
             one satellite per orbit, then have that satellite circularize.</p>
             <Form>
-                <h4>Desired Orbit</h4>
+                <h3>Desired Orbit</h3>
                 
                 <BodySelect
                     planetpack={this.props.planetpack}
@@ -44,7 +44,8 @@ export class ConstellationSingleLaunch extends React.PureComponent {
                     field={this.props.periapsis}
                     update={this.props.updateConstellationSingleLaunch} />
 
-                <h4>Satellites</h4>
+                <h3>Satellites</h3>
+                <hr />
 
                 <TextField
                     label="# of Satellites"
@@ -63,13 +64,15 @@ export class ConstellationSingleLaunch extends React.PureComponent {
     renderTransferOrbit(transferOrbit, planetpack) {
         if (!transferOrbit.isPossible) {
             return <>
-                <h4>Transfer Orbit: {transferOrbit.type}</h4>
-                <p>Not Possible</p>
+                <h3>Transfer Orbit: {transferOrbit.type}</h3>
+                <hr />
+                <p><FontAwesomeIcon icon={faExclamationCircle} className="text-danger" /> Not Possible</p>
             </>
         }
 
         return <>
-                <h4>Transfer Orbit: {transferOrbit.type}</h4>
+                <h3>Transfer Orbit: {transferOrbit.type}</h3>
+                <hr />
                 <DefinitionList>
                     <DefinitionList.Item label="Apoapsis">
                         <NumberFormat

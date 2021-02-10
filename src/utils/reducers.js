@@ -1,5 +1,5 @@
 import { Map, List } from 'immutable';
-import { convertValue } from './index';
+import { convertValue, getBestFitUnit } from './index';
 
 export function formUpdate(state, field, value) {
     if (Array.isArray(field)) {
@@ -24,7 +24,16 @@ export function createValidatedField(value='', error=null) {
     });
 }
 
-export function createValidatedUnitField({value='', units='', error=null}) {
+export function createValidatedUnitField({value='', units='', error=null, allUnits=null}) {
+    if (allUnits && value !== '') {
+        const result = getBestFitUnit(value, allUnits);
+        return Map({
+            value: result.value,
+            units: result.units,
+            error
+        });
+    }
+
     return Map({
         value,
         units,
@@ -42,8 +51,13 @@ export function setValidatedField(state, name, value='', error=null) {
     }
 }
 
-export function setValidatedUnitField(state, name,  value='', units='', error=null) {
-    const fieldMap = createValidatedUnitField(value, units, error);
+export function setValidatedUnitField(state, name, {
+        value='',
+        units='',
+        error=null,
+        allUnits=null
+    }) {
+    const fieldMap = createValidatedUnitField({value, units, error, allUnits});
 
     if (Array.isArray(name)) {
         return state.setIn(name, fieldMap);

@@ -35,13 +35,13 @@ export class ManeuverPlan {
         } else {
             // two burns
             if (currentPe > desiredAp) {
-                const intermediateOrbit = Orbit.fromApAndPe(body, currentPe, desiredAp);
+                const intermediateOrbit = Orbit.from(body, {apoapsis: currentPe, periapsis: desiredAp});
                 this.burns.push(new ManeuverBurn(PERIAPSIS,
                     intermediateOrbit.apoapsisVelocity - currentOrbit.periapsisVelocity));
                 this.burns.push(new ManeuverBurn(PERIAPSIS,
                     desiredOrbit.periapsisVelocity - intermediateOrbit.periapsisVelocity));
             } else {
-                const intermediateOrbit = Orbit.fromApAndPe(body, desiredAp, currentPe);
+                const intermediateOrbit = Orbit.from(body, {apoapsis: desiredAp, periapsis: currentPe});
                 this.burns.push(new ManeuverBurn(PERIAPSIS,
                     intermediateOrbit.periapsisVelocity - currentOrbit.periapsisVelocity));
                 this.burns.push(new ManeuverBurn(APOAPSIS,

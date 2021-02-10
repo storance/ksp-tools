@@ -23,7 +23,8 @@ export class ManeuverPlanner extends React.PureComponent {
                     body={this.props.body.name}
                     update={this.props.updateManeuverDeltaV} />
 
-                <h4>Current Orbit</h4>
+                <h3>Current Orbit</h3>
+                <hr />
                 <ApsisField label="Apoapsis"
                     name="currentApoapsis"
                     field={this.props.currentApoapsis}
@@ -33,7 +34,8 @@ export class ManeuverPlanner extends React.PureComponent {
                     field={this.props.currentPeriapsis}
                     update={this.props.updateManeuverDeltaV} />
 
-                <h4>Desired Orbit</h4>
+                <h3>Desired Orbit</h3>
+                <hr />
                 <ApsisField label="Apoapsis"
                     name="desiredApoapsis"
                     field={this.props.desiredApoapsis}
