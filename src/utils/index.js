@@ -16,37 +16,11 @@ export function convertValue(value, fromUnit, toUnit, unitsMap) {
     return value * unitsMap.get(fromUnit) / unitsMap.get(toUnit);
 }
 
-export function getBestFitUnit(value, units) {
-    for (const unit of Array.from(units).reverse()) {
-        if (Math.abs(value) >= unit.get('scale')) {
-            return {
-                value: value / unit.get('scale'),
-                units: unit.get('suffix')
-            };
-        }
-    }
-
-    return {value: value, units: ''};
-}
-
 export function convertField(field, unitsMap) {
     const units = field.get('units');
     const value = parseFloat(field.get('value'));
 
     return value * unitsMap.get(units);
-}
-
-export function convertAltitudeToMeters(field) {
-    var unitMult = {
-        "m" : 1,
-        "km" : 1000,
-        "Mm" : 1000000,
-        "Gm" : 1000000000
-    };
-
-    const units = field.get('units');
-    const value = parseFloat(field.get('value'));
-    return value * unitMult[units];
 }
 
 export function toRadians(deg) {
@@ -113,17 +87,4 @@ export function isEmpty(obj) {
 
 export function toGees(gravity) {
     return gravity / GRAVITY;
-}
-
-export function lookupBody(bodyName, planetpack) {
-    if (!bodyName) {
-        return planetpack.homeworld;
-    }
-
-    let body = planetpack.findByName(bodyName);
-    if (!body) {
-        return planetpack.homeworld;
-    }
-
-    return body;
 }

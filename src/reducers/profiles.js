@@ -2,7 +2,6 @@ import { Map, List } from 'immutable';
 import { v4 as uuidv4 } from 'uuid';
 import { DIFFICULTY_PRESETS,
     DSN_LEVELS,
-    ANTENNAS,
     POWER_UNITS,
     POWER_UNITS_MAP,
     formUpdate,
@@ -15,6 +14,7 @@ import { DIFFICULTY_PRESETS,
     Profile,
     ActiveProfile } from '../utils';
 import { planetpacks, findPlanetPack } from '../planetpacks';
+import { ANTENNAS } from '../antennas';
 import { validateRequiredField, validatePositiveNumberField } from '../validators';
 
 const initialPlanetPack = planetpacks[0];
@@ -95,6 +95,7 @@ function toActiveProfile(profile) {
         dsnLevels = DSN_LEVELS.map(power => power * profile.dsnModifier);
     }
 
+    console.log(ANTENNAS.toJS());
     const antennas = ANTENNAS.map(antenna => antenna.applyRangeModifier(profile.rangeModifier));
 
     return new ActiveProfile({

@@ -2,7 +2,6 @@ import { Map, List } from 'immutable';
 import { TYPE_DIRECT,
          POWER_UNITS,
          POWER_UNITS_MAP,
-         REFLECTORS,
          Antenna,
          VesselAntenna,
          Reflector,
@@ -16,6 +15,7 @@ import { TYPE_DIRECT,
          calcVesselPower,
          calcMaxRange,
          calcSignal } from '../utils';
+import { REFLECTORS } from '../antennas';
 import { validatePositiveIntegerField, validatePositiveNumberField, validateNumberField } from '../validators';
 
 const initialState = Map({

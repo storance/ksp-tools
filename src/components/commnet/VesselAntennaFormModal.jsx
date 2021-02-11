@@ -20,8 +20,9 @@ import { MOD_TO_DISPLAY_NAME,
     DISTANCE_UNITS_DISPLAY,
     TYPE_RELAY,
     TYPE_DIRECT,
-    REFLECTORS_BY_MOD,
+    MOD_TAGS,
     formatNumber } from '../../utils';
+import { REFLECTORS_BY_MOD } from '../../antennas';
 import * as actionCreators from '../../action_creators';
 
 
@@ -156,11 +157,12 @@ export class VesselAntennaFormModal extends React.PureComponent {
 
         const reducer = (allOptions, antennas, mod) => {
             const options = antennas
-                .sortBy(a => a.power)
+                .sortBy(a => a.displayName)
                 .map(antenna => ({
                     label: antenna.displayName,
                     value: antenna.name,
-                    mod: MOD_TO_DISPLAY_NAME.get(antenna.mod)
+                    mod: MOD_TO_DISPLAY_NAME.get(antenna.mod),
+                    tags: this.getAntennaTags(antenna)
                 }));
             return allOptions.push(Map({
                 key: mod,
@@ -171,6 +173,21 @@ export class VesselAntennaFormModal extends React.PureComponent {
 
         const antennaOptions = this.props.activeProfile.antennasByMod.reduce(reducer, List());
         return customOptions.concat(antennaOptions).toJS();
+    }
+
+    getAntennaTags(antenna) {
+        let tags = [antenna.type];
+        if (antenna.combinable) {
+            tags.push('combinable');
+            tags.push('combine');
+        }
+
+        const modTags = MOD_TAGS.get(antenna.mod);
+        if (modTags) {
+            tags.push(...modTags);
+        }
+
+        return tags;
     }
 
     getReflectorOptions() {
@@ -187,11 +204,12 @@ export class VesselAntennaFormModal extends React.PureComponent {
 
         const reducer = (allOptions, reflectors, mod) => {
             const options = reflectors
-                .sortBy(r => r.addedPower)
+                .sortBy(r => a.displayName)
                 .map(reflector => ({
                     label: reflector.displayName,
                     value: reflector.name,
-                    mod: MOD_TO_DISPLAY_NAME.get(reflector.mod)
+                    mod: MOD_TO_DISPLAY_NAME.get(reflector.mod),
+                    tags: []
                 }));
             return allOptions.push(Map({
                 key: mod,
@@ -213,7 +231,9 @@ export class VesselAntennaFormModal extends React.PureComponent {
         const modName = candidate.data.mod.toLowerCase();
         const partName = candidate.label.toLowerCase();
 
-        return terms.every(term => modName.includes(term) || partName.includes(term));
+        return terms.every(term => modName.includes(term) 
+            || partName.includes(term) 
+            || candidate.data.tags.includes(term));
     }
 }
 

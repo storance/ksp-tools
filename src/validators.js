@@ -1,4 +1,4 @@
-import { isPositiveNumber, isNumber, isInteger, isPositiveInteger, convertAltitudeToMeters } from './utils';
+import { DISTANCE_UNITS_MAP, isPositiveNumber, isNumber, isInteger, isPositiveInteger, convertField } from './utils';
 
 export function validateRequiredField(state, fieldName) {
     const fieldPath = Array.isArray(fieldName) ? fieldName : [fieldName];
@@ -70,8 +70,8 @@ export function validateNumberField(state, fieldName, min, max) {
 }
 
 export function validateApsisFields(state, apFieldName, peFieldName) {
-    const pe = convertAltitudeToMeters(state.get(peFieldName));
-    const ap = convertAltitudeToMeters(state.get(apFieldName));
+    const pe = convertField(state.get(peFieldName), DISTANCE_UNITS_MAP);
+    const ap = convertField(state.get(apFieldName), DISTANCE_UNITS_MAP);
 
     if (pe > ap) { 
         state.setIn([peFieldName, 'error'], 

@@ -1,5 +1,18 @@
 import { Map, List } from 'immutable';
-import { convertValue, getBestFitUnit } from './index';
+import { convertValue } from './index';
+
+function convert(value, units) {
+    for (const unit of Array.from(units).reverse()) {
+        if (Math.abs(value) >= unit.get('scale')) {
+            return {
+                value: value / unit.get('scale'),
+                units: unit.get('suffix')
+            };
+        }
+    }
+
+    return {value: value, units: ''};
+}
 
 export function formUpdate(state, field, value) {
     if (Array.isArray(field)) {
@@ -7,6 +20,19 @@ export function formUpdate(state, field, value) {
     } else {
         return state.set(field, value);
     }
+}
+
+export function lookupBody(bodyName, planetpack) {
+    if (!bodyName) {
+        return planetpack.homeworld;
+    }
+
+    let body = planetpack.findByName(bodyName);
+    if (!body) {
+        return planetpack.homeworld;
+    }
+
+    return body;
 }
 
 export function resetBodyOnProfileSelect(state, action, fields=['body']) {
@@ -26,7 +52,7 @@ export function createValidatedField(value='', error=null) {
 
 export function createValidatedUnitField({value='', units='', error=null, allUnits=null}) {
     if (allUnits && value !== '') {
-        const result = getBestFitUnit(value, allUnits);
+        const result = convert(value, allUnits);
         return Map({
             value: result.value,
             units: result.units,
