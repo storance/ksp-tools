@@ -23,6 +23,7 @@ module.exports = (env, argv) => {
                     options: {
                         plugins: [
                             require.resolve('@babel/plugin-proposal-export-default-from'),
+                            require.resolve('@babel/plugin-proposal-class-properties'),
                             isDevelopment && require.resolve('react-refresh/babel')
                         ].filter(Boolean),
                     }

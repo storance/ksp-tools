@@ -1,58 +1,144 @@
 import React from 'react';
+
 import NumberFormat from './format/NumberFormat';
 import DurationFormat from './format/DurationFormat';
-import StaticTextField from './forms/StaticTextField';
-import { DISTANCE_UNITS, DISTANCE_SQUARED_UNITS, VELOCITY_UNITS } from '../consts.js';
-import { toGees } from '../utils.js';
-import { formatNumber, formatDuration } from '../format.js';
+import DefinitionList from './DefinitionList';
+import { DISTANCE_UNITS_DISPLAY, DISTANCE_SQUARED_UNITS, VELOCITY_UNITS, toGees } from '../utils';
 
 export default class BodyDetails extends React.PureComponent {
     render() {
-        return <fieldset>
-                <legend>Body Information</legend>
+        return <>
+                <h3>Body Information</h3>
+                <hr />
+                <DefinitionList>
+                    <DefinitionList.Item label="Radius">
+                        <NumberFormat
+                            value={this.props.body.radius}
+                            fractionDigits={3}
+                            units={DISTANCE_UNITS_DISPLAY} />
+                    </DefinitionList.Item>
 
-                <StaticTextField label={"Radius"} value={formatNumber(this.props.body.radius, {fractionDigits: 3, units: DISTANCE_UNITS})} />
+                    <DefinitionList.Item label="Equitorial Circumference">
+                        <NumberFormat
+                        value={this.props.body.equitorialCircumference}
+                            fractionDigits={3}
+                            units={DISTANCE_UNITS_DISPLAY} />
+                    </DefinitionList.Item>
 
-                <StaticTextField label={"Equitorial Circumference"} value={formatNumber(this.props.body.equitorialCircumference, {fractionDigits: 3, units: DISTANCE_UNITS})} />
+                    <DefinitionList.Item label="Surface Area">
+                        <NumberFormat
+                            value={this.props.body.surfaceArea}
+                            fractionDigits={3}
+                            units={DISTANCE_UNITS_DISPLAY}
+                            exponential />
+                    </DefinitionList.Item>
 
-                <StaticTextField label={"Surface Area"} value={formatNumber(this.props.body.surfaceArea, {fractionDigits: 3, exponential:true, units: DISTANCE_SQUARED_UNITS})} />
+                    <DefinitionList.Item label="Mass">
+                        <NumberFormat value={this.props.body.mass}
+                            fractionDigits={6}
+                            suffix=' kg'
+                            exponential />
+                    </DefinitionList.Item>
 
-                <StaticTextField label={"Mass"} value={formatNumber(this.props.body.mass, {fractionDigits: 6, exponential: true, suffix:' kg'})} />
+                    <DefinitionList.Item label="Density">
+                        <NumberFormat
+                            value={this.props.body.density}
+                            fractionDigits={3}
+                            suffix=' kg/m^3' />
+                    </DefinitionList.Item>
 
-                <StaticTextField label={"Density"} value={formatNumber(this.props.body.density, {fractionDigits: 3, suffix: ' kg/m^3'})} />
+                    <DefinitionList.Item label="Standard Gravitational Parameter (&mu;)">
+                        <NumberFormat value={this.props.body.mu} fractionDigits={6} suffix=' m^3/s^2' />
+                    </DefinitionList.Item>
 
-                <StaticTextField label={"Standard Gravitional Parameter"} value={formatNumber(this.props.body.mu, {fractionDigits: 6, suffix: ' m^3/s^2'})} />
+                    <DefinitionList.Item label="Surface Gravity">
+                        <NumberFormat value={this.props.body.aslGravity} fractionDigits={3} suffix=' m/s^2' />
+                        &nbsp;(<NumberFormat
+                            value={toGees(this.props.body.aslGravity)}
+                            fractionDigits={3}
+                            suffix="g" />)
+                    </DefinitionList.Item>
 
-                <StaticTextField label={"Surface Gravity"} value={formatNumber(this.props.body.aslGravity, {fractionDigits: 3, suffix:' m/s^2'}) + '(' + formatNumber(toGees(this.props.body.aslGravity), {fractionDigits: 3, suffix:'g'}) + ')'} />
+                    <DefinitionList.Item label="Escape Velocity">
+                        <NumberFormat
+                            value={this.props.body.escapeVelocity}
+                            fractionDigits={3}
+                            units={VELOCITY_UNITS} />
+                    </DefinitionList.Item>
 
-                <StaticTextField label={"Escape Velocity"} value={formatNumber(this.props.body.escapeVelocity, {fractionDigits: 3, units: VELOCITY_UNITS})} />
+                    <DefinitionList.Item label="Sphere Of Influence">
+                        <NumberFormat
+                            value={this.props.body.sphereOfInfluence}
+                            fractionDigits={3}
+                            units={DISTANCE_UNITS_DISPLAY} />
+                    </DefinitionList.Item>
 
-                <StaticTextField label={"Sphere Of Influence"} value={formatNumber(this.props.body.sphereOfInfluence, {fractionDigits: 3, units: DISTANCE_UNITS})} />
+                    <DefinitionList.Item label="Tidally Locked?">
+                        {this.props.body.tidallyLocked ? 'Yes' : 'No'}
+                    </DefinitionList.Item>
 
-                <StaticTextField label={"Tidally Locked?"} value={this.props.body.tidallyLocked ? 'Yes' : 'No'} />
+                    <DefinitionList.Item label="Rotation Period">
+                        <DurationFormat
+                            value={this.props.body.rotationalPeriod}
+                            calendar={this.props.calendar}
+                            includeRaw />
+                    </DefinitionList.Item>
 
-                <StaticTextField label={"Rotational Period"} value={formatDuration(this.props.body.rotationalPeriod, this.props.calendar, true)} />
+                    <DefinitionList.Item label="Solar Day Length">
+                        <DurationFormat
+                            value={this.props.body.solarDayLength}
+                            calendar={this.props.calendar}
+                            includeRaw />
+                    </DefinitionList.Item>
 
-                <StaticTextField label={"Rotational Velocity"} value={formatNumber(this.props.body.rotationalVelocity, {fractionDigits: 3, units: VELOCITY_UNITS})} />
+                    <DefinitionList.Item label="Rotational Velocity">
+                        <NumberFormat
+                            value={this.props.body.rotationalVelocity}
+                            fractionDigits={3}
+                            units={VELOCITY_UNITS} />
+                    </DefinitionList.Item>
 
-                <StaticTextField label={"Stationary Orbit"} value={this.props.body.stationaryOrbit > this.props.body.sphereOfInfluence ? "Not Possible" : formatNumber(this.props.body.stationaryOrbit, {fractionDigits: 3, units: DISTANCE_UNITS})} />
+                    <DefinitionList.Item label="Stationary Orbit">
+                        {this.props.body.stationaryOrbit > this.props.body.sphereOfInfluence
+                            ? "Not Possible" 
+                            : <NumberFormat
+                                value={this.props.body.stationaryOrbit}
+                                fractionDigits={3}
+                                units={DISTANCE_UNITS_DISPLAY} /> }
+                    </DefinitionList.Item>
 
-                <StaticTextField label={"Has Atmosphere?"} value={this.props.body.atmosphere.enabled ? 'Yes' : 'No'} />
+                    <DefinitionList.Item label="Has Atmosphere?">
+                        {this.props.body.atmosphere.enabled ? 'Yes' : 'No'}
+                    </DefinitionList.Item>
 
-                {this.props.body.atmosphere.enabled &&
-                    <StaticTextField label={"Atmosphere Height"} value={formatNumber(this.props.body.atmosphere.height, {fractionDigits: 3, units: DISTANCE_UNITS})} />
-                }
+                    {this.props.body.atmosphere.enabled &&
+                        <>
+                            <DefinitionList.Item label="Atmosphere Height">
+                                <NumberFormat
+                                    value={this.props.body.atmosphere.height}
+                                    fractionDigits={3}
+                                    units={DISTANCE_UNITS_DISPLAY} />
+                            </DefinitionList.Item>
 
-                {this.props.body.atmosphere.enabled &&
-                    <StaticTextField label={"Has Oxygen?"} value={this.props.body.atmosphere.hasOxygen ? 'Yes' : 'No'} />
-                }
+                            <DefinitionList.Item label="Has Oxygen?">
+                                {this.props.body.atmosphere.hasOxygen ? 'Yes' : 'No'}
+                            </DefinitionList.Item>
 
-                {this.props.body.atmosphere.enabled &&
-                    <StaticTextField label={"Flying High Threshold"} value={formatNumber(this.props.body.atmosphere.flyingHighAltitude, {fractionDigits: 3, units: DISTANCE_UNITS})} />
-                }
-
-                <StaticTextField label={"High Space Threshold"}  value={formatNumber(this.props.body.highSpaceAltitude, {fractionDigits: 3, units: DISTANCE_UNITS})} />
-                
-            </fieldset>;
+                            <DefinitionList.Item label="Flying High Threshold">
+                                <NumberFormat 
+                                    value={this.props.body.atmosphere.flyingHighAltitude}
+                                    fractionDigits={3}
+                                    units={DISTANCE_UNITS_DISPLAY} />
+                            </DefinitionList.Item>
+                        </>
+                    }
+                    <DefinitionList.Item label="High Space Threshold">
+                        <NumberFormat
+                            value={this.props.body.highSpaceAltitude}
+                            fractionDigits={3}
+                            units={DISTANCE_UNITS_DISPLAY} />
+                    </DefinitionList.Item>
+                </DefinitionList>
+            </>;
     }
 };

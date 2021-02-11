@@ -1,10 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { OrbitingBodySelectContainer } from './forms/OrbitingBodySelect';
+
+import Form from 'react-bootstrap/Form';
+import { faCalculator } from '@fortawesome/free-solid-svg-icons';
+
+import { OrbitInformationSelector } from '../selectors'
 import ApsisField from './forms/ApsisField';
+import BodySelect from './forms/BodySelect';
 import ButtonField from './forms/ButtonField';
 import TextField from './forms/TextField';
-import RadioSelectField from './forms/RadioSelectField';
+import SelectField from './forms/SelectField';
 import OrbitDetails from './OrbitDetails';
 import * as actionCreators from '../action_creators';
 
@@ -25,87 +30,147 @@ const MODE_OPTIONS = [
 
 export class OrbitInformation extends React.PureComponent {
     render() {
-        return <div className="container">
+        return <>
             <h1>Orbit Information</h1>
-            <p>Calculates details about the orbit given the apoapsis and periapsis, apoapsis and period, or the
-            periapsis and period.  This will show details such as the semi-major axis, orbital period, eccentricity,
+            <p>Calculates details about the orbit given two of periapsis, apoapsis, period, semi-major axis and 
+            eccentricity.   This will show details such as the semi-major axis, orbital period, eccentricity,
             and velocities at apoapsis and periapsis. </p>
-            <form>
-                <OrbitingBodySelectContainer />
-                <fieldset>
-                    <legend>Orbit Parameters</legend>
+            <p><strong>Note:</strong> Semi-major axis and period can not be the two orbital elements. </p>
+            <Form>
+                <h3>Orbit Parameters</h3>
+                <hr />
+                <BodySelect
+                    planetpack={this.props.planetpack}
+                    body={this.props.body.name}
+                    update={this.props.updateOrbitInformation} />
 
-                    <RadioSelectField label="From"
-                        name="mode"
-                        value={this.props.mode}
-                        update={newValue => this.props.updateOrbitInformation('mode', newValue)}
-                        options={MODE_OPTIONS} />
+                <SelectField label="First Orbital Element"
+                    name="firstElement"
+                    value={this.props.firstElement}
+                    update={this.props.updateOrbitInformation}
+                    options={this.getOrbitalElements(true)} />
 
-                    {this.hasApoapsis() &&
-                        <ApsisField label="Apoapsis"
-                            name="apoapsis"
-                            value={this.props.apoapsis}
-                            unitsValue={this.props.apoapsisUnits}
-                            error={this.props.errors.apoapsis}
-                            update={newValue => this.props.updateOrbitInformation('apoapsis', newValue)}
-                            updateUnits={newValue => this.props.updateOrbitInformation('apoapsisUnits', newValue)} />
-                    }
+                <SelectField label="Second Orbital Element"
+                    name="secondElement"
+                    value={this.props.secondElement}
+                    update={this.props.updateOrbitInformation}
+                    options={this.getOrbitalElements(false)} />
 
-                    {this.hasPeriapsis() &&
-                        <ApsisField label="Periapsis"
-                            name="periapsis"
-                            value={this.props.periapsis}
-                            unitsValue={this.props.periapsisUnits}
-                            error={this.props.errors.periapsis}
-                            update={newValue => this.props.updateOrbitInformation('periapsis', newValue)}
-                            updateUnits={newValue => this.props.updateOrbitInformation('periapsisUnits', newValue)} />
-                    }
+                {this.hasSemiMajorAxis() &&
+                    <ApsisField label="Semi-Major Axis"
+                        name="semiMajorAxis"
+                        field={this.props.semiMajorAxis}
+                        update={this.props.updateOrbitInformation} />
+                }
 
-                    {this.hasPeriod() &&
-                        <TextField label={"Period"}
-                                   type="number"
-                                   name="period"
-                                   value={this.props.period}
-                                   error={this.props.errors.period}
-                                   update={newValue => this.props.updateOrbitInformation('period', newValue)}
-                                   suffix={"s"} />
-                    }
+                {this.hasApoapsis() &&
+                    <ApsisField label="Apoapsis"
+                        name="apoapsis"
+                        field={this.props.apoapsis}
+                        update={this.props.updateOrbitInformation} />
+                }
 
-                    <ButtonField label={"Calculate"}
-                                 onClick={() => this.props.calculateOrbitInformation(this.props.body)} />
-                </fieldset>
+                {this.hasPeriapsis() &&
+                    <ApsisField label="Periapsis"
+                        name="periapsis"
+                        field={this.props.periapsis}
+                        update={this.props.updateOrbitInformation} />
+                }
+
+                {this.hasEccentricity() &&
+                    <TextField label="Eccentricity"
+                               type="number"
+                               name="eccentricity"
+                               field={this.props.eccentricity}
+                               update={this.props.updateOrbitInformation} />
+                }
+
+                {this.hasPeriod() &&
+                    <TextField label="Period"
+                               type="number"
+                               name="period"
+                               field={this.props.period}
+                               update={this.props.updateOrbitInformation}
+                               suffix={"s"} />
+                }
+
+                <ButtonField
+                    label={"Calculate"}
+                    icon={faCalculator}
+                    onClick={() => this.props.calculateOrbitInformation()} />
                 {this.props.orbit &&
                     <OrbitDetails orbit={this.props.orbit} calendar={this.props.planetpack.calendar} />
                 }
-            </form>
-        </div>;
+            </Form>
+        </>;
+    }
+
+    getOrbitalElements(first) {
+        const selectedElement = first ?  this.props.firstElement : this.props.secondElement;
+        const otherElement = first ? this.props.secondElement : this.props.firstElement;
+
+        return [
+             {
+                value: 'semimajoraxis',
+                label: 'Semi-Major Axis',
+                disabled: otherElement === 'semimajoraxis' || otherElement == 'period'
+            },
+            {
+                value: 'apoapsis',
+                label: 'Apoapsis',
+                disabled: otherElement === 'apoapsis'
+            },
+            {
+                value: 'periapsis',
+                label: 'Periapsis',
+                disabled: otherElement === 'periapsis'
+            },
+            {
+                value: 'period',
+                label: 'Period',
+                disabled: otherElement === 'semimajoraxis' || otherElement == 'period'
+            },
+            {
+                value: 'eccentricity',
+                label: 'Eccentricity',
+                disabled: otherElement === 'eccentricity'
+            }
+        ].filter(option => !option.disabled);
     }
 
     hasPeriapsis() {
-        return this.props.mode === 'ap+pe' || this.props.mode == 'pe+period';
+        return this.props.firstElement === 'periapsis' || this.props.secondElement === 'periapsis';
     }
 
     hasApoapsis() {
-        return this.props.mode === 'ap+pe' || this.props.mode == 'ap+period';
+        return this.props.firstElement === 'apoapsis' || this.props.secondElement === 'apoapsis';
     }
 
     hasPeriod() {
-        return this.props.mode === 'ap+period' || this.props.mode == 'pe+period';
+        return this.props.firstElement === 'period' || this.props.secondElement === 'period';
+    }
+
+    hasEccentricity() {
+        return this.props.firstElement === 'eccentricity' || this.props.secondElement === 'eccentricity';
+    }
+
+    hasSemiMajorAxis() {
+        return this.props.firstElement === 'semimajoraxis' || this.props.secondElement === 'semimajoraxis';
     }
 };
 
 function mapStateToProps(state) {
     return {
-        apoapsis: state.getIn(['orbitInformation', 'apoapsis']),
-        apoapsisUnits: state.getIn(['orbitInformation', 'apoapsisUnits']),
-        periapsis: state.getIn(['orbitInformation', 'periapsis']),
-        periapsisUnits: state.getIn(['orbitInformation', 'periapsisUnits']),
-        period: state.getIn(['orbitInformation', 'period']),
-        mode: state.getIn(['orbitInformation', 'mode']),
-        orbit: state.getIn(['orbitInformation', 'orbit']),
-        errors: state.getIn(['orbitInformation', 'errors']),
-        planetpack: state.getIn(['celestialBody', 'selectedPlanetPack']),
-        body: state.getIn(['celestialBody', 'selectedBody'])
+        apoapsis: OrbitInformationSelector.getApoapsis(state),
+        periapsis: OrbitInformationSelector.getPeriapsis(state),
+        period: OrbitInformationSelector.getPeriod(state),
+        semiMajorAxis: OrbitInformationSelector.getSemiMajorAxis(state),
+        eccentricity: OrbitInformationSelector.getEccentricity(state),
+        firstElement: OrbitInformationSelector.getFirstElement(state),
+        secondElement: OrbitInformationSelector.getSecondElement(state),
+        orbit: OrbitInformationSelector.getOrbit(state),
+        planetpack: OrbitInformationSelector.getPlanetPack(state),
+        body: OrbitInformationSelector.getBody(state)
     }
 }
 

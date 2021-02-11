@@ -1,18 +1,20 @@
 import React from 'react';
 import SelectField from './SelectField';
-import { planetpacks } from '../../planetpack.js';
 
 export default class BodySelect extends React.PureComponent {
     render() {
-        return <SelectField name={"body"}
-                            label={"Celestial Body"}
+        let name = this.props.name || "body";
+        
+        return <SelectField name={name}
+                            label="Body"
+                            searchable
                             value={this.props.body}
-                            update={this.props.updateBody}
+                            update={this.props.update}
                             options={this.getOptions()} />;
     }
 
     getOptions() {
-        return this.appendOptions([], this.props.selectedPlanetPack.sun);
+        return this.appendOptions([], this.props.planetpack.sun);
     }
 
     appendOptions(options, body, indent=0) {

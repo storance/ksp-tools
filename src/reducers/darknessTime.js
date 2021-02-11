@@ -1,112 +1,89 @@
 import { Map } from 'immutable';
-import Orbit from '../orbit.js';
-import { convertAltitude, isPositiveNumber, isEmpty } from '../utils.js';
+import { DISTANCE_UNITS_MAP,
+         Orbit,
+         createValidatedField,
+         createValidatedUnitField,
+         getValidatedNumericField,
+         getValidatedUnitField,
+         formUpdate,
+         resetBodyOnProfileSelect,
+         lookupBody } from '../utils';
+import { validatePositiveNumberField, validateApsisFields } from '../validators';
 
 const initialState = Map({
-    'apoapsis' : '',
-    'apoapsisUnits' : 'km',
-    'periapsis' : '',
-    'periapsisUnits' : 'km',
-    'darknessTimeManual' : '',
-    'energyUse' : '',
-    'errors' : {}
+    'apoapsis' : createValidatedUnitField({units: 'km'}),
+    'periapsis' : createValidatedUnitField({units: 'km'}),
+    'darknessTime' : createValidatedField(),
+    'energyUse' : createValidatedField()
 });
 
-function formUpdate(state, field, value) {
-    return state.set(field, value);
-}
-
-function calculateDarknessTime(state, body) {
-    const errors = validateDarknessTime(state);
-    if (!isEmpty(errors)) {
-        return state.set('errors', errors);
+function calculateDarknessTime(state, profile) {
+    let newState = validateDarknessTime(state);
+    if (newState.get('hasErrors')) {
+        return newState;
     }
 
-    const apoapsis = convertAltitude(state.get('apoapsis'), state.get('apoapsisUnits'), 'm');
-    const periapsis = convertAltitude(state.get('periapsis'), state.get('periapsisUnits'), 'm');
+    const body = lookupBody(newState.get('body'), profile.planetpack);
+    const apoapsis = getValidatedUnitField(newState.get('apoapsis'), 'm', DISTANCE_UNITS_MAP);
+    const periapsis = getValidatedUnitField(newState.get('periapsis'), 'm', DISTANCE_UNITS_MAP);
 
-    const orbit = Orbit.fromApAndPe(body, apoapsis, periapsis);
+    const orbit = Orbit.from(body, {apoapsis, periapsis});
     const darknessTime = ((2 * orbit.semiMajorAxis * orbit.semiMinorAxis) / orbit.specificAngularMomentum) * 
         Math.asin(orbit.parentBody.radius / orbit.semiMinorAxis) +
         ((orbit.eccentricity * orbit.parentBody.radius) / orbit.semiMinorAxis);
-    return state.set('darknessTime', darknessTime)
-                .set('darknessTimeManual', darknessTime.toFixed(3))
-                .set('errors', {});
+    return newState.set('darknessTimeComputed', darknessTime)
+                   .setIn(['darknessTime', 'value'], darknessTime.toFixed(3));
 }
 
 
 function validateDarknessTime(state) {
-    const apoapsis = state.get('apoapsis');
-    const apoapsisUnits = state.get('apoapsisUnits');
-    const periapsis = state.get('periapsis');
-    const periapsisUnits = state.get('periapsisUnits');
-    const errors = {};
+    return state.withMutations(tempState => {
+        let errors = validatePositiveNumberField(tempState, 'apoapsis') ||
+            validatePositiveNumberField(tempState, 'periapsis');
 
-    if (apoapsis === "") {
-        errors.apoapsis = "Please enter an apoapsis.";
-    } else if (!isPositiveNumber(apoapsis)) {
-        errors.apoapsis = "Please enter a valid number greater than or equal to 0.";
-    }
-
-    if (periapsis === "") {
-        errors.periapsis = "Please enter a periapsis.";
-    } else if (!isPositiveNumber(periapsis)) {
-        errors.periapsis = "Please enter a valid number greater than or equal to 0.";
-    }
-
-    if (isEmpty(errors)) {
-        const pe = convertAltitude(periapsis, periapsisUnits, 'm');
-        const ap = convertAltitude(apoapsis, apoapsisUnits, 'm');
-
-        if (pe > ap) { 
-            errors.periapsis = "Please enter a periapsis that is less than or equal to the apoapsis.";
+        if (!errors) {
+            errors = errors || validateApsisFields(tempState, 'apoapsis', 'periapsis');
         }
-    }
 
-    return errors;
+        tempState.set('hasErrors', errors);
+        tempState.remove('darknessTimeComputed');
+    });
 }
 
 function calculateBatteryStorage(state) {
-    const errors = validateBatteryStorage(state);
-    if (!isEmpty(errors)) {
-        return state.set('errors', errors);
+    let newState = validateBatteryStorage(state);
+    if (newState.get('hasErrors')) {
+        return newState;
     }
 
-    const darknessTime = parseFloat(state.get('darknessTimeManual'));
-    const energyUse = parseFloat(state.get('energyUse'));
+    const darknessTime = parseFloat(newState.getIn(['darknessTime', 'value']));
+    const energyUse = parseFloat(newState.getIn(['energyUse', 'value']));
 
-    return state.set('energyCapacity', darknessTime * energyUse)
-                .set('errors', {});
+    return newState.set('energyCapacity', darknessTime * energyUse);
 }
 
 function validateBatteryStorage(state) {
-    const darknessTime = state.get('darknessTimeManual');
-    const energyUse = state.get('energyUse');
-    const errors = {}
-    
-    if (energyUse === "") {
-        errors.energyUse = "Please enter the amount of energy used per second.";
-    } else if (!isPositiveNumber(energyUse)) {
-        errors.energyUse = "Please enter a valid number greater than or equal to 0.";
-    }
+    return state.withMutations(tempState => {
+        const errors = validatePositiveNumberField(tempState, 'darknessTime') ||
+            validatePositiveNumberField(tempState, 'energyUse');
 
-    if (darknessTime === "") {
-        errors.darknessTime = "Please enter the number of seconds spent in darkness.";
-    } else if (!isPositiveNumber(darknessTime)) {
-        errors.darknessTime = "Please enter a valid number greater than or equal to 0.";
-    }
-
-    return errors;
+        tempState.set('hasErrors', errors);
+        tempState.remove('energyCapacity');
+    });
 }
 
 export default function(state = initialState, action) {
+    let newState = state;
     switch (action.type) {
         case 'DARKNESS_TIME.FORM_UPDATE':
-            return formUpdate(state, action.field, action.value);
+            newState = formUpdate(newState, action.payload.field, action.payload.value);
+            break;
         case 'DARKNESS_TIME.CALCULATE_DARKNESS_TIME':
-            return calculateDarknessTime(state, action.orbitingBody);
+            newState = calculateDarknessTime(newState, action.activeProfile);
+            break;
         case 'DARKNESS_TIME.CALCULATE_BATTERY_STORAGE':
-            return calculateBatteryStorage(state);
+            newState = calculateBatteryStorage(newState);
+            break;
     }
-    return state;
+    return resetBodyOnProfileSelect(newState, action);
 }

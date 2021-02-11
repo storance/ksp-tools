@@ -1,30 +1,34 @@
 import React from 'react';
 
+import Form from 'react-bootstrap/Form';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+
 export default class RadioSelectField extends React.PureComponent {
     render() {
-        return <div className="form-group row">
-                <label className="col-form-label col-sm-4 text-right font-weight-bold">{this.props.label}</label>
-                <div className="col-sm-3">
+        return <Form.Group as={Row}>
+                <Form.Label column sm={4} className="text-right font-weight-bold">{this.props.label}</Form.Label>
+                <Col sm={8}>
                     {this.props.options.map(this.renderOption.bind(this))}
-                </div>
-            </div>;
+                </Col>
+            </Form.Group>;
     }
 
     renderOption(option) {
         const key = option.key || option.value;
         const name = this.props.name;
         const selectedValue = this.props.value;
-        const updateFunc = this.props.update;
+        const updateFunc = event => this.props.update(this.props.name, event.target.value);
 
-        return <div key={key} className="form-check">
-            <input type="radio"
-                       id={name + "_" + option.value}
-                       className="form-check-input"
-                       name={name}
-                       value={option.value}
-                       checked={selectedValue === option.value}
-                       onChange={event => updateFunc(event.target.value)} />
-            <label className="form-check-label" htmlFor={name + "_" + option.value}>{option.label}</label>
-        </div>;
+        return <Form.Check 
+                key={key}
+                type="radio"
+                custom
+                id={name + "_" + option.value}
+                name={name}
+                value={option.value}
+                label={option.label}
+                checked={selectedValue === option.value}
+                onChange={updateFunc} />
     }
 };
