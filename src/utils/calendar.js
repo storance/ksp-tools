@@ -35,13 +35,13 @@ export class Calendar {
         days = Math.floor(seconds / this.dayLengthSeconds);
         seconds -= days * this.dayLengthSeconds;
 
+        seconds = seconds.toFixed(3);
+
         hours = Math.floor(seconds / HOUR_IN_SECONDS);
         seconds -= hours * HOUR_IN_SECONDS;
 
         minutes = Math.floor(seconds / MINUTE_IN_SECONDS);
         seconds -= minutes * MINUTE_IN_SECONDS;
-
-        seconds = seconds.toFixed(3);
 
         let humanizedText = seconds + "s";
         if (minutes > 0 || hours > 0 || days > 0 || years > 0) {
